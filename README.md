@@ -30,6 +30,21 @@ pnpm dev
 
 La aplicación queda disponible en **http://localhost:5173** (puerto por defecto de Vite, que es el que la API permite por CORS).
 
+## Documentación
+
+Toda la documentación del front está en [`docs/`](docs/), en español. Es la que consulta Claude Code en cada tarea.
+
+| Documento | Qué es |
+|---|---|
+| [`docs/sistema-visual.md`](docs/sistema-visual.md) | Tokens, reglas de uso y componentes. **Fuente de verdad del diseño.** |
+| [`docs/design/diseno-final.html`](docs/design/diseno-final.html) | Diseño aprobado («Horizonte comparado»). Ábrelo en el navegador. |
+| [`docs/design/direcciones-visuales.html`](docs/design/direcciones-visuales.html) | Las tres direcciones visuales (A, B, C) de las que sale el diseño final. |
+| [`docs/plan/epicas.md`](docs/plan/epicas.md) | Plan de trabajo: épicas y sub-issues con sus criterios de aceptación. |
+| [`docs/guia-de-trabajo.md`](docs/guia-de-trabajo.md) | Cómo se hace cada tarea: ramas, commits, PR, estructura de carpetas y nombres. |
+| [`docs/CONTEXTO_PATHFINDERS42.md`](docs/CONTEXTO_PATHFINDERS42.md) | Copia del contexto del equipo: decisiones, datos y API. |
+
+Si el diseño HTML y `sistema-visual.md` no coinciden, manda `sistema-visual.md`.
+
 ## Scripts
 
 | Comando | Qué hace |

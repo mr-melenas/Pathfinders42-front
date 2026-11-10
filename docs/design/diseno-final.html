@@ -1,0 +1,545 @@
+<title>Diseño final Pathfinders42</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Atkinson+Hyperlegible:wght@400;700&family=Exo+2:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Martian+Mono:wght@400;600&family=Red+Hat+Display:wght@500;700;800&family=Red+Hat+Mono:wght@400;600&family=Red+Hat+Text:wght@400;500;600&display=swap">
+<style>
+/* Layout: documento de propuesta (chrome neutro) con tres "mundos" a todo ancho, uno por dirección.
+   Diseño deliberadamente oscuro (decisión del equipo: tema oscuro). */
+:root{
+  color-scheme: dark;
+  --page:#05080f; --page-sf:#0b111d; --page-ln:#1d2738; --page-tx:#e7ecf4; --page-mu:#9aa6b8; --brand:#f7862a;
+  --f-page:"IBM Plex Sans",system-ui,sans-serif; --f-page-mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{background:var(--page);color:var(--page-tx);font-family:var(--f-page);font-size:15px;line-height:1.55}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+code,.mono{font-family:var(--f-page-mono);font-size:.86em}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.eyebrow{font-family:var(--f-page-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--page-mu)}
+
+/* ---------- Intro ---------- */
+.intro{padding-block:48px 28px;display:grid;gap:20px;border-bottom:1px solid var(--page-ln)}
+.intro h1{font-size:clamp(28px,4vw,42px);line-height:1.1;font-weight:600;letter-spacing:-.01em}
+.intro h1 b{color:var(--brand);font-weight:600}
+.intro .lead{max-width:68ch;color:var(--page-mu);font-size:16px}
+.jump{display:flex;flex-wrap:wrap;gap:8px}
+.jump a{font-family:var(--f-page-mono);font-size:13px;text-decoration:none;border:1px solid var(--page-ln);padding:6px 12px;border-radius:999px;color:var(--page-tx)}
+.jump a:hover{border-color:var(--brand)}
+
+.common{padding-block:36px;display:grid;gap:20px}
+.common h2,.asks h2,.vote h2{font-size:22px;font-weight:600}
+.grid-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.note{background:var(--page-sf);border:1px solid var(--page-ln);border-radius:10px;padding:16px;display:grid;gap:6px;align-content:start;min-width:0}
+.note h3{font-size:15px;font-weight:600}
+.note p{color:var(--page-mu);font-size:14px}
+.note p strong{color:var(--page-tx);font-weight:500}
+.note.warn{border-color:#6b4a24}
+.note.warn h3{color:var(--brand)}
+
+/* ---------- Dirección (cada una define sus tokens) ---------- */
+.dir{background:var(--bg);color:var(--tx);font-family:var(--f-body);border-top:1px solid var(--page-ln);padding-block:44px 52px}
+.dir .wrap{display:grid;gap:34px}
+.dir :focus-visible{outline-color:var(--ac)}
+.dir-a{
+  --bg:#070d1a; --sf:#0e1829; --sf2:#15233b; --ln:#243552; --tx:#e6edf7; --mu:#93a3bd; --ac:#f7862a; --info:#4aa8ff;
+  --ok:#3dd6a3; --fail:#ff7482; --null:#8d9ab0; --ok-bg:rgba(61,214,163,.13); --fail-bg:rgba(255,116,130,.13); --null-bg:rgba(141,154,176,.10);
+  --luna:#c3c9d4; --tierra:#4aa8ff;
+  --f-disp:"Exo 2",system-ui,sans-serif; --f-body:"IBM Plex Sans",system-ui,sans-serif; --f-data:"JetBrains Mono",ui-monospace,monospace;
+  --r:4px; --r-chip:3px; --disp-w:700; --disp-stretch:100%; --disp-track:0;
+}
+.dir-b{
+  --bg:#0b0e13; --sf:#141920; --sf2:#1c232d; --ln:#2b3441; --tx:#eef1f5; --mu:#a1abb9; --ac:#ff8a3d; --info:#56b4e9;
+  --ok:#56b4e9; --fail:#e58cc0; --null:#a8afba; --ok-bg:rgba(86,180,233,.14); --fail-bg:rgba(229,140,192,.14); --null-bg:rgba(168,175,186,.10);
+  --luna:#cfd3da; --tierra:#7ccfb8;
+  --f-disp:"Archivo",system-ui,sans-serif; --f-body:"Atkinson Hyperlegible",system-ui,sans-serif; --f-data:"Martian Mono",ui-monospace,monospace;
+  --r:10px; --r-chip:6px; --disp-w:760; --disp-stretch:118%; --disp-track:.005em;
+}
+.dir-c{
+  --bg:#0a1222; --sf:#111c31; --sf2:#18263f; --ln:#26385a; --tx:#f1f5fb; --mu:#a7b4c9; --ac:#f7862a; --info:#7cc8ff;
+  --ok:#7ee2b0; --fail:#ff9a8a; --null:#b6bfce; --ok-bg:rgba(126,226,176,.13); --fail-bg:rgba(255,154,138,.13); --null-bg:rgba(182,191,206,.10);
+  --luna:#d3d8e1; --tierra:#7cc8ff;
+  --f-disp:"Red Hat Display",system-ui,sans-serif; --f-body:"Red Hat Text",system-ui,sans-serif; --f-data:"Red Hat Mono",ui-monospace,monospace;
+  --r:16px; --r-chip:999px; --disp-w:800; --disp-stretch:100%; --disp-track:-.015em;
+}
+
+/* Versión final: base C (Horizonte) + mapas de B + componentes de A */
+.dir-f{ --r-chip:4px; --r-comp:6px; }
+.dir-c.dir-f .capa{border-radius:var(--r-comp)}
+.dir-c.dir-f .capa.is-true{box-shadow:inset 3px 0 0 var(--ok)}
+.dir-c.dir-f .capa.is-false{box-shadow:inset 3px 0 0 var(--fail)}
+.dir-f .mk,.dir-f .limits{border-radius:var(--r-comp)}
+.dir-f .maps-row{display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr);align-items:stretch;gap:10px}
+.dir-f .maps-row .map{height:100%}
+.dir-f .bridge{display:grid;justify-items:center;align-content:center;gap:4px;text-align:center;font-family:var(--f-data);font-size:10.5px;color:var(--ac)}
+.dir-f .bridge svg{width:64px;height:40px}
+.dir-f .final-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.origin{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.origin div{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r);padding:14px;display:grid;gap:6px}
+.origin b{font-family:var(--f-data);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);font-weight:600}
+.origin p{font-size:14px;color:var(--mu)}
+@media (max-width:820px){.dir-f .maps-row{grid-template-columns:1fr}.dir-f .bridge{transform:rotate(90deg);height:48px}.dir-f .final-cols{grid-template-columns:1fr}}
+.disp{font-family:var(--f-disp);font-weight:var(--disp-w);font-stretch:var(--disp-stretch);letter-spacing:var(--disp-track)}
+.data{font-family:var(--f-data);font-variant-numeric:tabular-nums;font-size:.86em}
+.dir-head{display:grid;gap:10px}
+.dir-head .tag{font-family:var(--f-data);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac)}
+.dir-head h2{font-size:clamp(30px,4.4vw,48px);line-height:1.05}
+.dir-head .idea{font-size:18px;color:var(--mu);max-width:62ch}
+.block{display:grid;gap:14px}
+.block>h3{font-family:var(--f-data);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);font-weight:400}
+.why{font-size:14px;color:var(--mu);max-width:78ch}
+.why b{color:var(--tx);font-weight:600}
+
+/* Paleta */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+.sw{border:1px solid var(--ln);border-radius:var(--r);overflow:hidden;background:var(--sf)}
+.sw i{display:block;height:46px}
+.sw div{padding:8px 10px;display:grid;gap:2px}
+.sw b{font-size:13px;font-weight:600}
+.sw span{font-family:var(--f-data);font-size:11px;color:var(--mu)}
+.sw i.striped{background-image:repeating-linear-gradient(135deg,var(--null) 0 6px,transparent 6px 12px)!important;background-color:var(--null-bg)!important}
+
+/* Tipografía */
+.type-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.type-card{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r);padding:16px;display:grid;gap:8px;min-width:0}
+.type-card .role{font-family:var(--f-data);font-size:11px;color:var(--mu);letter-spacing:.1em;text-transform:uppercase}
+.type-card .sample{font-size:26px;line-height:1.15;overflow-wrap:anywhere}
+.type-card .sample.body{font-family:var(--f-body);font-size:16px;line-height:1.5}
+.type-card .sample.mono{font-family:var(--f-data);font-size:15px}
+.type-card .name{font-size:13px;color:var(--mu)}
+
+/* Componentes */
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-items:start}
+.comp{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r);padding:16px;display:grid;gap:12px;min-width:0}
+.comp>.label{font-family:var(--f-data);font-size:11px;color:var(--mu);letter-spacing:.1em;text-transform:uppercase}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.stack{display:grid;gap:8px}
+
+/* Chip de veredicto */
+.vchip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:4px 10px 4px 7px;border-radius:var(--r-chip);border:1px solid;line-height:1.2;white-space:nowrap}
+.vchip svg{width:14px;height:14px;flex:none}
+.v-true{color:var(--ok);border-color:var(--ok);background:var(--ok-bg)}
+.v-false{color:var(--fail);border-color:var(--fail);background:var(--fail-bg)}
+.v-null{color:var(--null);border-color:var(--null);border-style:dashed;background:repeating-linear-gradient(135deg,var(--null-bg) 0 5px,transparent 5px 10px)}
+.api-val{font-family:var(--f-data);font-size:11px;color:var(--mu)}
+.chip-legend{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center}
+.chip-legend .vchip{justify-self:start}
+
+/* Chip verificada / candidato */
+.vchip.verif{color:var(--tx);border-color:var(--tx);background:transparent;font-weight:500}
+.vchip.cand{color:var(--mu);border-color:var(--mu);border-style:dashed;background:transparent;font-weight:500}
+
+/* Tarjeta de capa */
+.capa{background:var(--sf2);border:1px solid var(--ln);border-radius:var(--r);padding:14px;display:grid;gap:10px;min-width:0}
+.capa.is-true{box-shadow:inset 3px 0 0 var(--ok)}
+.capa.is-false{box-shadow:inset 3px 0 0 var(--fail)}
+.dir-c .capa.is-true,.dir-c .capa.is-false{box-shadow:none}
+.capa-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.capa-name{font-size:17px;line-height:1.2}
+.capa-desc{font-size:13px;color:var(--mu)}
+.capa .plain{font-size:15px;line-height:1.4}
+.pair{display:grid;gap:4px}
+.pair .who{font-weight:600;font-size:14px}
+.bar{height:8px;border-radius:99px;background:var(--bg);overflow:hidden;border:1px solid var(--ln)}
+.bar i{display:block;height:100%;background:var(--ok)}
+.bar.null i{background:repeating-linear-gradient(135deg,var(--null) 0 4px,transparent 4px 8px)}
+.metrics{display:grid;grid-template-columns:auto auto 1fr;gap:3px 12px;font-size:12px;align-items:baseline}
+.metrics dt{font-family:var(--f-data);color:var(--mu)}
+.metrics dd{margin:0;font-family:var(--f-data);font-variant-numeric:tabular-nums}
+.metrics .u{color:var(--mu);font-size:11px}
+.wf{display:grid;gap:6px;font-size:14px}
+.wf p{display:grid;grid-template-columns:18px 1fr;gap:6px;align-items:start}
+.wf svg{width:16px;height:16px;margin-top:2px}
+.wf .w svg{color:var(--ok)} .wf .f svg{color:var(--fail)} .wf .n svg{color:var(--null)}
+.wf b{font-weight:600}
+.src{font-size:12px;color:var(--mu);display:flex;flex-wrap:wrap;gap:4px 10px;border-top:1px dashed var(--ln);padding-top:8px}
+.src .data{font-size:11px}
+.pending{color:var(--mu);font-style:italic;font-size:13px}
+.ask{font-family:var(--f-data);font-size:10.5px;color:var(--ac);border:1px solid var(--ac);border-radius:var(--r-chip);padding:1px 6px;white-space:nowrap;font-style:normal}
+.btn-link{font:inherit;font-size:13px;color:var(--info);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+/* Marcadores */
+.markers{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px}
+.mk{display:grid;justify-items:center;gap:6px;text-align:center;font-size:12px;color:var(--mu);background:var(--bg);border:1px solid var(--ln);border-radius:var(--r);padding:12px 6px}
+.mk svg{width:56px;height:56px;overflow:visible}
+
+/* Cabecera */
+.appbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--bg);border:1px solid var(--ln);border-radius:var(--r);padding:10px 14px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.logo svg{width:34px;height:28px;flex:none}
+.logo .wm{font-size:19px;line-height:1}
+.logo .wm span{color:var(--ac)}
+.appnav{display:flex;gap:4px;flex-wrap:wrap;font-size:14px}
+.appnav a{padding:6px 10px;border-radius:var(--r-chip);text-decoration:none;color:var(--mu)}
+.appnav a[aria-current]{color:var(--tx);background:var(--sf2)}
+.spacer{flex:1}
+.seg{display:inline-flex;border:1px solid var(--ln);border-radius:var(--r-chip);overflow:hidden;font-size:13px}
+.seg button{font:inherit;background:none;border:0;color:var(--mu);padding:5px 10px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--sf2);color:var(--tx);font-weight:600}
+.dir-c .appbar{background:linear-gradient(180deg,#0a1222 0%,#0d1d3a 70%,#123059 100%);border-color:#2b4877;position:relative;overflow:hidden}
+.dir-c .appbar::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-38px;height:44px;border-radius:50%;border-top:2px solid rgba(124,200,255,.65);box-shadow:0 -6px 18px rgba(124,200,255,.25);pointer-events:none}
+
+/* Pantalla de detalle */
+.screen{border:1px solid var(--ln);border-radius:calc(var(--r) + 4px);background:var(--bg);overflow:hidden}
+.screen-chrome{display:flex;gap:6px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--ln);background:var(--sf);font-family:var(--f-data);font-size:11px;color:var(--mu)}
+.screen-chrome i{width:9px;height:9px;border-radius:50%;background:var(--ln);display:inline-block}
+.screen-body{padding:16px;display:grid;gap:16px}
+.crumbs{font-size:13px;color:var(--mu)}
+.crumbs a{text-decoration:none}
+.site-title{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end;justify-content:space-between}
+.site-title h4{font-family:var(--f-disp);font-weight:var(--disp-w);font-stretch:var(--disp-stretch);font-size:clamp(26px,3.4vw,38px);line-height:1;margin:0;letter-spacing:var(--disp-track)}
+.facts{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mu)}
+.facts .data{color:var(--tx)}
+.detail-grid{display:grid;gap:16px;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}
+.maps{display:grid;gap:10px;align-content:start}
+.map{position:relative;background:#03060c;border:1px solid var(--ln);border-radius:var(--r);overflow:hidden}
+.map svg{display:block;width:100%;height:auto}
+.map .cap{white-space:nowrap;position:absolute;left:10px;top:8px;font-size:12px;font-weight:600;display:flex;gap:6px;align-items:center;background:rgba(0,0,0,.55);padding:3px 8px;border-radius:var(--r-chip)}
+.map .foot{position:absolute;left:10px;right:10px;bottom:8px;font-size:11px;color:var(--mu);font-family:var(--f-data)}
+.panel{display:grid;gap:10px;align-content:start}
+.panel-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.panel-h h5{font-family:var(--f-disp);font-weight:var(--disp-w);font-stretch:var(--disp-stretch);font-size:18px;margin:0}
+.tally{font-size:13px;color:var(--mu)}
+.lrow{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:start;padding:10px 0;border-top:1px solid var(--ln)}
+.lrow .lname{font-weight:600;font-size:14px}
+.lrow .ldet{grid-column:2;font-size:13px;color:var(--mu)}
+.lrow .ldet .data{color:var(--tx)}
+.limits{background:var(--sf);border:1px dashed var(--ln);border-radius:var(--r);padding:12px;display:grid;gap:8px}
+.limits h6{margin:0;font-size:13px;font-weight:600}
+.limits ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.limits li{font-size:12.5px;border:1px solid var(--fail);color:var(--fail);border-radius:var(--r-chip);padding:3px 9px;display:inline-flex;gap:5px;align-items:center}
+.limits li svg{width:12px;height:12px}
+.limits p{font-size:12px;color:var(--mu)}
+
+/* Variantes de layout */
+.dir-b .detail-grid{grid-template-columns:1fr}
+.dir-b .maps{grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr);align-items:center}
+.dir-b .bridge{display:grid;justify-items:center;gap:4px;text-align:center;font-family:var(--f-data);font-size:10.5px;color:var(--ac)}
+.dir-b .bridge svg{width:64px;height:40px}
+.dir-b .wf-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.dir-b .col-h{font-family:var(--f-disp);font-stretch:var(--disp-stretch);font-weight:700;font-size:15px;display:flex;gap:8px;align-items:center;padding-bottom:6px;border-bottom:2px solid}
+.dir-b .col-h.w{color:var(--ok);border-color:var(--ok)} .dir-b .col-h.f{color:var(--fail);border-color:var(--fail)}
+.dir-b .col-h svg{width:16px;height:16px}
+.dir-c .hero-line{font-family:var(--f-disp);font-weight:700;font-size:clamp(20px,2.4vw,26px);line-height:1.25;max-width:40ch}
+.dir-c .hero-line em{font-style:normal;color:var(--ok)} .dir-c .hero-line s{text-decoration:none;color:var(--fail)}
+.dir-c .lrow{border-top:0;background:var(--sf);border-radius:12px;padding:12px;margin-top:2px}
+.dir-a .lrow{padding:8px 0}
+.dir-a .panel{font-size:13px}
+
+/* Pros / contras */
+.pc{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.pc>div{background:var(--sf);border:1px solid var(--ln);border-radius:var(--r);padding:16px;display:grid;gap:8px;align-content:start}
+.pc h4{margin:0;font-size:15px;display:flex;gap:8px;align-items:center}
+.pc h4 svg{width:16px;height:16px}
+.pc .p h4{color:var(--ok)} .pc .c h4{color:var(--fail)}
+.pc ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px}
+
+/* Peticiones y voto */
+.asks,.vote{padding-block:40px;display:grid;gap:16px;border-top:1px solid var(--page-ln)}
+.asks table{width:100%;border-collapse:collapse;font-size:14px;min-width:620px}
+.asks th,.asks td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--page-ln);vertical-align:top}
+.asks th{font-family:var(--f-page-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--page-mu);font-weight:400}
+.tscroll{overflow-x:auto}
+.vote .rec{background:var(--page-sf);border:1px solid var(--brand);border-radius:12px;padding:18px;display:grid;gap:8px;max-width:820px}
+.vote .rec h3{font-size:17px;color:var(--brand)}
+.vote ol{margin:0;padding-left:20px;display:grid;gap:6px;color:var(--page-mu)}
+.vote ol b{color:var(--page-tx);font-weight:500}
+footer{padding-block:24px 48px;color:var(--page-mu);font-size:13px;border-top:1px solid var(--page-ln)}
+
+@media (max-width:820px){
+  .detail-grid{grid-template-columns:1fr}
+  .dir-b .maps{grid-template-columns:1fr}
+  .dir-b .bridge{transform:rotate(90deg);height:48px}
+  .dir-b .wf-cols{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){
+  .pulse{animation:pulse 2.4s ease-out infinite;transform-origin:center;transform-box:fill-box}
+  @keyframes pulse{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(2.2)}}
+}
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <span class="eyebrow">Pathfinders42 · NASA Space Apps 2026 · Fase 1 · versión final elegida por el equipo</span>
+    <h1>Diseño final: <b>Horizonte</b>, con los mapas del Atlas y los componentes de Sala de control.</h1>
+    <p class="lead">Es la mezcla que eligió el equipo. La base, la cabecera, la paleta y la tipografía vienen de C. Los dos mapas a la misma altura vienen de B, y las tarjetas, chips y marcadores, de A. La pantalla de ejemplo es el detalle de <strong>Malapert Massif</strong> (Luna, región Artemis III) con su mejor pareja de anortosita, <strong>Lofoten</strong>. Todos los números salen de los ejemplos reales de la API v0.2.0. Lo que la API aún no da va marcado como <span class="mono" style="color:var(--brand)">petición al back</span>.</p>
+    <nav class="jump" aria-label="Ir a">
+      <a href="#comunes">Decisiones comunes</a>
+      <a href="#final">Diseño final</a>
+      <a href="#peticiones">Peticiones al back</a>
+      <a href="#siguiente">Siguiente paso</a>
+    </nav>
+  </header>
+
+  <section class="common" id="comunes" aria-labelledby="h-comunes">
+    <h2 id="h-comunes">Reglas que el diseño cumple</h2>
+    <div class="grid-notes">
+      <div class="note"><h3>El semáforo es el veredicto de la API</h3><p>El color sale de <code>parecido</code> / <code>hay_parecido</code> tal cual: <strong>true = funciona</strong>, <strong>false = falla</strong>, <strong>null = la capa no lo decide</strong>. Solo 3 de las 6 capas tienen umbral numérico, así que el front no recalcula veredictos. La barra de «parecido» (1 − distancia) es información extra, nunca el veredicto.</p></div>
+      <div class="note"><h3>null nunca se pinta como false</h3><p>«La capa no lo decide» lleva <strong>gris, borde discontinuo, rayado y un guion</strong>. «Falla» lleva color, borde continuo y una ✗. Así se distinguen aunque no veas el color, o en blanco y negro.</p></div>
+      <div class="note"><h3>Un mapa por cuerpo</h3><p>El sitio se pinta en el mapa de <strong>su</strong> cuerpo (Luna o Marte) y la pareja en el de la Tierra. Nunca en el mismo lienzo: las coordenadas no son comparables.</p></div>
+      <div class="note"><h3>Cada dato dice de dónde sale</h3><p>Cada tarjeta acaba con <strong>capa · fuente · nº de parejas</strong>, y cada análogo lleva su chip <strong>verificada / candidato</strong>.</p></div>
+      <div class="note"><h3>Dos idiomas desde el día 1</h3><p>Textos de la interfaz en <code>es.json</code> y <code>en.json</code> con <strong>react-i18next</strong> (funciona en React sin Next). Números y coordenadas con <code>Intl.NumberFormat</code>: <span class="mono">0,229</span> en español, <span class="mono">0.229</span> en inglés. Los componentes se dibujan con el texto español, que es el más largo.</p></div>
+      <div class="note warn"><h3>Ojo con el logo: quitar la insignia de la NASA</h3><p>La imagen del equipo lleva el logo de la NASA. La NASA no permite usar su insignia sin permiso y Space Apps pide no usarla en los proyectos. Propongo usar <strong>solo el símbolo del equipo (estrella + arco naranja) y «Pathfinders42»</strong>. El diseño final lo redibuja así.</p></div>
+    </div>
+  </section>
+</div>
+
+<section class="dir dir-c dir-f" id="final" aria-labelledby="h-f"><div class="wrap" data-dir="f"></div></section>
+
+<div class="wrap">
+  <section class="asks" id="peticiones" aria-labelledby="h-asks">
+    <h2 id="h-asks">Peticiones al back que salen del diseño</h2>
+    <p style="color:var(--page-mu);max-width:72ch">El front solo pinta lo que da la API. Esto es lo que el diseño necesita y hoy no está en la v0.2.0. Conviene abrirlo como issues en el repo del back.</p>
+    <div class="tscroll"><table>
+      <thead><tr><th>Qué falta</th><th>Para qué lo usa el diseño</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td>Posición y geometría de las parejas de la Tierra (p. ej. <code>lofoten_flakstadoy</code>)</td><td>Pintar la pareja en el mapa de la Tierra, al lado del sitio</td><td>Ya planificado: <code>/analogos/{id}</code> en S3</td></tr>
+        <tr><td>Fuente (dataset) de cada capa en <code>resumen</code></td><td>Pie «capa · fuente» de cada tarjeta. Hoy solo hay fuente a nivel de sitio (<code>propiedades.fuente</code>)</td><td>Pedir. <code>/fuentes</code> está previsto para S4</td></tr>
+        <tr><td>Textos en inglés de <code>nombre</code> y <code>descripcion</code></td><td>Interfaz bilingüe. Alternativa barata: las 6 descripciones de capa van en el i18n del front, con <code>capa</code> como clave, y los nombres propios no se traducen</td><td>A decidir con el back</td></tr>
+        <tr><td>Confirmar el signo de <code>brecha_*</code> (¿sitio − pareja?)</td><td>Escribir «Malapert es 121,7 °C más frío» sin equivocarnos de sentido</td><td>Pregunta</td></tr>
+        <tr><td>Verificación de la pareja fuera de <code>anortosita</code></td><td>El chip verificada / candidato. Hoy solo aparece en <code>detalles.verificacion</code> de algunas capas</td><td>Pregunta</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="vote" id="siguiente" aria-labelledby="h-next">
+    <h2 id="h-next">Siguiente paso: Fase 2</h2>
+    <ol>
+      <li><b>Revisad esta versión.</b> Si algo no encaja, se cambia aquí antes de documentarlo.</li>
+      <li><b>Con vuestro OK</b>, la documento en <code>sistema-visual.md</code>: tokens de color, tipografía, espaciados y radios listos para Tailwind v4 con <code>@theme</code>, y la lista de componentes con sus estados.</li>
+      <li><b>Las peticiones al back</b> de la tabla de arriba conviene abrirlas ya como issues, sobre todo <code>/analogos</code>, porque sin ella el mapa de la Tierra no puede situar las parejas.</li>
+    </ol>
+  </section>
+  <footer>Maqueta de diseño (versión final). No es código de la app. Datos: ejemplos de <code>GET /api/v1/sitios/artemis-malapert-massif</code> (API v0.2.0, 2 nov 2026). Los mapas son esquemas, no cartografía.</footer>
+</div>
+
+<script>
+(function(){
+const I = {
+  check:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg>',
+  x:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>',
+  dash:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 8h8"/></svg>',
+  seal:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.5l1.7 1.3 2.1-.2.6 2 1.8 1.1-.7 2 .7 2-1.8 1.1-.6 2-2.1-.2L8 14.5l-1.7-1.3-2.1.2-.6-2-1.8-1.1.7-2-.7-2 1.8-1.1.6-2 2.1.2z"/><path d="M5.6 8.2l1.6 1.5 3.2-3.2"/></svg>',
+  circ:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="2.4 2" aria-hidden="true"><circle cx="8" cy="8" r="6"/></svg>'
+};
+const vchip = (v, short) => v===true ? `<span class="vchip v-true">${I.check}Funciona</span>`
+  : v===false ? `<span class="vchip v-false">${I.x}Falla</span>`
+  : `<span class="vchip v-null">${I.dash}${short?'No decide':'La capa no lo decide'}</span>`;
+const verif = s => s==='verificada' ? `<span class="vchip verif">${I.seal}Verificada</span>` : `<span class="vchip cand">${I.circ}Candidato</span>`;
+const logo = (id) => `<a class="logo" href="#${id==='f'?'final':'direccion-'+id}" aria-label="Pathfinders42, inicio">
+  <svg viewBox="0 0 40 32" aria-hidden="true"><path d="M3 24 A18 17 0 0 1 37 24" fill="none" stroke="var(--ac)" stroke-width="2.4" stroke-linecap="round"/><circle cx="32.5" cy="12.5" r="2.4" fill="var(--ac)"/><path d="M20 2 L22 14 L31 16 L22 18 L20 30 L18 18 L9 16 L18 14 Z" fill="var(--tx)"/></svg>
+  <span class="wm disp">Pathfinders<span>42</span></span></a>`;
+
+const D = {
+ a:{ tag:'Dirección A', name:'Sala de control', idea:'La app como la consola de una misión: todo el dato a la vista, denso, preciso y alineado en columnas.',
+   pal:[['Fondo','#070d1a','bg'],['Superficie','#0e1829','sf'],['Texto','#e6edf7','tx'],['Acento (logo)','#f7862a','ac'],['Info / enlaces','#4aa8ff','info'],['Funciona · true','#3dd6a3','ok'],['Falla · false','#ff7482','fail'],['No decide · null','#8d9ab0 + rayado','null']],
+   palWhy:'<b>Por qué:</b> el azul noche y el naranja salen del logo. El naranja se reserva para acciones y selección y <b>nunca</b> significa veredicto, para que no se confunda con «falla». Verde azulado y coral se separan algo para el daltonismo rojo-verde, pero no del todo, así que aquí el icono y la palabra son obligatorios.',
+   type:[['Títulos','Exo 2','Malapert Massif','disp'],['Texto','IBM Plex Sans','Afloramientos de anortosita (tierras altas lunares): roca + topografía.','body'],['Datos','JetBrains Mono','d_topo 0.158 · −121,7 °C','mono']],
+   typeWhy:'<b>Por qué:</b> Exo 2 es geométrica y ancha como el wordmark del logo, pero solo va en títulos. Plex Sans aguanta texto pequeño en pantallas densas. La monoespaciada alinea las cifras en columnas, que es lo que pide una consola.',
+   pros:['La más rápida de construir: filas, tablas y poco adorno.','Muy legible en proyector gracias al contraste alto.','Transmite rigor al jurado experto.','Mucha información sin hacer scroll.'],
+   cons:['Densa para el público general.','Riesgo de parecer «un dashboard más».','Verde azulado y coral dependen del icono para el daltonismo.','El mapa de la Tierra queda como recuadro pequeño, menos protagonista.'],
+ },
+ b:{ tag:'Dirección B', name:'Atlas comparado', idea:'Siempre dos mundos lado a lado, unidos por el arco naranja del logo: la comparación es la pantalla.',
+   pal:[['Fondo basalto','#0b0e13','bg'],['Superficie','#141920','sf'],['Regolito (Luna)','#cfd3da','luna'],['Tierra (mar)','#7ccfb8','tierra'],['Puente (logo)','#ff8a3d','ac'],['Funciona · true','#56b4e9','ok'],['Falla · false','#e58cc0','fail'],['No decide · null','#a8afba + rayado','null']],
+   palWhy:'<b>Por qué:</b> el semáforo usa azul cielo y rosa púrpura de la paleta Okabe-Ito, pensada para que la distingan personas con cualquier tipo de daltonismo. No usa rojo ni verde. El naranja del logo es el «puente» que une Luna y Tierra, y el gris regolito marca lo que es de la Luna.',
+   type:[['Títulos','Archivo (ancha)','Malapert Massif','disp'],['Texto','Atkinson Hyperlegible','Afloramientos de anortosita (tierras altas lunares): roca + topografía.','body'],['Datos','Martian Mono','d_topo 0.158 · −121,7 °C','mono']],
+   typeWhy:'<b>Por qué:</b> Archivo tiene un eje de anchura. En ancho recuerda al logo, y la misma fuente sirve en estrecho para etiquetas. Atkinson Hyperlegible la diseñó el Braille Institute para baja visión y distingue bien letras parecidas (I l 1, 0 O). Martian Mono pone el toque espacial solo en los números.',
+   pros:['Cuenta la analogía de un vistazo: Luna a la izquierda, Tierra a la derecha.','Cumple de forma visible la regla de un mapa por cuerpo.','Semáforo seguro para daltonismo incluso sin icono.','Columnas «Funciona / Falla» que responden justo a lo que pide el reto.'],
+   cons:['Dos mapas MapLibre a la vez (aunque la regla de un mapa por cuerpo ya obliga a tener dos).','El mapa de la Tierra depende de /analogos (petición al back, S3).','En móvil los mapas se apilan y se pierde parte del efecto.','Tres fuentes distintas, así que hay más carga y más que coordinar.'],
+ },
+ f:{ tag:'Versión final', name:'Horizonte comparado', idea:'Primero la frase que entiende cualquiera y luego el número, con la Luna y la Tierra a la misma altura para comparar.',
+   pal:[['Fondo noche','#0a1222','bg'],['Superficie','#111c31','sf'],['Horizonte','#7cc8ff','info'],['Acento (logo)','#f7862a','ac'],['Texto','#f1f5fb','tx'],['Regolito (Luna)','#d3d8e1','luna'],['Funciona · true','#7ee2b0','ok'],['Falla · false','#ff9a8a','fail'],['No decide · null','#b6bfce + rayado','null']],
+   palWhy:'<b>Por qué:</b> es la paleta de C. El brillo azul del horizonte del logo solo va en la cabecera, porque un degradado detrás del texto baja el contraste. El naranja es para acciones, selección y el «puente» entre mapas, y <b>nunca</b> significa un veredicto. Verde y salmón no se distinguen bien con daltonismo rojo-verde, así que cada veredicto lleva <b>siempre</b> icono y palabra, y el null además va rayado.',
+   type:[['Títulos','Red Hat Display','Malapert Massif','disp'],['Texto','Red Hat Text','Afloramientos de anortosita (tierras altas lunares): roca + topografía.','body'],['Datos','Red Hat Mono','d_topo 0.158 · −121,7 °C','mono']],
+   typeWhy:'<b>Por qué:</b> es la tipografía de C. Una sola familia en tres versiones (Display, Text y Mono) se ve coherente sin esfuerzo y se carga de una vez. Los números van en Mono con cifras tabulares, para que se alineen en las tarjetas de A.',
+   pros:['Clara para el público general (frase primero) y rigurosa para el experto (tarjetas densas de A con todos los campos).','Los dos mapas a la misma altura dejan ver la analogía de un vistazo y cumplen la regla de un mapa por cuerpo.','Una sola familia tipográfica: menos carga y menos decisiones.','Las tarjetas y chips de A son rectangulares y simples, así que son rápidos de construir con Tailwind.'],
+   cons:['Las frases en lenguaje llano hay que construirlas con plantillas sobre datos de la API, en dos idiomas.','Dos mapas MapLibre a la vez, y el de la Tierra depende de /analogos (petición al back, S3).','La paleta de C no es segura para daltonismo por sí sola: depende de los iconos y las palabras, que no se pueden quitar nunca.','Mezclar radios (contenedores redondeados de C y componentes rectos de A) exige fijarlos en tokens para que no se descuadren.'],
+ },
+ c:{ tag:'Dirección C', name:'Horizonte', idea:'Primero la frase que entiende cualquiera y luego el número: divulgación con rigor, bajo el horizonte del logo.',
+   pal:[['Fondo noche','#0a1222','bg'],['Superficie','#111c31','sf'],['Horizonte','#7cc8ff','info'],['Acento (logo)','#f7862a','ac'],['Texto','#f1f5fb','tx'],['Funciona · true','#7ee2b0','ok'],['Falla · false','#ff9a8a','fail'],['No decide · null','#b6bfce + rayado','null']],
+   palWhy:'<b>Por qué:</b> el brillo azul del horizonte del logo solo aparece en la cabecera, porque un degradado detrás del texto baja el contraste. Los colores del semáforo son más claros y suaves, en tono divulgativo, y siempre van en píldoras con la palabra completa.',
+   type:[['Títulos','Red Hat Display','Malapert Massif','disp'],['Texto','Red Hat Text','Afloramientos de anortosita (tierras altas lunares): roca + topografía.','body'],['Datos','Red Hat Mono','d_topo 0.158 · −121,7 °C','mono']],
+   typeWhy:'<b>Por qué:</b> una sola familia en tres versiones (Display, Text y Mono) se ve coherente sin esfuerzo y es fácil de mantener. Display es redonda y cercana, y Text está hecha para tamaños pequeños.',
+   pros:['La más clara para el público general y para el vídeo del pitch.','Cada capa empieza con una frase: «se parece en la roca, falla en la temperatura».','Una sola familia tipográfica, coherente y fácil de mantener.','Tarjetas amplias y cómodas con teclado.'],
+   cons:['Las frases hay que construirlas con plantillas sobre datos de la API y en dos idiomas: más trabajo de i18n.','Menos densidad, así que el experto hace más scroll.','Verde y salmón dependen del icono y la palabra para el daltonismo.','El degradado del horizonte hay que limitarlo para no perder contraste.'],
+ }
+};
+
+function palette(d){
+  return `<div class="swatches">${d.pal.map(([n,h,k])=>`<div class="sw"><i class="${k==='null'?'striped':''}" style="background:var(--${k})"></i><div><b>${n}</b><span>${h}</span></div></div>`).join('')}</div>
+  <div class="row" style="margin-top:4px">${vchip(true)}${vchip(false)}${vchip(null)}</div>
+  <p class="why">${d.palWhy}</p>`;
+}
+function typo(d){
+  return `<div class="type-row">${d.type.map(([r,f,s,k])=>`<div class="type-card"><span class="role">${r}</span><span class="sample ${k==='disp'?'disp':k}">${s}</span><span class="name">${f}</span></div>`).join('')}</div><p class="why">${d.typeWhy}</p>`;
+}
+function capaCard(c, id){
+  const plain = (id==='c'||id==='f') && c.plain ? `<p class="plain">${c.plain}</p>` : '';
+  let pair='';
+  if(c.mejor){
+    const m=c.mejor, pct=Math.round((1-m.distancia)*100);
+    pair = `<div class="pair">
+      <div class="row" style="justify-content:space-between"><span class="who">${m.nombre}</span>${m.verificacion?verif(m.verificacion):''}</div>
+      <div class="row" style="gap:6px;font-size:12px;color:var(--mu)">Parecido por pareja: ${vchip(m.parecido,true)}</div>
+      <div class="bar ${m.parecido===null?'null':''}" role="img" aria-label="Parecido ${pct} por ciento, distancia ${String(m.distancia).replace('.',',')}"><i style="width:${pct}%"></i></div>
+      <dl class="metrics"><dt>parecido</dt><dd>${pct} %</dd><span class="u">1 − distancia</span><dt>distancia</dt><dd>${String(m.distancia).replace('.',',')}</dd><span class="u">0 = igual · 1 = nada parecido</span>${m.det.map(([k,v,u])=>`<dt>${k}</dt><dd>${v}</dd><span class="u">${u||''}</span>`).join('')}</dl>
+    </div>`;
+  } else {
+    pair = `<p class="pending">Mejor pareja y distancias: llegan de <code>resumen[].mejor</code> al conectar la API.</p>`;
+  }
+  const wf = `<div class="wf">${c.funciona?`<p class="w">${I.check}<span><b>Funciona:</b> ${c.funciona}</span></p>`:''}${c.falla?`<p class="f">${I.x}<span><b>Falla:</b> ${c.falla}</span></p>`:''}${c.nota?`<p class="n">${I.dash}<span>${c.nota}</span></p>`:''}</div>`;
+  return `<article class="capa is-${c.v}">
+    <div class="capa-top"><div><div class="capa-name disp">${c.nombre}</div><div class="capa-desc">${c.desc}</div></div>${vchip(c.v)}</div>
+    ${plain}${pair}${wf}
+    <div class="src"><span>Capa <span class="data">${c.capa}</span></span><span>Fuente: ${c.fuente}</span>${c.n?`<span>${c.n} parejas · <button class="btn-link" type="button">ver todas</button></span>`:''}</div>
+  </article>`;
+}
+const CAPAS = [
+  {capa:'anortosita', nombre:'Anortosita', v:true, n:3,
+   desc:'Afloramientos de anortosita (tierras altas lunares): roca + topografía.',
+   plain:'Se parece <em style="font-style:normal;color:var(--ok)">en la roca y en el relieve</em>: es la única capa que funciona en este sitio.',
+   mejor:{nombre:'Lofoten (macizo de Flakstadøy), Noruega', distancia:.229, parecido:true, verificacion:'verificada', det:[['d_geo','0,3','análogo completo si ≤ 0,4'],['d_topo','0,158','y si ≤ 0,2']]},
+   funciona:'misma roca (anortosita) y relieve parecido. Análogo completo según la regla de la capa.',
+   fuente:'<span class="ask">petición al back</span>'},
+  {capa:'clima', nombre:'Clima', v:false, n:5,
+   desc:'Temperatura de superficie (percentiles) + topografía.',
+   plain:'Falla <span style="color:var(--fail)">en la temperatura</span>: incluso la mejor pareja tiene una brecha media de −121,7 °C*.',
+   mejor:{nombre:'Askja, Islandia', distancia:.37, parecido:null, det:[['dist_clima','0,082',''],['brecha_ts_media','−121,7 °C','sitio − pareja*'],['brecha_ts_min','−188,2 °C','sitio − pareja*']]},
+   falla:'Malapert es 121,7 °C más frío de media que Askja y 188,2 °C más en la mínima*.',
+   nota:'La pareja sale «no decide» y el sitio «falla»: son veredictos distintos (por pareja y por sitio).',
+   fuente:'Diviner (Luna) · MODIS (Tierra)'}
+];
+function components(d,id){
+  return `<div class="comp-grid">
+    <div class="comp"><span class="label">Tarjeta de capa · funciona</span>${capaCard(CAPAS[0],id)}</div>
+    <div class="comp"><span class="label">Tarjeta de capa · falla, con pareja «no decide»</span>${capaCard(CAPAS[1],id)}</div>
+    <div class="stack" style="gap:14px">
+      <div class="comp"><span class="label">Chip de veredicto</span>
+        <div class="chip-legend">${vchip(true)}<span class="api-val">true · parecido / hay_parecido</span>${vchip(false)}<span class="api-val">false</span>${vchip(null)}<span class="api-val">null · ≠ false</span></div>
+      </div>
+      <div class="comp"><span class="label">Chip de verificación (ficha)</span>
+        <div class="chip-legend">${verif('verificada')}<span class="api-val">una fuente lo presenta como análogo</span>${verif('candidato')}<span class="api-val">sin fuente explícita</span></div>
+      </div>
+      <div class="comp"><span class="label">Marcador de sitio en el mapa</span>${markers(id)}
+        <p class="why" style="font-size:12.5px">La forma dice el <b>tipo</b> (región, aterrizaje, cueva) y el anillo naranja dice «seleccionado». Así el color queda libre para el veredicto.</p></div>
+    </div>
+    <div class="comp" style="grid-column:1/-1"><span class="label">Cabecera</span>
+      <div class="appbar">${logo(id)}
+        <nav class="appnav" aria-label="Principal (maqueta)"><a href="#${id==='f'?'final':'direccion-'+id}" aria-current="page">Explorar</a><a href="#${id==='f'?'final':'direccion-'+id}">Usos de misión</a><a href="#${id==='f'?'final':'direccion-'+id}">Límites de la Tierra</a><a href="#${id==='f'?'final':'direccion-'+id}">Fuentes</a></nav>
+        <span class="spacer"></span>
+        <div class="seg" role="group" aria-label="Cuerpo"><button type="button" aria-pressed="true">Luna</button><button type="button" aria-pressed="false">Marte</button></div>
+        <div class="seg" role="group" aria-label="Idioma"><button type="button" aria-pressed="true">ES</button><button type="button" aria-pressed="false">EN</button></div>
+      </div>
+      <p class="why" style="font-size:12.5px">«Usos de misión» y «Fuentes» son de S4. En el MVP pueden salir deshabilitados o no salir. El selector Luna / Marte cambia el mapa del cuerpo, y la Tierra aparece siempre como mapa de parejas.</p>
+    </div>
+  </div>`;
+}
+function markers(id){
+  const ring = `<circle cx="28" cy="28" r="17" fill="none" stroke="var(--ac)" stroke-width="2.5"/>`;
+  const pulse = `<circle class="pulse" cx="28" cy="28" r="10" fill="none" stroke="var(--ac)" stroke-width="2"/>`;
+  return `<div class="markers">
+    <div class="mk"><svg viewBox="0 0 56 56"><path d="M18 20 L34 15 L41 27 L35 40 L20 38 L14 28 Z" fill="var(--luna)" fill-opacity=".18" stroke="var(--luna)" stroke-width="2"/></svg>Región Artemis</div>
+    <div class="mk"><svg viewBox="0 0 56 56"><path d="M28 16 L40 28 L28 40 L16 28 Z" fill="var(--luna)" stroke="var(--bg)" stroke-width="2"/></svg>Aterrizaje</div>
+    <div class="mk"><svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="10" fill="none" stroke="var(--luna)" stroke-width="4"/><circle cx="28" cy="28" r="3" fill="var(--luna)"/></svg>Cueva / pozo</div>
+    <div class="mk"><svg viewBox="0 0 56 56">${pulse}<path d="M18 20 L34 15 L41 27 L35 40 L20 38 L14 28 Z" fill="var(--ac)" fill-opacity=".25" stroke="var(--ac)" stroke-width="2.5"/></svg>Seleccionado</div>
+    <div class="mk"><svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="9" fill="var(--tierra)" stroke="var(--bg)" stroke-width="2"/></svg>Pareja (Tierra)</div>
+    <div class="mk"><svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="9" fill="none" stroke="var(--tierra)" stroke-width="2" stroke-dasharray="3 3"/></svg>Candidato M1 (S4)</div>
+  </div>`;
+}
+function moonMap(){
+  // Proyección polar sur esquemática: centro = polo, anillo exterior = 80° S. Malapert: 85,99° S, 0,24° O → ~4° del polo, arriba.
+  return `<div class="map"><span class="cap"><svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="var(--luna)"/></svg>Luna · polo sur</span>
+  <svg viewBox="0 0 400 250" role="img" aria-label="Esquema del polo sur lunar con Malapert Massif a unos 4 grados del polo">
+    <defs><radialGradient id="mg" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#2a2f38"/><stop offset="1" stop-color="#0d1015"/></radialGradient></defs>
+    <rect width="400" height="250" fill="#05070b"/>
+    <circle cx="200" cy="130" r="112" fill="url(#mg)"/>
+    <g fill="none" stroke="#3a414d" stroke-width="1"><circle cx="200" cy="130" r="112"/><circle cx="200" cy="130" r="56" stroke-dasharray="3 4"/><path d="M200 18v224M88 130h224" stroke-dasharray="2 5"/></g>
+    <g fill="#1a1e25" stroke="#2f3540"><circle cx="150" cy="160" r="18"/><circle cx="250" cy="95" r="12"/><circle cx="235" cy="175" r="22"/><circle cx="165" cy="98" r="9"/></g>
+    <text x="206" y="74" fill="#6d7686" font-size="10" font-family="monospace">85° S</text>
+    <text x="206" y="30" fill="#6d7686" font-size="10" font-family="monospace">80° S</text>
+    <circle cx="200" cy="130" r="2.5" fill="#6d7686"/>
+    <circle class="pulse" cx="200" cy="85" r="14" fill="none" stroke="var(--ac)" stroke-width="2"/>
+    <path d="M188 80 L203 73 L214 82 L210 96 L193 97 Z" fill="var(--ac)" fill-opacity=".25" stroke="var(--ac)" stroke-width="2.2"/>
+    <text x="220" y="92" fill="var(--tx)" font-size="12" font-weight="600">Malapert Massif</text>
+  </svg><span class="foot">Esquema · geometría real: <span style="color:var(--tx)">geometria</span> (Polygon)</span></div>`;
+}
+function earthMap(){
+  return `<div class="map"><span class="cap"><svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="var(--tierra)"/></svg>Tierra · pareja</span>
+  <svg viewBox="0 0 400 250" role="img" aria-label="Esquema de la Tierra; la posición de Lofoten llegará del endpoint de análogos">
+    <rect width="400" height="250" fill="#030810"/>
+    <g fill="none" stroke="#1d3350" stroke-width="1"><path d="M0 62h400M0 125h400M0 188h400" stroke-dasharray="2 5"/><path d="M100 0v250M200 0v250M300 0v250" stroke-dasharray="2 5"/></g>
+    <g fill="#12253d" stroke="#1f3b5f"><path d="M160 40 C190 20 240 25 250 50 C262 78 230 92 210 110 C195 124 170 110 165 90 C158 72 140 58 160 40Z"/><path d="M60 70 C90 55 120 70 118 100 C116 130 90 150 80 180 C70 205 50 170 52 140 C54 110 40 85 60 70Z"/><path d="M270 110 C300 100 340 115 335 145 C330 170 300 175 285 160 C270 148 255 120 270 110Z"/></g>
+    <circle cx="214" cy="46" r="10" fill="none" stroke="var(--tierra)" stroke-width="2" stroke-dasharray="3 3"/>
+    <text x="230" y="44" fill="var(--tx)" font-size="12" font-weight="600">Lofoten</text>
+    <text x="230" y="58" fill="#7f8ea3" font-size="10">posición pendiente</text>
+  </svg><span class="foot">Esquema · posición: <span style="color:var(--ac)">/analogos/{id} (petición al back, S3)</span></span></div>`;
+}
+const LROWS = [
+  {v:true, n:'Anortosita', d:'Lofoten (macizo de Flakstadøy), Noruega · <span class="data">distancia 0,229</span> · verificada'},
+  {v:false, n:'Clima', d:'Mejor pareja Askja, Islandia (no decide) · brecha media <span class="data">−121,7 °C</span>, mínima <span class="data">−188,2 °C</span>'},
+  {v:false, n:'Topografía', d:'<span class="pending">pareja y distancia al conectar la API</span>'},
+  {v:false, n:'Geología', d:'Sitio: <span class="data">clase_dominante anortosita · f_anortosita 1,0</span>'},
+  {v:false, n:'Hielo', d:'Sitio: <span class="data">f_hielo 0,21</span>'},
+];
+function limits(){
+  return `<div class="limits"><h6>Límites de la Tierra como análogo · siempre fallan</h6>
+    <ul><li>${I.x}Gravedad reducida</li><li>${I.x}Vacío lunar</li><li>${I.x}Radiación</li></ul>
+    <p>Ninguna pareja de la Tierra los reproduce. Texto fijo (i18n) de la sección «Límites», P1 de S3.</p></div>`;
+}
+function rowsHTML(filter){ return LROWS.filter(filter||(()=>true)).map(r=>`<div class="lrow">${vchip(r.v)}<span class="lname">${r.n}</span><span class="ldet">${r.d}</span></div>`).join(''); }
+function detail(id){
+  const head = `<nav class="crumbs" aria-label="Migas"><a href="#${id==='f'?'final':'direccion-'+id}">Luna</a> › <a href="#${id==='f'?'final':'direccion-'+id}">Regiones Artemis III</a> › <span aria-current="page">Malapert Massif</span></nav>
+    <div class="site-title"><h4>Malapert Massif</h4><div class="row"><span class="vchip cand" style="color:var(--luna);border-color:var(--luna);border-style:solid">region_aterrizaje_artemis</span></div></div>
+    <div class="facts"><span><span class="data">85,9948° S · 0,2358° O</span></span><span>Área <span class="data">441,0 km²</span></span><span>Fuente: <a href="#${id==='f'?'final':'direccion-'+id}">USGS ScienceBase, Artemis III</a></span><span>5 capas</span></div>`;
+  const tally = `<span class="tally">1 de 5 capas funcionan</span>`;
+  let body='';
+  if(id==='a'){
+    body = `<div class="detail-grid"><div class="maps">${moonMap()}${earthMap()}</div>
+      <div class="panel"><div class="panel-h"><h5>Dónde funciona / dónde falla</h5>${tally}</div>${rowsHTML()}${limits()}</div></div>
+      ${capaCard(CAPAS[0],id)}`;
+  } else if(id==='b'){
+    body = `<div class="maps">${moonMap()}<div class="bridge"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M4 32 A30 26 0 0 1 60 32" fill="none" stroke="var(--ac)" stroke-width="2.4" stroke-linecap="round"/><circle cx="50" cy="13" r="3" fill="var(--ac)"/></svg>anortosita<br>0,229</div>${earthMap()}</div>
+      <div class="panel"><div class="panel-h"><h5>Dónde funciona / dónde falla</h5>${tally}</div>
+        <div class="wf-cols"><div><div class="col-h w">${I.check}Funciona</div>${rowsHTML(r=>r.v===true)}</div><div><div class="col-h f">${I.x}Falla</div>${rowsHTML(r=>r.v===false)}</div></div>
+        ${limits()}</div>`;
+  } else if(id==='f'){
+    body = `<p class="hero-line">Malapert Massif se parece a Lofoten <em>en la roca y el relieve</em>, pero <s>falla en la temperatura</s>: allí hace 121,7 °C menos de media que en Askja, su mejor pareja de clima*.</p>
+      <div class="maps-row">${moonMap()}<div class="bridge"><svg viewBox="0 0 64 40" aria-hidden="true"><path d="M4 32 A30 26 0 0 1 60 32" fill="none" stroke="var(--ac)" stroke-width="2.4" stroke-linecap="round"/><circle cx="50" cy="13" r="3" fill="var(--ac)"/></svg>anortosita<br>0,229</div>${earthMap()}</div>
+      <div class="final-cols"><div class="panel"><div class="panel-h"><h5>Dónde funciona / dónde falla</h5>${tally}</div>${rowsHTML()}${limits()}</div>
+      <div class="panel"><div class="panel-h"><h5>Mejor pareja</h5><span class="tally">capa anortosita</span></div>${capaCard(CAPAS[0],id)}</div></div>`;
+  } else {
+    body = `<p class="hero-line">Malapert Massif se parece a Lofoten <em>en la roca y el relieve</em>, pero <s>falla en la temperatura</s>: allí hace 121,7 °C menos de media que en Askja, su mejor pareja de clima*.</p>
+      <div class="detail-grid"><div class="panel"><div class="panel-h"><h5>Capa por capa</h5>${tally}</div>${rowsHTML()}${limits()}</div>
+      <div class="maps">${moonMap()}${earthMap()}</div></div>`;
+  }
+  return `<div class="screen"><div class="screen-chrome"><i></i><i></i><i></i>&nbsp; pathfinders42.vercel.app/luna/artemis-malapert-massif</div>
+    <div class="screen-body"><div class="appbar">${logo(id)}<nav class="appnav" aria-label="Principal (maqueta)"><a href="#${id==='f'?'final':'direccion-'+id}" aria-current="page">Explorar</a><a href="#${id==='f'?'final':'direccion-'+id}">Límites de la Tierra</a></nav><span class="spacer"></span><div class="seg" role="group" aria-label="Idioma"><button type="button" aria-pressed="true">ES</button><button type="button" aria-pressed="false">EN</button></div></div>
+    ${head}${body}
+    <p class="why" style="font-size:12px">* El signo de <code>brecha_*</code> (sitio − pareja) está pendiente de confirmar con el back. La URL es un ejemplo, no está decidida.</p></div></div>`;
+}
+function pc(d){
+  return `<div class="pc"><div class="p"><h4>${I.check}Pros</h4><ul>${d.pros.map(x=>`<li>${x}</li>`).join('')}</ul></div><div class="c"><h4>${I.x}Contras</h4><ul>${d.cons.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`;
+}
+document.querySelectorAll('[data-dir]').forEach(el=>{
+  const id=el.dataset.dir, d=D[id];
+  el.innerHTML = `<header class="dir-head"><span class="tag">${d.tag}</span><h2 class="disp" id="h-${id}">${d.name}</h2><p class="idea">${d.idea}</p></header>
+   ${id==='f'?`<div class="block"><h3>De dónde sale cada parte</h3><div class="origin">
+     <div><b>C · Horizonte</b><p>Base, cabecera con el brillo del horizonte, paleta, tipografía Red Hat y la frase en lenguaje llano al principio de la pantalla y de cada tarjeta.</p></div>
+     <div><b>B · Atlas comparado</b><p>Los dos mapas a la misma altura, Luna a la izquierda y Tierra a la derecha, unidos por el arco naranja con la capa y la distancia.</p></div>
+     <div><b>A · Sala de control</b><p>Tarjeta de capa con franja de veredicto y tabla de métricas, chips rectangulares, chip verificada / candidato y marcadores por forma.</p></div></div></div>`:''}
+   <div class="block"><h3>Paleta y semáforo</h3>${palette(d)}</div>
+   <div class="block"><h3>Tipografía</h3>${typo(d)}</div>
+   <div class="block"><h3>Componentes clave</h3>${components(d,id)}</div>
+   <div class="block"><h3>Pantalla clave · detalle de Malapert Massif ↔ Lofoten</h3>${detail(id)}</div>
+   <div class="block"><h3>Pros y contras</h3>${pc(d)}</div>`;
+});
+// Los conmutadores de la maqueta responden al teclado y al clic (solo visual).
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.seg button'); if(!b) return;
+  b.parentElement.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', String(x===b)));
+});
+})();
+</script>
