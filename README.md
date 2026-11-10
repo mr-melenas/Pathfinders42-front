@@ -45,6 +45,24 @@ Toda la documentación del front está en [`docs/`](docs/), en español. Es la q
 
 Si el diseño HTML y `sistema-visual.md` no coinciden, manda `sistema-visual.md`.
 
+## Estructura del código
+
+El código se organiza **por features**: cada funcionalidad vive en su carpeta y crece sin tocar las demás.
+
+```
+src/
+├─ app/        arranque de la app (App, rutas, providers, layout)
+├─ features/   una carpeta por funcionalidad: explore, site-detail, comparison, earth-limits…
+├─ shared/     lo que usan varias features: ui, api, i18n, lib
+├─ index.css   tokens del sistema visual
+└─ main.tsx
+```
+
+- Una feature **no importa de otra feature**: lo común va a `shared/`, y `shared/` nunca importa de `features/` ni de `app/`.
+- Las importaciones usan el alias `@/` (`@/` = `src/`): `import { App } from '@/app/App'`.
+
+Detalle de cada carpeta, reglas y convenciones de nombres: [`docs/guia-de-trabajo.md` §5](docs/guia-de-trabajo.md#5-estructura-de-carpetas-y-nombres).
+
 ## Scripts
 
 | Comando | Qué hace |
