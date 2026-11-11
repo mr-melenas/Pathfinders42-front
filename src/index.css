@@ -1,1 +1,136 @@
+/* src/index.css · Pathfinders42 visual system (see docs/sistema-visual.md) */
 @import "tailwindcss";
+
+@theme {
+  /* Remove Tailwind's default palette and type scale: only the design tokens are valid (see §2.1) */
+  --color-*: initial;
+  --text-*: initial;
+
+  /* ---------- Colors: backgrounds and surfaces ---------- */
+  --color-background: #0a1222;
+  --color-surface: #111c31;
+  --color-surface-2: #18263f;
+  --color-border: #26385a;   /* decorative only: 1.6:1 (see §5.6) */
+  --color-map: #03060c;
+
+  /* ---------- Colors: text ---------- */
+  --color-foreground: #f1f5fb;
+  --color-muted: #a7b4c9;
+
+  /* ---------- Colors: brand and actions ---------- */
+  --color-accent: #f7862a;   /* actions, selection, bridge, focus. NEVER a verdict */
+  --color-horizon: #7cc8ff;  /* header glow and links */
+
+  /* ---------- Colors: verdict traffic light (API verdict) ---------- */
+  --color-verdict-pass: #7ee2b0;                    /* true */
+  --color-verdict-pass-bg: rgb(126 226 176 / 0.13);
+  --color-verdict-fail: #ff9a8a;                    /* false */
+  --color-verdict-fail-bg: rgb(255 154 138 / 0.13);
+  --color-verdict-null: #b6bfce;                    /* null (≠ false) */
+  --color-verdict-null-bg: rgb(182 191 206 / 0.10);
+
+  /* ---------- Colors: bodies ---------- */
+  --color-body-moon: #d3d8e1;
+  --color-body-earth: #7cc8ff;
+  /* --color-body-mars: to be decided (docs/sistema-visual.md §8.1) */
+
+  /* ---------- Colors: header ---------- */
+  --color-header-mid: #0d1d3a;
+  --color-header-end: #123059;
+  --color-header-border: #2b4877;
+  --color-horizon-line: rgb(124 200 255 / 0.65);
+  --color-horizon-glow: rgb(124 200 255 / 0.25);
+
+  /* ---------- Typography ---------- */
+  --font-display: "Red Hat Display Variable", system-ui, sans-serif;
+  --font-sans: "Red Hat Text Variable", system-ui, sans-serif;
+  --font-mono: "Red Hat Mono Variable", ui-monospace, monospace;
+
+  --tracking-display: -0.015em;
+  --tracking-label: 0.14em;
+
+  --text-unit: 0.6875rem;          --text-unit--line-height: 1.4;
+  --text-data: 0.75rem;            --text-data--line-height: 1.4;
+  --text-caption: 0.8125rem;       --text-caption--line-height: 1.4;
+  --text-compact: 0.875rem;        --text-compact--line-height: 1.5;
+  --text-body: 0.9375rem;          --text-body--line-height: 1.55;
+  --text-card-title: 1.0625rem;    --text-card-title--line-height: 1.2;
+  --text-panel-title: 1.125rem;    --text-panel-title--line-height: 1.25;
+  --text-logo: 1.1875rem;          --text-logo--line-height: 1;
+  --text-lede: clamp(1.25rem, 2.4vw, 1.625rem);          --text-lede--line-height: 1.25;
+  --text-site-title: clamp(1.625rem, 3.4vw, 2.375rem);   --text-site-title--line-height: 1;
+
+  /* ---------- Radii ---------- */
+  --radius-chip: 4px;
+  --radius-card: 6px;
+  --radius-row: 12px;
+  --radius-container: 16px;
+  --radius-frame: 20px;
+
+  /* ---------- Shadows ---------- */
+  --shadow-stripe-pass: inset 3px 0 0 var(--color-verdict-pass);
+  --shadow-stripe-fail: inset 3px 0 0 var(--color-verdict-fail);
+  --shadow-horizon: 0 -6px 18px var(--color-horizon-glow);
+
+  /* ---------- Breakpoints (added to Tailwind's) ---------- */
+  --breakpoint-md2: 51.25rem; /* 820 px: the only layout change */
+
+  /* ---------- Motion ---------- */
+  --animate-pulse-ring: pulse-ring 2.4s ease-out infinite;
+  @keyframes pulse-ring {
+    0%   { opacity: 0.8; transform: scale(1); }
+    100% { opacity: 0;   transform: scale(2.2); }
+  }
+}
+
+/* ---------- Base styles ---------- */
+@layer base {
+  html {
+    color-scheme: dark; /* native scrollbars and form controls in dark mode */
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance; /* even out heading lines so no word is left alone */
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ---------- Custom utilities ---------- */
+
+/* Stripes for the null state (chip). Usage: class="stripes-null" */
+@utility stripes-null {
+  background-image: repeating-linear-gradient(
+    135deg, var(--color-verdict-null-bg) 0 5px, transparent 5px 10px
+  );
+}
+
+/* Stripes for the similarity bar fill when the pair is null */
+@utility stripes-bar {
+  background-image: repeating-linear-gradient(
+    135deg, var(--color-verdict-null) 0 4px, transparent 4px 8px
+  );
+}
+
+/* Header gradient (horizon) */
+@utility header-gradient {
+  background-image: linear-gradient(
+    180deg, var(--color-background) 0%, var(--color-header-mid) 70%, var(--color-header-end) 100%
+  );
+}
