@@ -2,6 +2,7 @@
 // Its texts are plain English on purpose: it never reaches production, so it skips i18n.
 import themeCss from '@/index.css?raw'
 import { parseThemeTokens } from '@/app/dev/parseThemeTokens'
+import { I18nSection } from '@/app/dev/I18nSection'
 import { TokenSection } from '@/app/dev/TokenSection'
 import { Logo } from '@/shared/ui/Logo'
 
@@ -49,6 +50,8 @@ export function StyleGuide() {
           <span aria-hidden="true" className="mt-3 h-10 w-16 bg-surface-2" style={{ boxShadow: `var(${variable})` }} />
         )}
       />
+
+      <I18nSection />
 
       <section aria-labelledby="style-guide-components" className="flex flex-col gap-3">
         <h3 id="style-guide-components" className="font-display text-card-title font-bold">
