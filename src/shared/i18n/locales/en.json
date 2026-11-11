@@ -1,0 +1,15 @@
+{
+  "verdict": {
+    "pass": "Works",
+    "fail": "Fails",
+    "null": "This layer does not decide",
+    "nullShort": "Undecided"
+  },
+  "state": {
+    "loading": "Loading…",
+    "error": "The data could not be loaded",
+    "retry": "Retry",
+    "empty": "No results",
+    "pending": "Data pending"
+  }
+}

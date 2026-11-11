@@ -1,0 +1,15 @@
+{
+  "verdict": {
+    "pass": "Funciona",
+    "fail": "Falla",
+    "null": "La capa no lo decide",
+    "nullShort": "No decide"
+  },
+  "state": {
+    "loading": "Cargando…",
+    "error": "No se han podido cargar los datos",
+    "retry": "Reintentar",
+    "empty": "No hay resultados",
+    "pending": "Dato pendiente"
+  }
+}
