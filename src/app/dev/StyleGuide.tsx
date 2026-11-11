@@ -3,6 +3,7 @@
 import themeCss from '@/index.css?raw'
 import { parseThemeTokens } from '@/app/dev/parseThemeTokens'
 import { TokenSection } from '@/app/dev/TokenSection'
+import { Logo } from '@/shared/ui/Logo'
 
 const tokens = parseThemeTokens(themeCss)
 
@@ -48,6 +49,16 @@ export function StyleGuide() {
           <span aria-hidden="true" className="mt-3 h-10 w-16 bg-surface-2" style={{ boxShadow: `var(${variable})` }} />
         )}
       />
+
+      <section aria-labelledby="style-guide-components" className="flex flex-col gap-3">
+        <h3 id="style-guide-components" className="font-display text-card-title font-bold">
+          Components
+        </h3>
+        <div className="flex flex-col items-start gap-1.5 rounded-card bg-surface p-3">
+          <Logo />
+          <code className="font-mono text-data">Logo</code>
+        </div>
+      </section>
     </aside>
   )
 }
