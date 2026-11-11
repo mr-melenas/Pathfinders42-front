@@ -5,6 +5,8 @@ import '@fontsource-variable/red-hat-display'
 import '@fontsource-variable/red-hat-text'
 import '@fontsource-variable/red-hat-mono'
 import './index.css'
+// Initializes i18n (texts, saved language, <html lang>) before the first render
+import '@/shared/i18n'
 import { App } from '@/app/App'
 
 createRoot(document.getElementById('root')!).render(
