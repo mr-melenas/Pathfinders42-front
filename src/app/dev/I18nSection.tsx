@@ -1,11 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { SUPPORTED_LANGUAGES } from '@/shared/i18n'
 import { formatArea, formatCoordinate, formatNumber, formatTemperature } from '@/shared/lib/format'
+import { SegmentedToggle } from '@/shared/ui/SegmentedToggle'
 
 // Typed keys: a key that does not exist in es.json fails the build
 const KEYS = [
   'verdict.pass', 'verdict.fail', 'verdict.null', 'verdict.nullShort',
   'state.loading', 'state.error', 'state.retry', 'state.empty', 'state.pending',
+  'body.moon', 'body.mars', 'toggle.body', 'toggle.language',
 ] as const
 
 export function I18nSection() {
@@ -26,19 +28,12 @@ export function I18nSection() {
         i18n
       </h3>
 
-      <div role="group" aria-label="Language" className="flex gap-2">
-        {SUPPORTED_LANGUAGES.map((option) => (
-          <button
-            key={option}
-            type="button"
-            aria-pressed={language === option}
-            onClick={() => void i18n.changeLanguage(option)}
-            className="rounded-chip border border-muted px-3 py-1 font-mono text-data uppercase aria-pressed:bg-surface-2"
-          >
-            {option}
-          </button>
-        ))}
-      </div>
+      <SegmentedToggle
+        label={t('toggle.language')}
+        options={SUPPORTED_LANGUAGES.map((option) => ({ value: option, label: option.toUpperCase() }))}
+        value={language}
+        onChange={(next) => void i18n.changeLanguage(next)}
+      />
 
       <dl className="flex flex-col gap-1 rounded-card bg-surface p-3">
         {KEYS.map((key) => (
