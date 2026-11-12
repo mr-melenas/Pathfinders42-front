@@ -11,5 +11,13 @@
     "retry": "Reintentar",
     "empty": "No hay resultados",
     "pending": "Dato pendiente"
+  },
+  "body": {
+    "moon": "Luna",
+    "mars": "Marte"
+  },
+  "toggle": {
+    "body": "Cuerpo",
+    "language": "Idioma"
   }
 }

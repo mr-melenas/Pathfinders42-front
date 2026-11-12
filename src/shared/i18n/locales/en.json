@@ -11,5 +11,13 @@
     "retry": "Retry",
     "empty": "No results",
     "pending": "Data pending"
+  },
+  "body": {
+    "moon": "Moon",
+    "mars": "Mars"
+  },
+  "toggle": {
+    "body": "Body",
+    "language": "Language"
   }
 }
