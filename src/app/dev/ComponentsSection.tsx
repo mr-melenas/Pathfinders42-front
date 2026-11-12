@@ -3,6 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { Icon, type IconName } from '@/shared/ui/Icon'
 import { Logo } from '@/shared/ui/Logo'
 import { SegmentedToggle } from '@/shared/ui/SegmentedToggle'
+import { VerdictChip } from '@/shared/ui/VerdictChip'
+
+// The 3 possible API values; each one is shown in its normal and short version
+const VERDICT_VALUES = [true, false, null] as const
 
 // Each icon in the color it takes where it is used (the icon inherits the text color)
 const ICON_SAMPLES: { name: IconName; className: string }[] = [
@@ -54,6 +58,18 @@ export function ComponentsSection() {
             ))}
           </ul>
           <code className="font-mono text-data">Icon · 14 / 16 px</code>
+        </li>
+        <li className="flex flex-col items-start gap-1.5 rounded-card bg-surface p-3 sm:col-span-2">
+          <ul className="flex flex-col gap-2">
+            {VERDICT_VALUES.map((value) => (
+              <li key={String(value)} className="flex flex-wrap items-center gap-2">
+                <code className="w-12 font-mono text-data text-muted">{String(value)}</code>
+                <VerdictChip value={value} />
+                <VerdictChip value={value} short />
+              </li>
+            ))}
+          </ul>
+          <code className="font-mono text-data">VerdictChip · value · short</code>
         </li>
       </ul>
     </section>
