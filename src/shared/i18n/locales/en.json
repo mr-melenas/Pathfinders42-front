@@ -19,5 +19,11 @@
   "toggle": {
     "body": "Body",
     "language": "Language"
+  },
+  "nav": {
+    "label": "Main",
+    "home": "Pathfinders42, home",
+    "explore": "Explore",
+    "earthLimits": "Earth's limits"
   }
 }

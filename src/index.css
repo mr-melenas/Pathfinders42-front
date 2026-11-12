@@ -75,6 +75,9 @@
   /* ---------- Breakpoints (added to Tailwind's) ---------- */
   --breakpoint-md2: 51.25rem; /* 820 px: the only layout change */
 
+  /* ---------- Layout ---------- */
+  --container-content: 75rem; /* 1200 px: max width of the header and the page content (max-w-content) */
+
   /* ---------- Motion ---------- */
   --animate-pulse-ring: pulse-ring 2.4s ease-out infinite;
   @keyframes pulse-ring {
@@ -87,6 +90,7 @@
 @layer base {
   html {
     color-scheme: dark; /* native scrollbars and form controls in dark mode */
+    scrollbar-gutter: stable; /* always reserve the scrollbar space, so content does not jump when it appears */
   }
   body {
     background-color: var(--color-background);
@@ -133,4 +137,20 @@
   background-image: linear-gradient(
     180deg, var(--color-background) 0%, var(--color-header-mid) 70%, var(--color-header-end) 100%
   );
+}
+
+/* Curved horizon line at the bottom of the header (needs "relative overflow-hidden" on the element) */
+@utility horizon-line {
+  &::after {
+    content: "";
+    position: absolute;
+    left: -10%;
+    right: -10%;
+    bottom: -38px;
+    height: 44px;
+    border-radius: 50%;
+    border-top: 2px solid var(--color-horizon-line);
+    box-shadow: var(--shadow-horizon);
+    pointer-events: none;
+  }
 }
