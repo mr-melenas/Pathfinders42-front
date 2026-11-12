@@ -19,5 +19,11 @@
   "toggle": {
     "body": "Cuerpo",
     "language": "Idioma"
+  },
+  "nav": {
+    "label": "Principal",
+    "home": "Pathfinders42, inicio",
+    "explore": "Explorar",
+    "earthLimits": "Límites de la Tierra"
   }
 }
