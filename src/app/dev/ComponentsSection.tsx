@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ApiError } from '@/shared/api/client'
 import type { components } from '@/shared/api/schema'
 import es from '@/shared/i18n/locales/es.json'
+import { EmptyState } from '@/shared/ui/EmptyState'
+import { ErrorState } from '@/shared/ui/ErrorState'
 import { Icon, type IconName } from '@/shared/ui/Icon'
 import { LayerCard } from '@/shared/ui/LayerCard'
 import { LinkButton } from '@/shared/ui/LinkButton'
+import { LoadingState } from '@/shared/ui/LoadingState'
 import { Logo } from '@/shared/ui/Logo'
 import { MetricsTable } from '@/shared/ui/MetricsTable'
 import { SegmentedToggle } from '@/shared/ui/SegmentedToggle'
@@ -71,6 +75,15 @@ const LAYER_SAMPLES: components['schemas']['ResumenCapa'][] = [
     },
     n_parejas: 5,
   },
+]
+
+// One error per message ErrorState knows, built with the same ApiError the client throws
+const ERROR_SAMPLES = [
+  { label: 'status 0', error: new ApiError(0, null) },
+  { label: '404', error: new ApiError(404, null) },
+  { label: '422', error: new ApiError(422, null) },
+  { label: '503', error: new ApiError(503, null) },
+  { label: 'other', error: new Error('Unexpected') },
 ]
 
 // Each icon in the color it takes where it is used (the icon inherits the text color)
@@ -193,6 +206,18 @@ export function ComponentsSection() {
             <LayerCard layer={{ ...LAYER_SAMPLES[1], mejor: null }} />
           </div>
           <code className="font-mono text-data">LayerCard (Malapert Massif · anortosita / clima / no mejor)</code>
+        </li>
+        <li className="flex flex-col items-stretch gap-3 rounded-card bg-surface p-3 sm:col-span-2">
+          <LoadingState className="h-16" />
+          {ERROR_SAMPLES.map(({ label, error }) => (
+            <div key={label} className="flex flex-col gap-1">
+              <code className="font-mono text-data text-muted">{label}</code>
+              <ErrorState error={error} onRetry={countClick} />
+            </div>
+          ))}
+          <EmptyState />
+          <EmptyState>{t('state.pending')}</EmptyState>
+          <code className="font-mono text-data">LoadingState · ErrorState (0 / 404 / 422 / 503 / other) · EmptyState</code>
         </li>
       </ul>
     </section>
