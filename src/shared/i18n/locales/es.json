@@ -59,5 +59,11 @@
   },
   "layerCard": {
     "pairVerdict": "Parecido por pareja:"
+  },
+  "error": {
+    "offline": "No se puede conectar con la API",
+    "notFound": "No hay datos para este sitio o esta capa",
+    "invalid": "La petición no es válida",
+    "unavailable": "La API todavía no tiene datos cargados"
   }
 }

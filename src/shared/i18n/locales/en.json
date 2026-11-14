@@ -59,5 +59,11 @@
   },
   "layerCard": {
     "pairVerdict": "Pair verdict:"
+  },
+  "error": {
+    "offline": "Cannot connect to the API",
+    "notFound": "There is no data for this site or layer",
+    "invalid": "The request is not valid",
+    "unavailable": "The API has no data loaded yet"
   }
 }
