@@ -4,6 +4,7 @@ import themeCss from '@/index.css?raw'
 import { parseThemeTokens } from '@/app/dev/parseThemeTokens'
 import { ComponentsSection } from '@/app/dev/ComponentsSection'
 import { I18nSection } from '@/app/dev/I18nSection'
+import { LiveDataSection } from '@/app/dev/LiveDataSection'
 import { TokenSection } from '@/app/dev/TokenSection'
 
 const tokens = parseThemeTokens(themeCss)
@@ -54,6 +55,8 @@ export function StyleGuide() {
       <I18nSection />
 
       <ComponentsSection />
+
+      <LiveDataSection />
     </aside>
   )
 }
