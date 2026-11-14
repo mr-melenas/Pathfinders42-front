@@ -694,7 +694,7 @@ tokens que ya existen (ver 8 para confirmarlos):
 | 8 | **Textos en inglés** de `nombre` y `descripcion` | Interfaz bilingüe | Back + Front | Las 6 descripciones en i18n del front; los nombres propios no se traducen |
 | 9 | **Mapas base** de MapLibre (teselas o imágenes de Luna, Marte y Tierra) | El diseño usa esquemas, no cartografía | Front + Datos | Decidir al empezar la tarea del globo/mapa |
 | 10 | **`body-earth` y `horizon` tienen el mismo valor** (`#7cc8ff`) | Un enlace y una pareja se ven del mismo color | Front | Se acepta en el MVP: se distinguen por forma (subrayado / marcador) |
-| 11 | **Rutas (URL)** | La maqueta enseña `/luna/artemis-malapert-massif` solo como ejemplo | Front | Se decide en la arquitectura de pantallas (Fase 3) |
+| 11 | **Rutas (URL)** | La maqueta enseña `/luna/artemis-malapert-massif` solo como ejemplo | Front | ✅ Decidido (15 nov, #13): `/:cuerpo` y `/:cuerpo/:siteId`; ver `docs/arquitectura-pantallas.md` |
 | 12 | **Ancho máximo del contenido** | La maqueta usa 1180 px, pero es el ancho del documento de propuesta, no de la app | Front | ✅ Decidido (12 nov, Adriana): **1200 px** (`--container-content: 75rem`, clase `max-w-content`), centrado |
 | 13 | **Logo en SVG** sin la insignia de la NASA | Lo necesita `Logo` y el favicon | Front | Redibujarlo desde la maqueta (estrella + arco + «Pathfinders42») |
 | 14 | **Corregir `CONTEXTO_PATHFINDERS42.md`** (código en inglés) | El apartado 2 aún dice que el código va en español, y era un error | Equipo | Ya avisado: lo corrige quien escribió el CONTEXTO |

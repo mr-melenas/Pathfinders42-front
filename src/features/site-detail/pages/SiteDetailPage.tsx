@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useSite } from '@/shared/api/queries'
 import { ErrorState } from '@/shared/ui/ErrorState'
 import { LoadingState } from '@/shared/ui/LoadingState'
@@ -11,12 +12,20 @@ type SiteDetailPageProps = {
 
 // Detail of one site: loading → error (with retry) → header on top and the two panels below
 export function SiteDetailPage({ siteId }: SiteDetailPageProps) {
+  const { t } = useTranslation()
   const { data, isPending, isError, error, refetch } = useSite(siteId)
 
   // Roughly the height of the page, so it does not jump when the data arrives
   if (isPending) return <LoadingState className="h-96" />
   // ErrorState picks the message from the status: 404 unknown site, 503 API without data…
-  if (isError) return <ErrorState error={error} onRetry={() => void refetch()} />
+  if (isError)
+    return (
+      <div className="flex flex-col gap-3">
+        {/* The site name is unknown here, but the page still needs its one <h1> */}
+        <h1 className="font-display text-site-title font-extrabold tracking-display">{t('siteDetail.errorTitle')}</h1>
+        <ErrorState error={error} onRetry={() => void refetch()} />
+      </div>
+    )
 
   return (
     <div className="flex flex-col gap-4">
