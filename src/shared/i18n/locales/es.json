@@ -38,5 +38,8 @@
     "exploration_zone": "Zona de exploración",
     "cueva_luna": "Cueva lunar",
     "cueva_marte": "Cueva marciana"
+  },
+  "similarity": {
+    "label": "Parecido {{percent}} por ciento, distancia {{distance}}"
   }
 }
