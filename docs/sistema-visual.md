@@ -628,7 +628,7 @@ tokens que ya existen (ver 8 para confirmarlos):
 | `VerificationChip` | `status`: `"verificada"` (sello, borde `foreground` continuo) / `"candidato"` (círculo discontinuo, borde `muted` discontinuo) | Si la API no trae verificación: no se muestra (ver 8) | Peso 500, fondo transparente. El valor viene de `detalles.verificacion` y se usa tal cual (en español) |
 | `SiteTypeChip` | `tipo`: `region_aterrizaje_artemis`, `aterrizaje_tripulado`… | | Borde y texto `body-moon`, continuo. El texto visible sale de i18n con el `tipo` como clave |
 | `Icon` | `name`: `check`, `cross`, `dash`, `seal`, `circle` | | Los 5 SVG de la maqueta, con `stroke="currentColor"` para heredar el color |
-| `SimilarityBar` | `distancia`, `parecido` (si es `null`, relleno rayado) | Sin dato: no se pinta | 8 px de alto, `rounded-full`, fondo `background`, borde `border`. Relleno = `(1 − distancia) × 100 %`. **Es información extra, nunca el veredicto** |
+| `SimilarityBar` | `distancia`, `parecido` (si es `null`, relleno rayado) | Sin dato: no se pinta | 8 px de alto, `rounded-full`, fondo `background`, borde `border`. Relleno = `(1 − distancia) × 100 %`. **Es información extra, nunca el veredicto** · Relleno **neutro (`muted`)**, no verde: la barra no es el veredicto (decidido el 14 nov). `null` → rayado (`stripes-bar`) |
 | `MetricsTable` | `detalles` | Sin `detalles`: no se pinta | `<dl>` en 3 columnas: campo de la API (tal cual, `font-mono`, `muted`), valor (`tabular-nums`), unidad o aclaración (`text-unit`, `muted`) |
 | `SourceFooter` | con / sin nº de parejas | Fuente sin dato: «dato pendiente» | «Capa `x` · Fuente: … · N parejas · ver todas». Línea discontinua arriba (`border-dashed`) |
 | `LinkButton` | | normal, foco | `horizon`, subrayado con separación de 3 px |

@@ -3,13 +3,33 @@ import { useTranslation } from 'react-i18next'
 import es from '@/shared/i18n/locales/es.json'
 import { Icon, type IconName } from '@/shared/ui/Icon'
 import { Logo } from '@/shared/ui/Logo'
+import { MetricsTable } from '@/shared/ui/MetricsTable'
 import { SegmentedToggle } from '@/shared/ui/SegmentedToggle'
+import { SimilarityBar } from '@/shared/ui/SimilarityBar'
 import { SiteTypeChip } from '@/shared/ui/SiteTypeChip'
 import { VerdictChip } from '@/shared/ui/VerdictChip'
 import { VerificationChip } from '@/shared/ui/VerificationChip'
 
 // The 3 possible API values; each one is shown in its normal and short version
 const VERDICT_VALUES = [true, false, null] as const
+
+// Real pairs from docs/CONTEXTO_PATHFINDERS42.md §6: Malapert Massif's best pair in two layers
+const PAIR_SAMPLES: { capa: string; nombre: string; distancia: number; parecido: boolean | null; detalles: Record<string, unknown> }[] = [
+  {
+    capa: 'anortosita',
+    nombre: 'Lofoten (macizo de Flakstadøy), Noruega',
+    distancia: 0.229,
+    parecido: true,
+    detalles: { verificacion: 'verificada', d_geo: 0.3, d_topo: 0.158 },
+  },
+  {
+    capa: 'clima',
+    nombre: 'Askja, Islandia',
+    distancia: 0.37,
+    parecido: null,
+    detalles: { dist_clima: 0.082, brecha_ts_media: -121.7, brecha_ts_min: -188.2 },
+  },
+]
 
 // Each icon in the color it takes where it is used (the icon inherits the text color)
 const ICON_SAMPLES: { name: IconName; className: string }[] = [
@@ -92,6 +112,20 @@ export function ComponentsSection() {
             <SiteTypeChip tipo="nuevo_tipo" />
           </div>
           <code className="font-mono text-data">SiteTypeChip · the 7 tipos + an unknown one</code>
+        </li>
+        <li className="flex flex-col items-stretch gap-1.5 rounded-card bg-surface p-3 sm:col-span-2">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {PAIR_SAMPLES.map(({ capa, nombre, distancia, parecido, detalles }) => (
+              <div key={capa} className="flex flex-col gap-2">
+                <code className="font-mono text-data text-muted">
+                  {capa} · {nombre}
+                </code>
+                <SimilarityBar distancia={distancia} parecido={parecido} />
+                <MetricsTable detalles={detalles} />
+              </div>
+            ))}
+          </div>
+          <code className="font-mono text-data">SimilarityBar · MetricsTable (Malapert Massif, CONTEXTO §6)</code>
         </li>
       </ul>
     </section>
