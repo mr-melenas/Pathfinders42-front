@@ -1,5 +1,6 @@
 import { lazy, Suspense, useState } from 'react'
 import { AppHeader } from '@/app/layout/AppHeader'
+import { SiteDetailPage } from '@/features/site-detail'
 
 // Dev-only style guide: Vite sets DEV to false in production builds,
 // so this branch and its dynamic import are removed from the bundle
@@ -15,8 +16,9 @@ export function App() {
     <>
       <div className="mx-auto flex min-h-screen w-full max-w-content flex-col gap-4 p-4">
         <AppHeader body={body} onBodyChange={setBody} />
-        <main className="flex flex-1 items-center justify-center">
-          <h1 className="font-display text-site-title font-extrabold tracking-display">Pathfinders42</h1>
+        {/* Fixed site until the routes exist (#13): then the page will get its id from the URL */}
+        <main className="flex-1">
+          <SiteDetailPage siteId="artemis-malapert-massif" />
         </main>
       </div>
       {StyleGuide && (
