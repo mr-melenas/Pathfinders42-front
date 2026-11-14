@@ -41,5 +41,12 @@
   },
   "similarity": {
     "label": "Similarity {{percent}} percent, distance {{distance}}"
+  },
+  "source": {
+    "layer": "Layer",
+    "source": "Source:",
+    "pairs_one": "{{count}} pair",
+    "pairs_other": "{{count}} pairs",
+    "showAll": "see all"
   }
 }
