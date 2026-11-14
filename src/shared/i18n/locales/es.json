@@ -41,5 +41,12 @@
   },
   "similarity": {
     "label": "Parecido {{percent}} por ciento, distancia {{distance}}"
+  },
+  "source": {
+    "layer": "Capa",
+    "source": "Fuente:",
+    "pairs_one": "{{count}} pareja",
+    "pairs_other": "{{count}} parejas",
+    "showAll": "ver todas"
   }
 }
