@@ -25,5 +25,18 @@
     "home": "Pathfinders42, inicio",
     "explore": "Explorar",
     "earthLimits": "Límites de la Tierra"
+  },
+  "verification": {
+    "verificada": "Verificada",
+    "candidato": "Candidato"
+  },
+  "siteType": {
+    "region_aterrizaje_artemis": "Región de aterrizaje Artemis",
+    "aterrizaje_tripulado": "Aterrizaje tripulado",
+    "aterrizaje_robotico": "Aterrizaje robótico",
+    "aterrizaje_planificado": "Aterrizaje planificado",
+    "exploration_zone": "Zona de exploración",
+    "cueva_luna": "Cueva lunar",
+    "cueva_marte": "Cueva marciana"
   }
 }

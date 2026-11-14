@@ -25,5 +25,18 @@
     "home": "Pathfinders42, home",
     "explore": "Explore",
     "earthLimits": "Earth's limits"
+  },
+  "verification": {
+    "verificada": "Verified",
+    "candidato": "Candidate"
+  },
+  "siteType": {
+    "region_aterrizaje_artemis": "Artemis landing region",
+    "aterrizaje_tripulado": "Crewed landing",
+    "aterrizaje_robotico": "Robotic landing",
+    "aterrizaje_planificado": "Planned landing",
+    "exploration_zone": "Exploration Zone",
+    "cueva_luna": "Lunar cave",
+    "cueva_marte": "Martian cave"
   }
 }
