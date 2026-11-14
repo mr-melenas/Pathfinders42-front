@@ -65,5 +65,19 @@
     "notFound": "No hay datos para este sitio o esta capa",
     "invalid": "La petición no es válida",
     "unavailable": "La API todavía no tiene datos cargados"
+  },
+  "breadcrumbs": {
+    "label": "Ruta de navegación"
+  },
+  "siteHeader": {
+    "area": "Área",
+    "layers_one": "{{count}} capa",
+    "layers_other": "{{count}} capas"
+  },
+  "coordinates": {
+    "north": "N",
+    "south": "S",
+    "east": "E",
+    "west": "O"
   }
 }
