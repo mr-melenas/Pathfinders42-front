@@ -1,13 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import es from '@/shared/i18n/locales/es.json'
+import { isSiteType } from '@/shared/i18n/labels'
 import { Chip } from '@/shared/ui/Chip'
-
-// The known "tipo" values are the keys of the siteType texts, so the list is not written twice
-type SiteType = keyof typeof es.siteType
-
-function isSiteType(value: string): value is SiteType {
-  return Object.hasOwn(es.siteType, value)
-}
 
 type SiteTypeChipProps = {
   tipo: string // the site's "tipo", as the API sends it

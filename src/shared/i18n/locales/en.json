@@ -65,5 +65,19 @@
     "notFound": "There is no data for this site or layer",
     "invalid": "The request is not valid",
     "unavailable": "The API has no data loaded yet"
+  },
+  "breadcrumbs": {
+    "label": "Breadcrumb"
+  },
+  "siteHeader": {
+    "area": "Area",
+    "layers_one": "{{count}} layer",
+    "layers_other": "{{count}} layers"
+  },
+  "coordinates": {
+    "north": "N",
+    "south": "S",
+    "east": "E",
+    "west": "W"
   }
 }
