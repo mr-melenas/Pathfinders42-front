@@ -71,6 +71,19 @@ Detalle de cada carpeta, reglas y convenciones de nombres: [`docs/guia-de-trabaj
 | `pnpm build` | Comprueba los tipos (`tsc -b`) y genera el build de producción en `dist/`. |
 | `pnpm preview` | Sirve en local el build de producción para revisarlo. |
 | `pnpm lint` | Analiza el código con oxlint. |
+| `pnpm gen:api` | Regenera los tipos de la API (`src/shared/api/schema.d.ts`) desde `http://localhost:8000/openapi.json`. Necesita la API levantada. |
+
+## Tipos de la API
+
+Los tipos de TypeScript de la API **no se escriben a mano**: se generan desde su contrato (OpenAPI) con
+[`openapi-typescript`](https://openapi-ts.dev/) y se guardan en `src/shared/api/schema.d.ts`.
+
+- **Cuándo regenerarlos:** cada vez que cambie la API (un campo nuevo, otro tipo, una ruta nueva).
+- **Cómo:** levanta la API en local (ver `docs/CONTEXTO_PATHFINDERS42.md` §4) y ejecuta `pnpm gen:api`.
+- `schema.d.ts` **se sube al repo**, para que el proyecto compile sin tener la API levantada. No se edita a mano.
+- Después de regenerar, `pnpm build` señala el código que haya que adaptar a los cambios del contrato.
+
+> El proyecto usa **TypeScript 5.9** porque `openapi-typescript` 7 todavía no funciona con TypeScript 7.
 
 ## Variables de entorno
 
