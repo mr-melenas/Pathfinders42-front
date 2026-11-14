@@ -809,12 +809,172 @@ F4.3 capa de sitios desde `/sitios/geojson` con `SiteMarker` por forma · F4.4 l
 (siempre con icono y palabra en la leyenda) · F4.5 conmutador Luna / Marte · F4.6 lista de sitios como alternativa
 accesible al mapa ⚠️ · F4.7 elegir un sitio y abrir su detalle · F4.8 elegir el color de Marte (pendiente 1) ⚠️.
 
-### E5 · Detalle del sitio · P0 · S3
-**Objetivo:** la pantalla Malapert ↔ Lofoten del diseño, con datos reales de `GET /sitios/{id}`.
-**Tablero:** «Vista de detalle del sitio» y «Panel “dónde funciona / dónde falla”».
-**Sub-issues:** F5.1 `SiteHeader` + `Breadcrumbs` · F5.2 `LayerRow` + `VerdictPanel` con el recuento · F5.3 lista de
-`LayerCard` del `resumen` · F5.4 `PlainSummary` con plantillas de i18n ⚠️ (depende de B4) · F5.5 `MapsRow`
-(`BodyMap` + `MapBridge` + `EarthMap` con «posición pendiente» hasta B1) · F5.6 estados `404` / `503` del detalle.
+### E5 · Detalle del sitio
+
+> Detallada el 14 nov (antes solo había un resumen). La antigua F5.6 (estados `404` / `503`) queda dentro de F5.3.
+
+**Objetivo:** la pantalla Malapert ↔ Lofoten del diseño final, con datos reales de `GET /sitios/{id}`: migas, nombre y
+datos del sitio, frase en lenguaje llano, mapas, panel «Dónde funciona / dónde falla» y panel «Mejor pareja».
+
+**Prioridad:** P0 · **Área:** Front · Tablero: «Vista de detalle del sitio» y «Panel “dónde funciona / dónde falla”»
+
+> **Datos:** todo sale de `GET /api/v1/sitios/{id}` (tipo generado `SitioDetalle`) con el hook `useSite(id)`. Para
+> probar: `artemis-malapert-massif` (CONTEXTO §6).
+
+#### F5.1 · Componentes `SiteHeader` y `Breadcrumbs`
+
+| Prioridad | Área | Tamaño |
+|---|---|---|
+| P0 | Front | M |
+
+**Descripción**
+La cabecera del detalle: migas, nombre del sitio, chip del tipo y una línea de datos (coordenadas, área, fuente y
+número de capas), como en la pantalla final del diseño.
+
+**Criterios de aceptación**
+- [ ] `SiteHeader` recibe el `SitioDetalle` de la API (tipo generado) y no inventa ningún dato
+- [ ] Nombre del sitio en `<h1>` con `text-site-title`, peso 800 y `tracking-display`, y `SiteTypeChip` con el `tipo`
+- [ ] Coordenadas con el formateo del idioma y su hemisferio (`85,9948° S · 0,2358° O`); si `lat` / `lon` son `null`,
+      no se muestran
+- [ ] Área con `formatArea` si `propiedades.area_km2` es un número; fuente de `propiedades.fuente` con enlace a
+      `propiedades.url_fuente` si existe; número de capas (`capas`) con plural de i18n
+- [ ] `Breadcrumbs`: `<nav aria-label>` de i18n, separador «›» decorativo, último elemento con `aria-current="page"`.
+      Niveles: cuerpo › tipo de sitio › nombre. Mientras no haya rutas (#13), los dos primeros niveles son texto
+- [ ] Textos nuevos en `es.json` y `en.json`; se ve bien en español y en inglés, y a 320 px sin scroll horizontal
+- [ ] Añadidos a `StyleGuide` con los datos reales de Malapert Massif
+- [ ] `pnpm lint` y `pnpm build` en verde
+
+**Archivos:** `src/features/site-detail/components/SiteHeader.tsx` · `src/features/site-detail/components/Breadcrumbs.tsx`
+· `src/shared/i18n/locales/*.json`
+**Depende de:** nada (usa `SiteTypeChip`, el formateo y los tipos generados, ya hechos)
+**Referencias:** `docs/sistema-visual.md` §6.2 (`SiteHeader`, `Breadcrumbs`) · `docs/design/diseno-final.html`
+(función `detail`, variable `head`) · tipo `SitioDetalle` en `src/shared/api/schema.d.ts`
+
+**Prompt para Claude Code**
+> Tarea F5.1: SiteHeader y Breadcrumbs. Lee `docs/sistema-visual.md` §6.2 y la variable `head` de la función `detail`
+> en `docs/design/diseno-final.html`. Modo: [MODO]. Usa los tipos generados y los datos reales de la API local; no
+> inventes ningún dato.
+
+#### F5.2 · Componentes `LayerRow` y `VerdictPanel`
+
+| Prioridad | Área | Tamaño |
+|---|---|---|
+| P0 | Front | M |
+
+**Descripción**
+El panel «Dónde funciona / dónde falla»: una fila por capa con su veredicto y una línea de detalle, y el recuento de
+capas que funcionan.
+
+**Criterios de aceptación**
+- [ ] `LayerRow` recibe un elemento de `resumen` (tipo generado): `VerdictChip` del sitio + nombre de la capa (i18n) +
+      una línea de detalle con la mejor pareja (nombre · distancia formateada · verificación si la hay). Sin `mejor`,
+      «Dato pendiente»
+- [ ] Estilos del §6.2: `bg-surface`, `rounded-row`, `p-3`
+- [ ] `VerdictPanel` recibe el `SitioDetalle`: título «Dónde funciona / dónde falla» en `<h2>`, recuento «1 de 5 capas
+      funcionan» contando los `=== true` de `parecidos` (con plural de i18n) y la lista de `LayerRow`
+- [ ] El recuento compara con `=== true`: `null` no cuenta como «funciona» ni como «falla»
+- [ ] `EarthLimitsBox` no entra (es la F7.1 de E7)
+- [ ] Textos nuevos en `es.json` y `en.json`; añadidos a `StyleGuide` con los datos reales de Malapert Massif
+- [ ] `pnpm lint` y `pnpm build` en verde
+
+**Archivos:** `src/features/site-detail/components/LayerRow.tsx` · `src/features/site-detail/components/VerdictPanel.tsx`
+· `src/shared/i18n/locales/*.json`
+**Depende de:** nada (usa `VerdictChip`, `VerificationChip` y el formateo, ya hechos)
+**Referencias:** `docs/sistema-visual.md` §5.1, §5.2 y §6.2 (`LayerRow`, `VerdictPanel`) · `docs/design/diseno-final.html`
+(`LROWS`, `rowsHTML`) · campos `parecidos` y `resumen` de la API
+
+**Prompt para Claude Code**
+> Tarea F5.2: LayerRow y VerdictPanel. Lee `docs/sistema-visual.md` §5.1, §5.2 y §6.2, y `LROWS` / `rowsHTML` en
+> `docs/design/diseno-final.html`. Modo: [MODO]. El recuento cuenta solo los `=== true`; `null` no es `false`.
+
+#### F5.3 · Página de detalle del sitio
+
+| Prioridad | Área | Tamaño |
+|---|---|---|
+| P0 | Front | L |
+
+**Descripción**
+La pantalla `SiteDetailPage` de la feature `site-detail`: pide el sitio con `useSite(id)` y junta la cabecera (F5.1),
+el panel de veredictos (F5.2) y el panel «Mejor pareja» con una `LayerCard`, con sus estados de carga y error
+(incluye la antigua F5.6). Mientras no haya rutas (#13), se muestra en `App` con un sitio fijo (Malapert Massif).
+
+**Criterios de aceptación**
+- [ ] `SiteDetailPage` recibe el `id` del sitio y usa `useSite(id)`; se exporta desde `src/features/site-detail/index.ts`
+- [ ] Cargando: `LoadingState` con el tamaño aproximado de la página. Error: `ErrorState` con «Reintentar»
+      (`refetch`), con el mensaje de `404` (sitio desconocido) y `503` (API sin datos)
+- [ ] Panel «Mejor pareja»: la `LayerCard` de la capa con `hay_parecido === true` y menor distancia; si no hay
+      ninguna, la de menor distancia entre todas. Siempre sale de los datos
+- [ ] Distribución del diseño final: cabecera arriba y, debajo, los dos paneles en dos columnas desde 820 px (`md2:`)
+      y en una sola columna por debajo
+- [ ] Un solo `<h1>` (nombre del sitio); los títulos de los paneles en `<h2>` y los de las tarjetas en `<h3>`
+- [ ] Mientras no exista la #13, `App` muestra `SiteDetailPage` con `artemis-malapert-massif` en lugar del título
+      provisional
+- [ ] Probada con la API local (y con un `id` inexistente para el `404`), a 320 px y en escritorio, y con teclado
+- [ ] `pnpm lint` y `pnpm build` en verde
+
+**Archivos:** `src/features/site-detail/pages/SiteDetailPage.tsx` · `src/features/site-detail/index.ts` ·
+`src/app/App.tsx` · `src/shared/i18n/locales/*.json`
+**Depende de:** F5.1, F5.2
+**Referencias:** `docs/sistema-visual.md` §6.2 · `docs/design/diseno-final.html` (función `detail`, caso `'f'`) ·
+`useSite` en `src/shared/api/queries.ts`
+
+**Prompt para Claude Code**
+> Tarea F5.3: página de detalle. Lee el caso `'f'` de la función `detail` en `docs/design/diseno-final.html` y
+> `docs/sistema-visual.md` §6.2. Modo: [MODO]. Usa `useSite`, `LoadingState` y `ErrorState`; no escribas tipos a mano.
+
+#### F5.4 · Frase en lenguaje llano (`PlainSummary`) ⚠️
+
+| Prioridad | Área | Tamaño |
+|---|---|---|
+| P1 | Front | M |
+
+**Descripción**
+La frase de entrada del diseño («Malapert Massif se parece a Lofoten en la roca y el relieve, pero falla en la
+temperatura…»), construida con plantillas de i18n sobre los datos de la API, nunca escrita a mano.
+
+**Criterios de aceptación**
+- [ ] Plantillas de i18n (es / en) que solo usan datos de `SitioDetalle` (nombre, capas que funcionan y que fallan,
+      mejor pareja, brechas)
+- [ ] La frase sobre temperatura solo se muestra cuando el back confirme el signo de `brecha_*` (B4)
+- [ ] Sin datos suficientes, la frase no se muestra
+- [ ] `font-display` 700, `text-lede`, `max-w-[40ch]`; palabras de «funciona» en `verdict-pass` y de «falla» en
+      `verdict-fail`, sin tachado
+- [ ] `pnpm lint` y `pnpm build` en verde
+
+**Archivos:** `src/features/site-detail/components/PlainSummary.tsx` · `src/shared/i18n/locales/*.json`
+**Depende de:** F5.3 · B4 (signo de `brecha_*`, pregunta al back)
+**Referencias:** `docs/sistema-visual.md` §6.2 (`PlainSummary`) y §8 (pendiente 4) · `docs/design/diseno-final.html`
+(`hero-line`)
+
+**Prompt para Claude Code**
+> Tarea F5.4: PlainSummary. Lee `docs/sistema-visual.md` §6.2 y §8 (pendiente 4). Modo: [MODO]. No escribas ninguna
+> frase a mano: plantillas de i18n sobre datos de la API.
+
+#### F5.5 · Fila de mapas (`MapsRow`)
+
+| Prioridad | Área | Tamaño |
+|---|---|---|
+| P0 | Front | L |
+
+**Descripción**
+El mapa del cuerpo con el sitio, el arco «puente» con la capa y la distancia, y el mapa de la Tierra con la pareja,
+a la misma altura.
+
+**Criterios de aceptación**
+- [ ] `MapsRow` con `BodyMap` · `MapBridge` · `EarthMap`, misma altura; por debajo de 820 px se apilan y el puente
+      gira 90°
+- [ ] `MapBridge`: arco y punto `accent` + nombre de capa + distancia en `font-mono`
+- [ ] `EarthMap` con «posición pendiente» (marcador discontinuo) mientras la API no dé la posición de la pareja (B1)
+- [ ] Cada mapa con texto alternativo; animaciones solo con `motion-safe:`
+- [ ] `pnpm lint` y `pnpm build` en verde
+
+**Archivos:** `src/features/site-detail/components/MapsRow.tsx` · `MapBridge.tsx` · `EarthMap.tsx`
+**Depende de:** F5.3 · F4.2 (`BodyMap`, de E4) · B1 (posición de las parejas)
+**Referencias:** `docs/sistema-visual.md` §6.3 · `docs/design/diseno-final.html` (`maps-row`, `bridge`)
+
+**Prompt para Claude Code**
+> Tarea F5.5: MapsRow. Lee `docs/sistema-visual.md` §6.3. Modo: [MODO]. Usa el `BodyMap` de F4.2; no inventes la
+> posición de las parejas.
 
 ### E6 · Comparación sitio ↔ análogo · P1 · S3
 **Objetivo:** ver todas las parejas de una capa y comparar variable a variable el sitio y su análogo.
