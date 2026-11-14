@@ -79,5 +79,10 @@
     "south": "S",
     "east": "E",
     "west": "O"
+  },
+  "verdictPanel": {
+    "title": "Dónde funciona / dónde falla",
+    "tally_one": "{{working}} de {{count}} capa funciona",
+    "tally_other": "{{working}} de {{count}} capas funcionan"
   }
 }

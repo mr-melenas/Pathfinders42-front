@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { SiteHeader } from '@/features/site-detail'
+import { SiteHeader, VerdictPanel } from '@/features/site-detail'
 import { useSite } from '@/shared/api/queries'
 import { ErrorState } from '@/shared/ui/ErrorState'
 import { LayerCard } from '@/shared/ui/LayerCard'
@@ -22,6 +22,7 @@ export function LiveSite({ siteId }: LiveSiteProps) {
     content = (
       <>
         <SiteHeader site={data} />
+        <VerdictPanel site={data} />
         <div className="grid gap-3 md2:grid-cols-2">
           {data.resumen.map((layer) => (
             <LayerCard key={layer.capa} layer={layer} />

@@ -18,3 +18,10 @@ export type Body = keyof typeof BODY_LABEL_KEYS
 export function isBody(value: string): value is Body {
   return Object.hasOwn(BODY_LABEL_KEYS, value)
 }
+
+// The pair's "detalles.verificacion": its texts live in "verification" with the API value as the key
+export type VerificationStatus = keyof typeof es.verification
+
+export function isVerificationStatus(value: string): value is VerificationStatus {
+  return Object.hasOwn(es.verification, value)
+}

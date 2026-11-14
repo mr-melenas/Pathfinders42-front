@@ -79,5 +79,10 @@
     "south": "S",
     "east": "E",
     "west": "W"
+  },
+  "verdictPanel": {
+    "title": "Where it works / where it fails",
+    "tally_one": "{{working}} of {{count}} layer works",
+    "tally_other": "{{working}} of {{count}} layers work"
   }
 }

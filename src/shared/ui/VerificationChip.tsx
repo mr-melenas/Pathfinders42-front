@@ -1,18 +1,12 @@
 import { useTranslation } from 'react-i18next'
+import { isVerificationStatus, type VerificationStatus } from '@/shared/i18n/labels'
 import { Chip } from '@/shared/ui/Chip'
-import { Icon } from '@/shared/ui/Icon'
+import { Icon, type IconName } from '@/shared/ui/Icon'
 
-// The two values of "detalles.verificacion" (CONTEXTO §5), as the API sends them.
-// To be replaced by the generated OpenAPI type when it exists (#9).
-const VARIANTS = {
+// One look per value of "detalles.verificacion" (CONTEXTO §5), as the API sends them
+const VARIANTS: Record<VerificationStatus, { icon: IconName; className: string }> = {
   verificada: { icon: 'seal', className: 'border-foreground text-foreground' },
   candidato: { icon: 'circle', className: 'border-dashed border-muted text-muted' },
-} as const
-
-type VerificationStatus = keyof typeof VARIANTS
-
-function isVerificationStatus(value: string): value is VerificationStatus {
-  return Object.hasOwn(VARIANTS, value)
 }
 
 type VerificationChipProps = {
