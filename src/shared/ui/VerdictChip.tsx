@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { Chip } from '@/shared/ui/Chip'
 import { Icon, type IconName } from '@/shared/ui/Icon'
 
 type Verdict = 'pass' | 'fail' | 'null'
@@ -40,11 +41,9 @@ export function VerdictChip({ value, short = false }: VerdictChipProps) {
   const { icon, labelKey, shortLabelKey, className } = VARIANTS[toVerdict(value)]
 
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-chip border py-1 pr-2.5 pl-1.75 text-caption leading-tight font-semibold ${className}`}
-    >
+    <Chip className={`font-semibold ${className}`}>
       <Icon name={icon} size={14} />
       {t(short && shortLabelKey ? shortLabelKey : labelKey)}
-    </span>
+    </Chip>
   )
 }

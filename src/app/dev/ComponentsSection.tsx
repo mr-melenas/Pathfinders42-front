@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import es from '@/shared/i18n/locales/es.json'
 import { Icon, type IconName } from '@/shared/ui/Icon'
 import { Logo } from '@/shared/ui/Logo'
 import { SegmentedToggle } from '@/shared/ui/SegmentedToggle'
+import { SiteTypeChip } from '@/shared/ui/SiteTypeChip'
 import { VerdictChip } from '@/shared/ui/VerdictChip'
+import { VerificationChip } from '@/shared/ui/VerificationChip'
 
 // The 3 possible API values; each one is shown in its normal and short version
 const VERDICT_VALUES = [true, false, null] as const
@@ -70,6 +73,25 @@ export function ComponentsSection() {
             ))}
           </ul>
           <code className="font-mono text-data">VerdictChip · value · short</code>
+        </li>
+        <li className="flex flex-col items-start gap-1.5 rounded-card bg-surface p-3 sm:col-span-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <VerificationChip status="verificada" />
+            <VerificationChip status="candidato" />
+            <code className="font-mono text-data text-muted">null → renders nothing:</code>
+            <VerificationChip status={null} />
+          </div>
+          <code className="font-mono text-data">VerificationChip · verificada / candidato / null</code>
+        </li>
+        <li className="flex flex-col items-start gap-1.5 rounded-card bg-surface p-3 sm:col-span-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {Object.keys(es.siteType).map((tipo) => (
+              <SiteTypeChip key={tipo} tipo={tipo} />
+            ))}
+            <code className="font-mono text-data text-muted">unknown tipo, shown as it comes:</code>
+            <SiteTypeChip tipo="nuevo_tipo" />
+          </div>
+          <code className="font-mono text-data">SiteTypeChip · the 7 tipos + an unknown one</code>
         </li>
       </ul>
     </section>
