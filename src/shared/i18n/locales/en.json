@@ -48,5 +48,16 @@
     "pairs_one": "{{count}} pair",
     "pairs_other": "{{count}} pairs",
     "showAll": "see all"
+  },
+  "layer": {
+    "topografia": { "name": "Topography", "description": "Slope and relief (KS, 0–1). Similar if the distance is ≤ 0.2." },
+    "clima": { "name": "Climate", "description": "Surface temperature (percentiles) combined with topography; gaps in °C." },
+    "geologia": { "name": "Geology", "description": "Rock type + topography. Full analogue if topography ≤ 0.2 and geology ≤ 0.4." },
+    "hielo": { "name": "Ice", "description": "Near-surface ice versus Earth's permafrost, combined with topography." },
+    "cuevas": { "name": "Caves", "description": "Caves of the same type on Earth: shape (depth/diameter) and terrain." },
+    "anortosita": { "name": "Anorthosite", "description": "Anorthosite outcrops (lunar highlands): rock + topography." }
+  },
+  "layerCard": {
+    "pairVerdict": "Pair verdict:"
   }
 }
