@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { components } from '@/shared/api/schema'
 import es from '@/shared/i18n/locales/es.json'
 import { Icon, type IconName } from '@/shared/ui/Icon'
+import { LayerCard } from '@/shared/ui/LayerCard'
 import { LinkButton } from '@/shared/ui/LinkButton'
 import { Logo } from '@/shared/ui/Logo'
 import { MetricsTable } from '@/shared/ui/MetricsTable'
@@ -30,6 +32,44 @@ const PAIR_SAMPLES: { capa: string; nombre: string; distancia: number; parecido:
     distancia: 0.37,
     parecido: null,
     detalles: { dist_clima: 0.082, brecha_ts_media: -121.7, brecha_ts_min: -188.2 },
+  },
+]
+
+// Copied as is from GET /api/v1/sitios/artemis-malapert-massif (local API v0.3.0): the two cards of the design
+const LAYER_SAMPLES: components['schemas']['ResumenCapa'][] = [
+  {
+    capa: 'anortosita',
+    descripcion: 'Afloramientos de anortosita (tierras altas lunares): roca + topografía.',
+    hay_parecido: true,
+    mejor: {
+      id: 'lofoten_flakstadoy',
+      nombre: 'Lofoten (macizo de Flakstadøy), Noruega',
+      distancia: 0.229,
+      parecido: true,
+      detalles: { verificacion: 'verificada', d_geo: 0.3, d_topo: 0.158, d_total: 0.229, analogo_completo: 'Sí' },
+    },
+    n_parejas: 3,
+  },
+  {
+    capa: 'clima',
+    descripcion: 'Temperatura de superficie (percentiles) combinada con topografía; brechas en °C.',
+    hay_parecido: false,
+    mejor: {
+      id: 'analogo-luna-askja-islandia',
+      nombre: 'Askja, Islandia',
+      distancia: 0.37,
+      parecido: null,
+      detalles: {
+        dist_clima: 0.082,
+        brecha_ts_media: -121.678,
+        brecha_ts_min: -188.216,
+        brecha_ts_max: -100.027,
+        brecha_osc_diaria: 107.988,
+        dist_topo: 0.658,
+        dist_total: 0.37,
+      },
+    },
+    n_parejas: 5,
   },
 ]
 
@@ -143,6 +183,16 @@ export function ComponentsSection() {
             <code className="font-mono text-data text-muted">«ver todas» clicks: {showAllClicks}</code>
           </div>
           <code className="font-mono text-data">SourceFooter · LinkButton (button / link)</code>
+        </li>
+        <li className="flex flex-col items-stretch gap-3 rounded-card bg-surface p-3 sm:col-span-2">
+          <div className="grid gap-3 md2:grid-cols-2">
+            {LAYER_SAMPLES.map((layer) => (
+              <LayerCard key={layer.capa} layer={layer} onShowAllPairs={countClick} />
+            ))}
+            {/* Not from the API: the clima card without "mejor", to show the "Dato pendiente" state */}
+            <LayerCard layer={{ ...LAYER_SAMPLES[1], mejor: null }} />
+          </div>
+          <code className="font-mono text-data">LayerCard (Malapert Massif · anortosita / clima / no mejor)</code>
         </li>
       </ul>
     </section>

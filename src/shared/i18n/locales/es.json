@@ -48,5 +48,16 @@
     "pairs_one": "{{count}} pareja",
     "pairs_other": "{{count}} parejas",
     "showAll": "ver todas"
+  },
+  "layer": {
+    "topografia": { "name": "Topografía", "description": "Pendiente y relieve (KS, 0–1). Parecido si la distancia es ≤ 0,2." },
+    "clima": { "name": "Clima", "description": "Temperatura de superficie (percentiles) combinada con topografía; brechas en °C." },
+    "geologia": { "name": "Geología", "description": "Tipo de roca + topografía. Análogo completo si topografía ≤ 0,2 y geología ≤ 0,4." },
+    "hielo": { "name": "Hielo", "description": "Hielo cerca de la superficie frente a permafrost de la Tierra, combinado con topografía." },
+    "cuevas": { "name": "Cuevas", "description": "Cuevas del mismo tipo en la Tierra: forma (profundidad/diámetro) y terreno." },
+    "anortosita": { "name": "Anortosita", "description": "Afloramientos de anortosita (tierras altas lunares): roca + topografía." }
+  },
+  "layerCard": {
+    "pairVerdict": "Parecido por pareja:"
   }
 }
