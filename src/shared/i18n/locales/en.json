@@ -87,5 +87,16 @@
   },
   "bestPair": {
     "title": "Best match"
+  },
+  "siteDetail": {
+    "errorTitle": "Site not available"
+  },
+  "explore": {
+    "title": "Explore · {{body}}"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "This address does not exist in Pathfinders42.",
+    "back": "Back to Explore"
   }
 }
