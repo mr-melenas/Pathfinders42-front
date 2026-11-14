@@ -84,5 +84,8 @@
     "title": "Dónde funciona / dónde falla",
     "tally_one": "{{working}} de {{count}} capa funciona",
     "tally_other": "{{working}} de {{count}} capas funcionan"
+  },
+  "bestPair": {
+    "title": "Mejor pareja"
   }
 }
