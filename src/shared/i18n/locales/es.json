@@ -183,6 +183,14 @@
       "marsSites": "sitios en Marte",
       "layers": "capas comparadas"
     },
+    "video": {
+      "eyebrow": "Demo",
+      "title": "Así funciona Pathfinders42.",
+      "text": "Un recorrido por la app: de un sitio de la Luna o Marte a los lugares de la Tierra que se le parecen.",
+      "frameTitle": "Demo en vídeo: Pathfinders42 — Rehearse the Moon and Mars without leaving Earth",
+      "language": "Vídeo en inglés, con subtítulos en inglés.",
+      "watch": "Ver en YouTube"
+    },
     "challenge": {
       "eyebrow": "El reto",
       "title": "Artemis vuelve a la Luna para quedarse. Antes, todo se ensaya en la Tierra.",

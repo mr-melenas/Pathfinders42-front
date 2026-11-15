@@ -6,6 +6,12 @@ Construido con **Vite + React + TypeScript** y **Tailwind CSS**.
 
 **Web desplegada:** https://pathfinders42-front.vercel.app
 
+### Demo
+
+Así funciona Pathfinders42: un recorrido por la app en vídeo (en inglés, con subtítulos en inglés). Pulsa la imagen para verlo en YouTube:
+
+[![Pathfinders42 — Rehearse the Moon and Mars without leaving Earth (vídeo en YouTube)](https://img.youtube.com/vi/bJ1hm9Ao3-M/maxresdefault.jpg)](https://youtu.be/bJ1hm9Ao3-M)
+
 ## Requisitos
 
 - **Node.js** `^20.19.0 || >=22.12.0` (lo que exige Vite 8; probado con Node 24).

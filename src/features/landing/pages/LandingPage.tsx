@@ -8,6 +8,7 @@ import { HowItWorksSection } from '@/features/landing/components/HowItWorksSecti
 import { LimitsSection } from '@/features/landing/components/LimitsSection'
 import { MarsSection } from '@/features/landing/components/MarsSection'
 import { UsesSection } from '@/features/landing/components/UsesSection'
+import { VideoSection } from '@/features/landing/components/VideoSection'
 
 // Home page ("/"): presents the project and leads to the explorer. It has its own header, outside the app layout
 export function LandingPage() {
@@ -17,6 +18,7 @@ export function LandingPage() {
     <div className="flex min-h-screen flex-col">
       <HeroSection />
       <main className="flex flex-1 flex-col">
+        <VideoSection />
         <ChallengeSection />
         <HowItWorksSection />
         <UsesSection />
