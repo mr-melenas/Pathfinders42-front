@@ -1,6 +1,16 @@
 // Where a site goes on each map, as fractions of the map's size (0 = left/top, 1 = right/bottom).
 // Pure functions with no React, ready for the tests in #23.
 
+// The fields a map needs from a site. Both GET /sitios items and GET /sitios/{id} have them,
+// so the maps accept either without depending on a feature
+export type MapSite = {
+  id: string
+  nombre: string
+  tipo: string
+  lat: number | null
+  lon: number | null
+}
+
 export type MapPoint = {
   x: number
   y: number

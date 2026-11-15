@@ -1,4 +1,4 @@
-import type { Shape } from '@/features/explore/components/siteShapes'
+import type { Shape } from '@/shared/lib/siteShapes'
 
 const SHAPE_CLASS: Record<Shape, string> = {
   region: 'size-3 border-2 border-current bg-current/18', // square with an 18 % fill

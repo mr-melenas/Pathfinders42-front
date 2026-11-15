@@ -105,7 +105,8 @@
     "global": "{{body}} · mapa global",
     "southPole": "{{body}} · polo sur",
     "caption": "Imagen: NASA Solar System Treks. Los sitios del mapa también están en la lista de abajo.",
-    "polarCaption": "Esquema: el centro es el polo sur y el borde, 80° S."
+    "polarCaption": "Esquema: el centro es el polo sur y el borde, 80° S.",
+    "imageSource": "Imagen: NASA Solar System Treks."
   },
   "mapLegend": {
     "label": "Leyenda del mapa",
@@ -122,5 +123,13 @@
     "radiation": "Radiación",
     "note": "Ninguna pareja de la Tierra los reproduce.",
     "pending": "Explicaciones y fuentes: dato pendiente."
+  },
+  "earthMap": {
+    "label": "Tierra · pareja",
+    "pending": "· posición pendiente",
+    "caption": "Imagen: NASA GIBS (Blue Marble). La posición de la pareja todavía no llega de la API."
+  },
+  "mapBridge": {
+    "label": "Capa y distancia de la mejor pareja:"
   }
 }
