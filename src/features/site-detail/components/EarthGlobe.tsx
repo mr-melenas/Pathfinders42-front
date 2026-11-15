@@ -3,7 +3,6 @@ import { Map as MapLibreMap, Marker, NavigationControl, setWorkerUrl } from 'map
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { GeoPosition } from '@/shared/api/pairPosition'
 import { MapFrame } from '@/shared/ui/MapFrame'
 
 // Sentinel-2 cloudless 2016 by EOX: CC BY 4.0 (later years are non-commercial only). CORS checked on 15 nov
@@ -34,7 +33,7 @@ function markerElement(name: string): HTMLElement {
 
 type EarthGlobeProps = {
   pairName: string | null // the best match's name; null when there is none
-  position: GeoPosition | null // null while the API does not say where the pair is (B1)
+  position: { lat: number; lon: number } | null // the pair's "lat" / "lon" from the API; null when it does not say
 }
 
 // 3D Earth with satellite imagery: it turns to the pair and marks it. Loaded on demand (MapLibre is heavy)
