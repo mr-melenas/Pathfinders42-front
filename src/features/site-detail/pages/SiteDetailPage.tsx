@@ -5,6 +5,7 @@ import { LoadingState } from '@/shared/ui/LoadingState'
 import { BestPairPanel } from '@/features/site-detail/components/BestPairPanel'
 import { MapsRow } from '@/features/site-detail/components/MapsRow'
 import { PlainSummary } from '@/features/site-detail/components/PlainSummary'
+import { AnaloguesPanel } from '@/features/site-detail/components/AnaloguesPanel'
 import { SiteHeader } from '@/features/site-detail/components/SiteHeader'
 import { VerdictPanel } from '@/features/site-detail/components/VerdictPanel'
 
@@ -39,6 +40,7 @@ export function SiteDetailPage({ siteId }: SiteDetailPageProps) {
         <VerdictPanel site={data} />
         <BestPairPanel resumen={data.resumen} />
       </div>
+      <AnaloguesPanel key={data.id} siteId={data.id} />
     </div>
   )
 }

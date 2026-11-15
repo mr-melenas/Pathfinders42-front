@@ -28,7 +28,9 @@
   },
   "verification": {
     "verificada": "Verificada",
-    "candidato": "Candidato"
+    "candidato": "Candidato",
+    "pendiente": "Pendiente",
+    "hipótesis": "Hipótesis"
   },
   "siteType": {
     "region_aterrizaje_artemis": "Región de aterrizaje Artemis",
@@ -154,5 +156,14 @@
       "forma_cueva": "la forma de las cuevas",
       "anortosita": "la anortosita"
     }
+  },
+  "analogues": {
+    "title": "Análogos en la Tierra",
+    "choose": "Elige un análogo",
+    "works": "Funciona",
+    "fails": "Falla",
+    "unmeasured": "Sin medir",
+    "none": "Ninguno",
+    "source": "Ver fuente"
   }
 }

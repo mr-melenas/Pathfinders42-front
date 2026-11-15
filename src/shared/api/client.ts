@@ -41,6 +41,7 @@ async function unwrap<T>(request: Promise<{ data?: T; error?: unknown; response:
 type SitesQuery = NonNullable<paths['/api/v1/sitios']['get']['parameters']['query']>
 type PairsQuery = NonNullable<paths['/api/v1/sitios/{sitio_id}/parejas']['get']['parameters']['query']>
 type UseMatchesQuery = NonNullable<paths['/api/v1/usos/{uso}/sitios/{sitio_id}']['get']['parameters']['query']>
+type AnaloguesQuery = NonNullable<paths['/api/v1/analogos/{sitio_id}']['get']['parameters']['query']>
 
 export function getHealth() {
   return unwrap(client.GET('/api/v1/health'))
@@ -65,4 +66,16 @@ export function getPairs(siteId: string, query?: PairsQuery) {
 // Earth places for a site and a mission use, best first; each one says which layers work and fail for THAT place
 export function getUseMatches(uso: string, siteId: string, query?: UseMatchesQuery) {
   return unwrap(client.GET('/api/v1/usos/{uso}/sitios/{sitio_id}', { params: { path: { uso, sitio_id: siteId }, query } }))
+}
+
+// The site's Earth analogues, suitable ones first, each with a one-line summary in es/en
+export function getAnalogues(siteId: string, query?: AnaloguesQuery) {
+  return unwrap(client.GET('/api/v1/analogos/{sitio_id}', { params: { path: { sitio_id: siteId }, query } }))
+}
+
+// One analogue's sheet: pros, cons, unmeasured layers and Earth limits, precomputed by the back in es/en
+export function getAnalogue(siteId: string, earthId: string) {
+  return unwrap(
+    client.GET('/api/v1/analogos/{sitio_id}/{tierra_id}', { params: { path: { sitio_id: siteId, tierra_id: earthId } } }),
+  )
 }

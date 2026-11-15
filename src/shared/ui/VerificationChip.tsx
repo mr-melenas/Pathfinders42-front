@@ -6,7 +6,10 @@ import { Icon, type IconName } from '@/shared/ui/Icon'
 // One look per value of "detalles.verificacion" (CONTEXTO §5), as the API sends them
 const VARIANTS: Record<VerificationStatus, { icon: IconName; className: string }> = {
   verificada: { icon: 'seal', className: 'border-foreground text-foreground' },
+  // Every status that is not «verificada» looks unconfirmed: dashed border and muted colour, the word tells which
   candidato: { icon: 'circle', className: 'border-dashed border-muted text-muted' },
+  pendiente: { icon: 'circle', className: 'border-dashed border-muted text-muted' },
+  'hipótesis': { icon: 'circle', className: 'border-dashed border-muted text-muted' },
 }
 
 type VerificationChipProps = {
