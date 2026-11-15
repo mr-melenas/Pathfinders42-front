@@ -687,7 +687,7 @@ tokens que ya existen (ver 8 para confirmarlos):
 | 1 | **Color de Marte** (`--color-body-mars`) | El diseño final solo define Luna y Tierra | Front | ✅ Decidido (15 nov, Adriana): **A · Arena dorada** (`#f2d27e`), ver 8.1 |
 | 2 | **Borde de los controles** | `border` solo llega a 1,6:1 y WCAG pide 3:1 para el contorno de botones y campos | Front | Usar `muted` (7,22:1 sobre `surface-2`) como borde de controles, sin crear un color nuevo |
 | 3 | **Estados de carga, error y vacío** | El diseño no los dibuja; en 6 hay una propuesta con los tokens existentes | Front | Validarla al hacer la primera vista con datos |
-| 4 | **Signo de `brecha_*`** | Para escribir «es 121,7 °C más frío» sin equivocarnos de sentido | Back | Pregunta abierta (¿sitio − pareja?) |
+| 4 | **Signo de `brecha_*`** | Para escribir «es 121,7 °C más frío» sin equivocarnos de sentido | Back | ✅ Confirmado (15 nov, Max): **sitio − Tierra**, negativo = el sitio es más frío. Lo usa `PlainSummary` (#52) |
 | 5 | **Fuente (dataset) por capa** en `resumen` | `SourceFooter` de cada tarjeta. Hoy solo hay `propiedades.fuente` a nivel de sitio | Back | Petición. `/fuentes` está previsto en S4 |
 | 6 | **Verificación fuera de `anortosita`** | `VerificationChip`. Hoy solo aparece en `detalles.verificacion` de algunas capas | Back | Pregunta. Mientras tanto, no se muestra el chip si no hay dato |
 | 7 | **Posición y geometría de las parejas** | `EarthMap` | Back | Ya planificado: `/analogos/{id}` en S3 |
