@@ -658,7 +658,7 @@ tokens que ya existen (ver 8 para confirmarlos):
 | Componente | Variantes | Estados | Notas |
 |---|---|---|---|
 | `BodyMap` | `cuerpo`: `"luna"` / `"marte"` (valor de la API) | cargando (`bg-map`), error, sin geometría | SVG propio con la imagen de NASA Trek (pendiente 9). Etiqueta arriba a la izquierda («Luna · polo sur») con punto del color del cuerpo; pie con de dónde sale la geometría |
-| `EarthMap` | | cargando, **posición pendiente** (hasta que exista `/analogos/{id}`) | Pareja con marcador `body-earth`. Mientras no llegue la posición: marcador discontinuo + «posición pendiente» |
+| `EarthMap` / `EarthGlobe` | | cargando (mapa fijo Blue Marble mientras llega MapLibre), **posición pendiente** (hasta que la API dé `lat`/`lon` de cada pareja, B1) | Desde el 15 nov (#74) es un globo 3D con zoom (MapLibre, imagen Sentinel-2 cloudless 2016 de EOX, CC BY 4.0, atribución en el pie). Gira hasta la pareja y la marca con su nombre y un punto `body-earth`. Sin posición: globo entero + marcador discontinuo + «posición pendiente» |
 | `MapBridge` | horizontal / girado 90° (< 820 px) | | Arco y punto naranjas (64 × 40 px) + nombre de capa + distancia en `font-mono`, `accent` |
 | `MapsRow` | | | `BodyMap` · `MapBridge` · `EarthMap`, misma altura |
 | `SiteMarker` | región Artemis (polígono, borde `body-moon`, relleno al 18 %), aterrizaje (rombo `body-moon`), cueva / pozo (anillo + punto `body-moon`), **seleccionado** (`accent`, relleno al 25 %, pulso), pareja Tierra (círculo `body-earth`), candidato M1 · S4 (círculo `body-earth` discontinuo) | | La forma dice el tipo. En MapLibre se pintan como capas con los colores leídos de las variables CSS |
