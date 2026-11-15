@@ -92,7 +92,9 @@
     "errorTitle": "Site not available"
   },
   "explore": {
-    "title": "Explore · {{body}}"
+    "title": "Explore · {{body}}",
+    "count_one": "{{count}} site",
+    "count_other": "{{count}} sites"
   },
   "notFound": {
     "title": "Page not found",

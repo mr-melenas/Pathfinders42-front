@@ -10,6 +10,9 @@ export function isSiteType(value: string): value is SiteType {
   return Object.hasOwn(es.siteType, value)
 }
 
+// Display order of the site types: the order of "siteType" in the translation files (Artemis first)
+export const SITE_TYPE_ORDER: readonly string[] = Object.keys(es.siteType)
+
 // The API's "cuerpo" values and the key of their name
 export const BODY_LABEL_KEYS = { luna: 'body.moon', marte: 'body.mars' } as const
 
