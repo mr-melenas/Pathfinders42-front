@@ -106,5 +106,12 @@
     "southPole": "{{body}} · south pole",
     "caption": "Image: NASA Solar System Treks. The sites on the map are also in the list below.",
     "polarCaption": "Diagram: the centre is the south pole and the edge, 80° S."
+  },
+  "mapLegend": {
+    "label": "Map legend",
+    "region": "Landing or exploration region",
+    "landing": "Landing",
+    "cave": "Cave",
+    "unknown": "Other type"
   }
 }

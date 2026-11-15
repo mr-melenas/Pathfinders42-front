@@ -1,8 +1,6 @@
 import type { ReactNode } from 'react'
 import type { Body } from '@/shared/i18n/labels'
-
-// Marker colour of each body: Mars has no colour of its own yet (F4.8), so it uses the text colour
-const BODY_COLOR: Record<Body, string> = { luna: 'text-body-moon', marte: 'text-foreground' }
+import { BODY_COLOR } from '@/features/explore/components/siteShapes'
 
 type MapFrameProps = {
   cuerpo: Body

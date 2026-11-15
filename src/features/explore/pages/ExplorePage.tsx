@@ -6,6 +6,7 @@ import { EmptyState } from '@/shared/ui/EmptyState'
 import { ErrorState } from '@/shared/ui/ErrorState'
 import { LoadingState } from '@/shared/ui/LoadingState'
 import { BodyMap } from '@/features/explore/components/BodyMap'
+import { MapLegend } from '@/features/explore/components/MapLegend'
 import { SiteList } from '@/features/explore/components/SiteList'
 import { SouthPoleMap } from '@/features/explore/components/SouthPoleMap'
 
@@ -32,6 +33,7 @@ export function ExplorePage({ cuerpo }: ExplorePageProps) {
           </div>
           {cuerpo === 'luna' && <SouthPoleMap sites={data} />}
         </div>
+        <MapLegend cuerpo={cuerpo} sites={data} />
         <SiteList sites={data} />
       </>
     )
