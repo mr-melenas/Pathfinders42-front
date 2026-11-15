@@ -1094,11 +1094,66 @@ a la misma altura.
 **Sub-issues:** F6.1 lista «ver todas» con `GET /sitios/{id}/parejas?capa=&n=` · F6.2 tabla sitio vs pareja con
 `datos_capas` y `detalles` · F6.3 brechas en °C con su signo explicado (depende de B4).
 
-### E7 · Límites de la Tierra · P1 · S3
+### E7 · Límites de la Tierra
+
+> Detallada el 15 nov. La API v0.3.0 no trae nada sobre los límites, y la documentación solo los nombra (CONTEXTO §1:
+> «gravedad, vacío lunar, atmósfera marciana, radiación»; `sistema-visual.md` §6.2, `EarthLimitsBox`). El front muestra
+> esos nombres y la frase del diseño; las explicaciones y sus fuentes las tiene que dar el equipo de datos (F7.3).
+
 **Objetivo:** explicar por qué ningún sitio de la Tierra reproduce la gravedad, el vacío, la atmósfera ni la radiación.
-**Tablero:** «Sección “Límites de la Tierra como análogo”».
-**Sub-issues:** F7.1 `EarthLimitsBox` (caja del detalle) · F7.2 página «Límites de la Tierra» con textos de i18n ·
-F7.3 pedir al equipo de datos los textos y sus fuentes ⚠️ (el front no inventa cifras).
+
+**Prioridad:** P1 · **Área:** Front · Tablero: «Sección “Límites de la Tierra como análogo”»
+
+#### F7.1 + F7.2 · Límites de la Tierra: caja del detalle y página
+
+| Prioridad | Área | Tamaño |
+|---|---|---|
+| P1 | Front | S |
+
+**Descripción**
+La caja «Límites de la Tierra como análogo · siempre fallan» del diseño final (`EarthLimitsBox`), debajo de las capas en
+el panel «Dónde funciona / dónde falla» del detalle, y la página `/limites-tierra` con una caja por cuerpo. Solo los
+nombres de los límites y la frase del diseño: ninguna cifra hasta que lleguen los textos del equipo (F7.3).
+
+**Criterios de aceptación**
+- [ ] `EarthLimitsBox` en `shared/ui` (la usan dos features), con los estilos del §6.2: `bg-surface`, borde discontinuo,
+      chips con borde `verdict-fail` e icono ✗ (siempre icono y palabra)
+- [ ] Recibe el `cuerpo`: Luna → gravedad reducida, vacío lunar, radiación; Marte → gravedad reducida, atmósfera
+      marciana, radiación. Un cuerpo desconocido no muestra la caja
+- [ ] Título «Límites de la Tierra como análogo · siempre fallan» y la frase «Ninguna pareja de la Tierra los reproduce»
+- [ ] En el detalle, dentro de `VerdictPanel`, debajo de la lista de capas
+- [ ] Página `/limites-tierra`: `<h1>`, una sección por cuerpo con su `<h2>` y su caja, y «Dato pendiente» donde irán las
+      explicaciones y las fuentes
+- [ ] Textos en `es.json` y `en.json`; probado en un detalle de la Luna y otro de Marte, en la página, es/en y 320 px
+- [ ] `pnpm lint` y `pnpm build` en verde
+
+**Archivos:** `src/shared/ui/EarthLimitsBox.tsx` · `src/features/site-detail/components/VerdictPanel.tsx` ·
+`src/features/earth-limits/pages/EarthLimitsPage.tsx` · `src/shared/i18n/locales/*.json`
+**Depende de:** #50 (VerdictPanel) y #13 (ruta de la página)
+**Referencias:** `docs/sistema-visual.md` §6.2 (`EarthLimitsBox`) · `docs/design/diseno-final.html` (función `limits`)
+
+**Prompt para Claude Code**
+> Tarea F7.1 + F7.2: límites de la Tierra. Lee `docs/sistema-visual.md` §6.2 y la función `limits` de
+> `docs/design/diseno-final.html`. Modo: [MODO]. Solo nombres y la frase del diseño; no escribas ninguna cifra.
+
+#### F7.3 · Pedir al equipo de datos los textos y las fuentes de los límites ⚠️
+
+| Prioridad | Área | Tamaño |
+|---|---|---|
+| P1 | Datos | S |
+
+**Descripción**
+El front no puede inventar datos científicos. Para completar la página «Límites de la Tierra» hace falta, por cada
+límite y cuerpo, una o dos frases que expliquen por qué la Tierra no lo reproduce, con su cifra si la hay y su fuente,
+en español y en inglés.
+
+**Criterios de aceptación**
+- [ ] Textos para: gravedad reducida (Luna y Marte), vacío lunar, atmósfera marciana y radiación (Luna y Marte)
+- [ ] Cada texto con su fuente (nombre y URL) y en los dos idiomas
+- [ ] Decidido si llegan por la API (un endpoint o un campo en `/meta`) o como texto fijo en i18n del front
+
+**Depende de:** el equipo de datos
+**Referencias:** CONTEXTO §1 · `docs/sistema-visual.md` §6.2 (`EarthLimitsBox`)
 
 ### E8 · Capas del índice, regiones e imágenes · P1/P2 · S3
 **Objetivo:** mostrar en el mapa las capas PNG del índice y las regiones, y enlazar imágenes de NASA Worldview.

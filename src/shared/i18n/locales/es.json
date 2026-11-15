@@ -113,5 +113,14 @@
     "landing": "Aterrizaje",
     "cave": "Cueva",
     "unknown": "Otro tipo"
+  },
+  "earthLimits": {
+    "title": "Límites de la Tierra como análogo · siempre fallan",
+    "gravity": "Gravedad reducida",
+    "vacuum": "Vacío lunar",
+    "atmosphere": "Atmósfera marciana",
+    "radiation": "Radiación",
+    "note": "Ninguna pareja de la Tierra los reproduce.",
+    "pending": "Explicaciones y fuentes: dato pendiente."
   }
 }
