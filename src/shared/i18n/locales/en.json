@@ -165,5 +165,101 @@
     "unmeasured": "Not measured",
     "none": "None",
     "source": "See source"
+  },
+  "landing": {
+    "nav": { "label": "Page sections", "how": "How it works", "uses": "Mission uses", "ai": "AI", "data": "Data", "open": "Open the explorer" },
+    "hero": {
+      "badge": "NASA Space Apps Challenge 2026",
+      "title": "Rehearse the Moon and Mars without leaving Earth.",
+      "text": "Pathfinders42 finds and characterises places on Earth that resemble the landing sites, caves and exploration regions of the Moon and Mars. With NASA open data, and saying where the resemblance fails too.",
+      "exploreMoon": "Explore the Moon",
+      "exploreMars": "Explore Mars",
+      "statsLabel": "Pathfinders42 in numbers",
+      "moonSites": "sites on the Moon",
+      "marsSites": "sites on Mars",
+      "layers": "layers compared"
+    },
+    "challenge": {
+      "eyebrow": "The challenge",
+      "title": "Artemis is going back to the Moon to stay. Before that, everything is rehearsed on Earth.",
+      "p1": "Equipment, rovers and astronauts are tested in places on Earth that resemble their destination. But the known analogues (Atacama, Haughton crater, Death Valley, Mojave) are few and not fully characterised.",
+      "p2": "Our question: which other places on the planet work, for what use and to what extent?",
+      "imageAlt": "Earth at night seen from space with only six points of light: the known analogues",
+      "caption": "The known analogues can be counted on the fingers of one hand."
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "Beyond visual resemblance: we compare layer by layer.",
+      "step1Title": "Pick a site",
+      "step1": "A landing site, an Artemis region or a cave on the Moon or Mars: from Apollo 11 to Mons Mouton.",
+      "step2Title": "We compare five layers",
+      "step2": "Topography, climate, geology, ice and caves, measured with physical data from both bodies, against regions all over Earth.",
+      "step3Title": "Works and fails",
+      "step3": "Each pair says which layers match, which do not and which limits no place on Earth can reproduce.",
+      "exampleLabel": "Example result, with real data from the API",
+      "pair": "Pair on Earth:",
+      "limits": "Always fail: reduced gravity, lunar vacuum and radiation.",
+      "seeSite": "See {{site}}",
+      "explorerAlt": "Screenshot of the Pathfinders42 explorer with the global map of the Moon and the south pole",
+      "explorerCaption": "The explorer: the sites of the Moon and Mars, on the map and in a list."
+    },
+    "uses": {
+      "eyebrow": "Depending on the mission use",
+      "title": "A good analogue for landing is not the same as one for building.",
+      "text": "Each mission use weighs the layers differently.",
+      "landingTitle": "Landing and navigation",
+      "landing": "Topography matters most: slope and relief.",
+      "landingAlt": "Lunar ridge lit by a low sun next to a crater in shadow",
+      "constructionTitle": "Construction and resources",
+      "construction": "Geology rules: rock and regolith to use in situ.",
+      "constructionAlt": "White rock outcrop resembling the anorthosite of the lunar highlands",
+      "iceTitle": "Water, ice and permafrost",
+      "ice": "Ice at the lunar poles against frozen ground on Earth.",
+      "iceAlt": "Ice polygons in Arctic permafrost seen from the air",
+      "cavesTitle": "Caves and habitat",
+      "caves": "Lava tubes and pits as shelter from radiation.",
+      "cavesAlt": "Inside a lava tube with an opening in the roof letting the light in",
+      "also": "And also:",
+      "mobility": "Rover mobility",
+      "thermal": "Thermal testing of equipment"
+    },
+    "mars": {
+      "eyebrow": "Mars too",
+      "title": "Only the sky gives away which planet you are on.",
+      "text": "The Martian sites (landings, exploration regions and caves) are compared with the same rule.",
+      "imageAlt": "Split landscape: on the left an Earth desert with a blue sky and on the right Mars with an orange sky; the ground is almost identical"
+    },
+    "ai": {
+      "eyebrow": "Artificial intelligence",
+      "title": "And an AI looks for the analogues nobody has studied yet.",
+      "p1": "A machine learning model scans the whole Earth on a fine grid, learns from the known analogues and proposes new candidate regions for each mission use.",
+      "p2": "The text of each result comes from fixed rules over the measurements: the AI proposes, the data explains.",
+      "imageAlt": "A rover and two people in suits doing field tests in a volcanic desert"
+    },
+    "limits": {
+      "eyebrow": "Scientific honesty",
+      "title": "What Earth can never imitate.",
+      "text": "No pair on Earth reproduces these limits. We show them in every result so nobody is misled."
+    },
+    "data": {
+      "eyebrow": "Open data",
+      "title": "Physical measurements of three bodies, not similar-looking photos.",
+      "earthdataTitle": "NASA Earthdata",
+      "earthdata": "Surface temperature (MODIS), emissivity and vegetation of Earth.",
+      "demTitle": "Copernicus DEM",
+      "dem": "Slope and relief of Earth.",
+      "lroTitle": "LRO and PDS",
+      "lro": "Topography, temperatures and surface of the Moon and Mars.",
+      "trekTitle": "NASA Solar System Treks",
+      "trek": "Global maps of the Moon and Mars in the explorer."
+    },
+    "cta": {
+      "title": "Find the next testing ground for the Moon and Mars.",
+      "code": "See the code"
+    },
+    "footer": {
+      "challenge": "Pathfinders42 · NASA Space Apps Challenge 2026 · Challenge «Identify Earth Locations that Analog the Permanent Moon Base Locations and Mars»",
+      "images": "Illustrative images generated with AI. Maps: NASA Solar System Treks."
+    }
   }
 }

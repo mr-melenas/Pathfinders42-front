@@ -10,7 +10,7 @@ export function NotFoundPage() {
       <h1 className="font-display text-site-title font-extrabold tracking-display">{t('notFound.title')}</h1>
       <p className="text-muted">{t('notFound.text')}</p>
       {/* Same look as LinkButton, but a router Link: it navigates without reloading the page */}
-      <Link to="/" className="text-horizon underline underline-offset-3 hover:text-foreground">
+      <Link to="/luna"className="text-horizon underline underline-offset-3 hover:text-foreground">
         {t('notFound.back')}
       </Link>
     </div>

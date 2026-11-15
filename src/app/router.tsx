@@ -1,15 +1,17 @@
-import { createBrowserRouter, redirect } from 'react-router'
+import { createBrowserRouter } from 'react-router'
 import { AppLayout } from '@/app/layout/AppLayout'
 import { NotFoundPage } from '@/app/pages/NotFoundPage'
 import { ExploreRoute, SiteDetailRoute } from '@/app/routes'
 import { EarthLimitsPage } from '@/features/earth-limits'
+import { LandingPage } from '@/features/landing'
 
-// Routes from docs/arquitectura-pantallas.md; every page renders inside AppLayout's <Outlet />
+// Routes from docs/arquitectura-pantallas.md
 export const router = createBrowserRouter([
+  // The landing has its own header, so it lives outside the explorer's layout
+  { path: '/', Component: LandingPage },
   {
-    Component: AppLayout, // no path: a layout route only adds the common frame
+    Component: AppLayout, // no path: a layout route only adds the common frame; pages render in its <Outlet />
     children: [
-      { index: true, loader: () => redirect('/luna') }, // "/" has no page of its own
       { path: 'limites-tierra', Component: EarthLimitsPage },
       { path: ':cuerpo', Component: ExploreRoute },
       { path: ':cuerpo/:siteId', Component: SiteDetailRoute },
