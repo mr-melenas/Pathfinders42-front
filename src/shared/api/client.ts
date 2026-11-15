@@ -60,3 +60,8 @@ export function getSite(siteId: string) {
 export function getPairs(siteId: string, query?: PairsQuery) {
   return unwrap(client.GET('/api/v1/sitios/{sitio_id}/parejas', { params: { path: { sitio_id: siteId }, query } }))
 }
+
+// The layer's whole file, as the data notebook exports it. The contract types it as unknown, so it is read with checks
+export function getLayerFile(capa: string) {
+  return unwrap(client.GET('/api/v1/capas/{capa}', { params: { path: { capa } } }))
+}
