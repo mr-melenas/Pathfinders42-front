@@ -32,7 +32,7 @@
   /* ---------- Colors: bodies ---------- */
   --color-body-moon: #d3d8e1;
   --color-body-earth: #7cc8ff;
-  /* --color-body-mars: to be decided (docs/sistema-visual.md §8.1) */
+  --color-body-mars: #f2d27e; /* «Arena dorada», option A in docs/sistema-visual.md §8.1 */
 
   /* ---------- Colors: header ---------- */
   --color-header-mid: #0d1d3a;

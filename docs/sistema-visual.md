@@ -130,7 +130,7 @@ Los `-bg` son el relleno suave de los chips. `verdict-null` además lleva **raya
 |---|---|---|
 | `--color-body-moon` | `#d3d8e1` | «Regolito»: marcadores de sitios de la Luna, chip del tipo de sitio, punto de la etiqueta «Luna · polo sur» |
 | `--color-body-earth` | `#7cc8ff` | Marcadores de parejas de la Tierra y candidatos M1, punto de la etiqueta «Tierra · pareja». Es el mismo valor que `horizon` |
-| `--color-body-mars` | **pendiente** | El diseño final no define color para Marte. Hay tres propuestas comprobadas en 8.1 |
+| `--color-body-mars` | `#f2d27e` | «Arena dorada» (propuesta A de 8.1, decidida el 15 nov): marcadores y leyenda de Marte, chip del tipo de los sitios de Marte |
 
 #### Cabecera (solo para el degradado del horizonte)
 
@@ -369,7 +369,7 @@ Antes de pegarlo, mira si quedan estilos de la plantilla de Vite (`:root { font-
   /* ---------- Colores: cuerpos ---------- */
   --color-body-moon: #d3d8e1;
   --color-body-earth: #7cc8ff;
-  /* --color-body-mars: pendiente de decidir (docs/sistema-visual.md §8.1) */
+  --color-body-mars: #f2d27e; /* «Arena dorada», propuesta A de §8.1 */
 
   /* ---------- Colores: cabecera ---------- */
   --color-header-mid: #0d1d3a;
@@ -684,7 +684,7 @@ tokens que ya existen (ver 8 para confirmarlos):
 
 | # | Qué falta | Por qué importa | Quién decide | Propuesta |
 |---|---|---|---|---|
-| 1 | **Color de Marte** (`--color-body-mars`) | El diseño final solo define Luna y Tierra | Front | Tres opciones comprobadas en 8.1 |
+| 1 | **Color de Marte** (`--color-body-mars`) | El diseño final solo define Luna y Tierra | Front | ✅ Decidido (15 nov, Adriana): **A · Arena dorada** (`#f2d27e`), ver 8.1 |
 | 2 | **Borde de los controles** | `border` solo llega a 1,6:1 y WCAG pide 3:1 para el contorno de botones y campos | Front | Usar `muted` (7,22:1 sobre `surface-2`) como borde de controles, sin crear un color nuevo |
 | 3 | **Estados de carga, error y vacío** | El diseño no los dibuja; en 6 hay una propuesta con los tokens existentes | Front | Validarla al hacer la primera vista con datos |
 | 4 | **Signo de `brecha_*`** | Para escribir «es 121,7 °C más frío» sin equivocarnos de sentido | Back | Pregunta abierta (¿sitio − pareja?) |

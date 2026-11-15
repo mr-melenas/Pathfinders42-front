@@ -22,5 +22,5 @@ export function shapeOf(tipo: string): Shape {
 // Order of the shapes in the legend
 export const SHAPE_ORDER: readonly Shape[] = ['region', 'landing', 'cave', 'unknown']
 
-// Marker colour of each body: Mars has no colour of its own yet (F4.8), so it uses the text colour
-export const BODY_COLOR: Record<Body, string> = { luna: 'text-body-moon', marte: 'text-foreground' }
+// Marker colour of each body (sistema-visual §2.2)
+export const BODY_COLOR: Record<Body, string> = { luna: 'text-body-moon', marte: 'text-body-mars' }

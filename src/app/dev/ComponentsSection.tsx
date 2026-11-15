@@ -163,12 +163,14 @@ export function ComponentsSection() {
         <li className="flex flex-col items-start gap-1.5 rounded-card bg-surface p-3 sm:col-span-2">
           <div className="flex flex-wrap items-center gap-2">
             {Object.keys(es.siteType).map((tipo) => (
-              <SiteTypeChip key={tipo} tipo={tipo} />
+              <SiteTypeChip key={tipo} tipo={tipo} cuerpo="luna" />
             ))}
+            <code className="font-mono text-data text-muted">on Mars:</code>
+            <SiteTypeChip tipo="exploration_zone" cuerpo="marte" />
             <code className="font-mono text-data text-muted">unknown tipo, shown as it comes:</code>
-            <SiteTypeChip tipo="nuevo_tipo" />
+            <SiteTypeChip tipo="nuevo_tipo" cuerpo="luna" />
           </div>
-          <code className="font-mono text-data">SiteTypeChip · the 7 tipos + an unknown one</code>
+          <code className="font-mono text-data">SiteTypeChip · the 7 tipos (Moon colour) + one on Mars + an unknown one</code>
         </li>
         <li className="flex flex-col items-stretch gap-1.5 rounded-card bg-surface p-3 sm:col-span-2">
           <div className="grid gap-4 sm:grid-cols-2">
