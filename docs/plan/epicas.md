@@ -53,6 +53,7 @@ crear las issues.
 | S2 | **TanStack Query** para pedir datos a la API | Da hechos los estados de carga y error, el «Reintentar» y la caché. Sin ella habría que programar eso a mano en cada vista | F3.4 y todas las vistas |
 | S3 | **openapi-fetch** para el cliente de la API | Es de los mismos autores que `openapi-typescript` y usa los tipos generados, así que las rutas y los campos se comprueban solos. `CLAUDE.md` prohíbe escribir los tipos a mano | F3.2 |
 | S4 | **MapLibre con react-map-gl** (versión `maplibre`) para los mapas (decidido por Adriana, 4 nov; descartado Three.js) | Es lo que dice el CONTEXTO, trae el globo de serie, lee el GeoJSON de la API y deja usar el mapa como un componente de React | E4, E5, E8, E10 |
+| S4b | **Mapas de la Luna y Marte en SVG propio** con la imagen equirectangular de NASA Trek, no con MapLibre (decidido por Adriana, 15 nov, F4.1) | Prueba del 15 nov: MapLibre 6 en globo usa teselas Web Mercator, que acaban en ±85,05°. Por debajo, la imagen sale en franjas y los sitios no se dibujan (Malapert, −85,99°). Son 12 de los 67 sitios de la Luna, los de Artemis. Las imágenes de Trek cubren los polos, tienen CORS y no añaden dependencias. MapLibre queda para el mapa de la Tierra | E4, E5 |
 | S5 | **i18next + react-i18next** para los idiomas | Ya decidido en el diseño | F2.1 |
 | S6 | **Vitest solo en las piezas con lógica** (chip de veredicto, formateo de números, cliente API) | No hay tests en el repo y no da tiempo a cubrir todo antes del 8 nov. Esas piezas son donde un fallo engaña al jurado (`null` pintado como `false`) | F2.2, F2.4, F3.2 |
 | S7 | **La tarea de diseño E0 la prepara Claude en el proyecto** y el equipo la aprueba | Falta la arquitectura de pantallas y el wireframe de «Explorar»; sin ellos E3.5 y E4 no se pueden planificar bien | E0 |
@@ -814,10 +815,12 @@ cuerpo/tipo o por veredicto»
 > **Datos:** la lista usa `GET /api/v1/sitios?cuerpo=` (tipo generado, hook `useSites(cuerpo)`): 67 sitios en la Luna
 > y 93 en Marte con la API v0.3.0. El mapa usará `GET /api/v1/sitios/geojson`.
 
-**Sub-issues pendientes de detallar:** F4.1 decidir el mapa base de Luna, Marte y Tierra (pendiente 9) ⚠️ · F4.2
-`BodyMap` con react-map-gl (MapLibre) · F4.3 capa de sitios desde `/sitios/geojson` con `SiteMarker` por forma · F4.4
-leyenda y colorear por tipo o por veredicto (siempre con icono y palabra en la leyenda) · F4.8 elegir el color de Marte
-(pendiente 1) ⚠️.
+**F4.1 · Mapa base: decidido (15 nov).** SVG propio con la imagen equirectangular de NASA Solar System Treks (Luna:
+mosaico LRO WAC; Marte: mosaico Viking MDIM 2.1). MapLibre en globo no sirve para el polo sur de la Luna (supuesto S4b).
+Sin issue propia: la decisión queda aquí y en `sistema-visual.md` §8 (pendiente 9).
+
+**Sub-issues pendientes de detallar:** F4.4 leyenda y colorear por tipo o por veredicto (siempre con icono y palabra en
+la leyenda) · F4.8 elegir el color de Marte (pendiente 1) ⚠️. F4.2 y F4.3 se juntan en una sola sub-issue (abajo).
 
 #### F4.6 · Lista de sitios en Explorar (incluye F4.7)
 
@@ -853,6 +856,40 @@ detalle.
 > Tarea F4.6: lista de sitios en Explorar. Lee `docs/arquitectura-pantallas.md` y los estados comunes de
 > `docs/sistema-visual.md` §6. Modo: [MODO]. Usa `useSites(cuerpo)` y los tipos generados; el recuento cuenta solo los
 > `=== true`.
+
+#### F4.2 · Mapa de sitios en SVG (`BodyMap`, incluye F4.3)
+
+| Prioridad | Área | Tamaño |
+|---|---|---|
+| P0 | Front | M |
+
+**Descripción**
+Encima de la lista de Explorar, un mapa del cuerpo: la imagen equirectangular de NASA Trek de fondo y un marcador por
+sitio, con la forma de su tipo, que enlaza a su detalle. En la Luna, además, una vista del polo sur (por debajo de
+80° S), donde están los sitios de Artemis. Decisión y motivo en el supuesto S4b.
+
+**Criterios de aceptación**
+- [ ] `BodyMap` recibe el `cuerpo` y los sitios de `useSites(cuerpo)` (la misma petición que la lista, sin pedir nada más)
+- [ ] Fondo: imagen de NASA Solar System Treks (Luna: LRO WAC; Marte: Viking MDIM 2.1); mientras carga, `bg-map`.
+      Pie con la fuente («NASA Solar System Treks»)
+- [ ] Posición con una función pura (`x = (lon + 180) / 360`, `y = (90 − lat) / 180`), lista para probarla en la #23
+- [ ] Marcadores por forma según el tipo (`SiteMarker`, §6.3): región Artemis, aterrizaje (rombo), cueva (anillo y
+      punto). Color `body-moon` en la Luna; en Marte, `foreground` hasta decidir su color (F4.8)
+- [ ] Luna: vista del polo sur con anillos de latitud (centro = polo, borde = 80° S), como el esquema del diseño final
+- [ ] Cada marcador enlaza a `/:cuerpo/:siteId` y muestra el nombre al pasar el ratón. Con teclado se usa la lista, que
+      tiene los mismos enlaces: el mapa no añade 67 paradas de tabulador (el mapa se anuncia con un texto que lo explica)
+- [ ] Se adapta al ancho: en móvil, el mapa y la vista polar uno debajo del otro; desde 820 px, uno al lado del otro
+- [ ] Sin dependencias nuevas; `pnpm lint` y `pnpm build` en verde; probado en Luna y Marte, es/en y a 320 px
+
+**Archivos:** `src/features/explore/components/BodyMap.tsx` · `src/features/explore/components/*` ·
+`src/features/explore/pages/ExplorePage.tsx` · `src/shared/i18n/locales/*.json`
+**Depende de:** #60 (lista de sitios)
+**Referencias:** `docs/sistema-visual.md` §6.3 (`BodyMap`, `SiteMarker`) y §8 (pendiente 9) · supuesto S4b ·
+`docs/design/diseno-final.html` (función `moonMap`)
+
+**Prompt para Claude Code**
+> Tarea F4.2: mapa de sitios en SVG. Lee el supuesto S4b de `docs/plan/epicas.md`, `docs/sistema-visual.md` §6.3 y la
+> función `moonMap` de `docs/design/diseno-final.html`. Modo: [MODO]. Sin MapLibre ni dependencias nuevas.
 
 ### E5 · Detalle del sitio
 
