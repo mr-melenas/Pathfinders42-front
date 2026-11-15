@@ -819,8 +819,9 @@ cuerpo/tipo o por veredicto»
 mosaico LRO WAC; Marte: mosaico Viking MDIM 2.1). MapLibre en globo no sirve para el polo sur de la Luna (supuesto S4b).
 Sin issue propia: la decisión queda aquí y en `sistema-visual.md` §8 (pendiente 9).
 
-**Sub-issues pendientes de detallar:** F4.4 leyenda y colorear por tipo o por veredicto (siempre con icono y palabra en
-la leyenda) · F4.8 elegir el color de Marte (pendiente 1) ⚠️. F4.2 y F4.3 se juntan en una sola sub-issue (abajo).
+**Sub-issues pendientes de detallar:** F4.8 elegir el color de Marte (pendiente 1) ⚠️. F4.2 y F4.3 se juntan en una
+sola sub-issue (abajo). F4.4 se detalla abajo solo con la leyenda de formas: colorear por veredicto no entra, porque la
+API no da un veredicto por sitio y el front no recalcula veredictos (`CLAUDE.md`).
 
 #### F4.6 · Lista de sitios en Explorar (incluye F4.7)
 
@@ -890,6 +891,35 @@ sitio, con la forma de su tipo, que enlaza a su detalle. En la Luna, además, un
 **Prompt para Claude Code**
 > Tarea F4.2: mapa de sitios en SVG. Lee el supuesto S4b de `docs/plan/epicas.md`, `docs/sistema-visual.md` §6.3 y la
 > función `moonMap` de `docs/design/diseno-final.html`. Modo: [MODO]. Sin MapLibre ni dependencias nuevas.
+
+#### F4.4 · Leyenda del mapa
+
+| Prioridad | Área | Tamaño |
+|---|---|---|
+| P1 | Front | S |
+
+**Descripción**
+Debajo de los mapas de Explorar, una leyenda que explica qué forma tiene cada tipo de sitio: región (cuadrado),
+aterrizaje (rombo) y cueva (anillo con punto). Cada entrada lleva el dibujo y la palabra, nunca solo el dibujo.
+
+**Criterios de aceptación**
+- [ ] El dibujo de cada forma se saca de `SiteMarker` a un componente propio (`MarkerShape`) y lo usan el marcador y la
+      leyenda, para que nunca se vean distintos
+- [ ] La relación tipo → forma vive en un archivo `.ts` aparte (`siteShapes.ts`), junto con el color de cada cuerpo
+- [ ] La leyenda es una lista (`<ul>`) con nombre accesible («Leyenda del mapa»), con el color del cuerpo en los dibujos
+- [ ] Solo salen las formas que aparecen en los sitios del cuerpo
+- [ ] Textos nuevos en `es.json` y `en.json`; probada en Luna y Marte, en español e inglés, y a 320 px
+- [ ] `pnpm lint` y `pnpm build` en verde
+
+**Archivos:** `src/features/explore/components/MarkerShape.tsx` · `src/features/explore/components/siteShapes.ts` ·
+`src/features/explore/components/MapLegend.tsx` · `SiteMarker.tsx` · `MapFrame.tsx` · `ExplorePage.tsx` ·
+`src/shared/i18n/locales/*.json`
+**Depende de:** #62 (mapas)
+**Referencias:** `docs/sistema-visual.md` §6.3 (`SiteMarker`) y §5.1 (siempre dibujo y palabra)
+
+**Prompt para Claude Code**
+> Tarea F4.4: leyenda del mapa. Lee `docs/sistema-visual.md` §6.3 y `SiteMarker.tsx`. Modo: [MODO]. Saca la forma a un
+> componente compartido; no colorees por veredicto.
 
 ### E5 · Detalle del sitio
 
