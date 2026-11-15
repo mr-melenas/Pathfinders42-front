@@ -59,6 +59,9 @@
   --text-logo: 1.1875rem;          --text-logo--line-height: 1;
   --text-lede: clamp(1.25rem, 2.4vw, 1.625rem);          --text-lede--line-height: 1.25;
   --text-site-title: clamp(1.625rem, 3.4vw, 2.375rem);   --text-site-title--line-height: 1;
+  /* Landing (#81): hero headline and section titles */
+  --text-section: clamp(1.625rem, 3.2vw, 2.25rem);       --text-section--line-height: 1.15;
+  --text-hero: clamp(2.25rem, 5.6vw, 3.75rem);            --text-hero--line-height: 1.05;
 
   /* ---------- Radii ---------- */
   --radius-chip: 4px;
@@ -78,12 +81,19 @@
   /* ---------- Layout ---------- */
   --container-content: 75rem; /* 1200 px: max width of the header and the page content (max-w-content) */
   --container-lede: 40ch; /* line length of the plain-language sentence (PlainSummary, sistema-visual §6.2) */
+  --container-prose: 62ch; /* line length of the landing's running text */
 
   /* ---------- Motion ---------- */
   --animate-pulse-ring: pulse-ring 2.4s ease-out infinite;
   @keyframes pulse-ring {
     0%   { opacity: 0.8; transform: scale(1); }
     100% { opacity: 0;   transform: scale(2.2); }
+  }
+  /* Slow drift of the landing's hero image; used only with motion-safe: */
+  --animate-drift: drift 28s ease-in-out infinite alternate;
+  @keyframes drift {
+    from { transform: scale(1.02) translate3d(0, 0, 0); }
+    to   { transform: scale(1.12) translate3d(-2%, -1.5%, 0); }
   }
 }
 

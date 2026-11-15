@@ -165,5 +165,101 @@
     "unmeasured": "Sin medir",
     "none": "Ninguno",
     "source": "Ver fuente"
+  },
+  "landing": {
+    "nav": { "label": "Secciones de la página", "how": "Cómo funciona", "uses": "Usos de misión", "ai": "IA", "data": "Datos", "open": "Abrir el explorador" },
+    "hero": {
+      "badge": "NASA Space Apps Challenge 2026",
+      "title": "Ensaya la Luna y Marte sin salir de la Tierra.",
+      "text": "Pathfinders42 encuentra y caracteriza lugares de la Tierra que se parecen a los sitios de aterrizaje, las cuevas y las regiones de exploración de la Luna y Marte. Con datos abiertos de la NASA, y diciendo también dónde falla el parecido.",
+      "exploreMoon": "Explorar la Luna",
+      "exploreMars": "Explorar Marte",
+      "statsLabel": "Pathfinders42 en cifras",
+      "moonSites": "sitios en la Luna",
+      "marsSites": "sitios en Marte",
+      "layers": "capas comparadas"
+    },
+    "challenge": {
+      "eyebrow": "El reto",
+      "title": "Artemis vuelve a la Luna para quedarse. Antes, todo se ensaya en la Tierra.",
+      "p1": "Equipos, rovers y astronautas se prueban en lugares de la Tierra que se parecen a su destino. Pero los análogos conocidos (Atacama, el cráter Haughton, el Valle de la Muerte, Mojave) son pocos y no están del todo caracterizados.",
+      "p2": "Nuestra pregunta: ¿qué otros lugares del planeta sirven, para qué uso y hasta qué punto?",
+      "imageAlt": "La Tierra de noche vista desde el espacio con solo seis puntos luminosos: los análogos conocidos",
+      "caption": "Los análogos conocidos se cuentan con los dedos de una mano."
+    },
+    "how": {
+      "eyebrow": "Cómo funciona",
+      "title": "Más allá del parecido visual: lo comparamos capa a capa.",
+      "step1Title": "Elige un sitio",
+      "step1": "Un lugar de aterrizaje, una región Artemis o una cueva de la Luna o de Marte: de Apollo 11 a Mons Mouton.",
+      "step2Title": "Comparamos cinco capas",
+      "step2": "Topografía, clima, geología, hielo y cuevas, medidas con datos físicos de los dos cuerpos, frente a regiones de toda la Tierra.",
+      "step3Title": "Funciona y falla",
+      "step3": "Cada pareja dice qué capas se parecen, cuáles no y qué límites no puede reproducir ningún lugar de la Tierra.",
+      "exampleLabel": "Ejemplo de resultado, con datos reales de la API",
+      "pair": "Pareja en la Tierra:",
+      "limits": "Siempre fallan: gravedad reducida, vacío lunar y radiación.",
+      "seeSite": "Ver {{site}}",
+      "explorerAlt": "Captura del explorador de Pathfinders42 con el mapa global de la Luna y el polo sur",
+      "explorerCaption": "El explorador: los sitios de la Luna y Marte, en el mapa y en lista."
+    },
+    "uses": {
+      "eyebrow": "Según el uso de la misión",
+      "title": "Un buen análogo para aterrizar no es el mismo que para construir.",
+      "text": "Cada uso de misión pesa las capas de forma distinta.",
+      "landingTitle": "Aterrizaje y navegación",
+      "landing": "Pesa sobre todo la topografía: pendiente y relieve.",
+      "landingAlt": "Cresta lunar iluminada por un sol rasante junto a un cráter en sombra",
+      "constructionTitle": "Construcción y recursos",
+      "construction": "La geología manda: roca y regolito para usar in situ.",
+      "constructionAlt": "Afloramiento de roca blanca parecida a la anortosita de las tierras altas lunares",
+      "iceTitle": "Agua, hielo y permafrost",
+      "ice": "Hielo en los polos lunares frente a suelos helados de la Tierra.",
+      "iceAlt": "Polígonos de hielo en un permafrost ártico vistos desde el aire",
+      "cavesTitle": "Cuevas y hábitat",
+      "caves": "Tubos de lava y fosas como refugio frente a la radiación.",
+      "cavesAlt": "Interior de un tubo de lava con una abertura en el techo por la que entra la luz",
+      "also": "Y también:",
+      "mobility": "Movilidad de rovers",
+      "thermal": "Pruebas térmicas de equipos"
+    },
+    "mars": {
+      "eyebrow": "También en Marte",
+      "title": "Solo el cielo delata en qué planeta estás.",
+      "text": "Los sitios marcianos (aterrizajes, regiones de exploración y cuevas) se comparan con la misma regla.",
+      "imageAlt": "Paisaje dividido: a la izquierda un desierto de la Tierra con cielo azul y a la derecha Marte con cielo anaranjado; el terreno es casi idéntico"
+    },
+    "ai": {
+      "eyebrow": "Inteligencia artificial",
+      "title": "Y una IA busca los análogos que nadie ha estudiado todavía.",
+      "p1": "Un modelo de aprendizaje automático recorre toda la Tierra en una rejilla fina, aprende de los análogos conocidos y propone, para cada uso de misión, regiones candidatas nuevas.",
+      "p2": "El texto de cada resultado sale de reglas fijas a partir de las medidas: la IA propone, los datos explican.",
+      "imageAlt": "Rover y dos personas con traje haciendo pruebas de campo en un desierto volcánico"
+    },
+    "limits": {
+      "eyebrow": "Honestidad científica",
+      "title": "Lo que la Tierra nunca podrá imitar.",
+      "text": "Ninguna pareja de la Tierra reproduce estos límites. Los mostramos en cada resultado para que nadie se lleve a engaño."
+    },
+    "data": {
+      "eyebrow": "Datos abiertos",
+      "title": "Medidas físicas de tres cuerpos, no fotos parecidas.",
+      "earthdataTitle": "NASA Earthdata",
+      "earthdata": "Temperatura de superficie (MODIS), emisividad y vegetación de la Tierra.",
+      "demTitle": "Copernicus DEM",
+      "dem": "Pendiente y relieve de la Tierra.",
+      "lroTitle": "LRO y PDS",
+      "lro": "Topografía, temperaturas y superficie de la Luna y Marte.",
+      "trekTitle": "NASA Solar System Treks",
+      "trek": "Mapas globales de la Luna y Marte del explorador."
+    },
+    "cta": {
+      "title": "Encuentra el próximo campo de pruebas para la Luna y Marte.",
+      "code": "Ver el código"
+    },
+    "footer": {
+      "challenge": "Pathfinders42 · NASA Space Apps Challenge 2026 · Reto «Identify Earth Locations that Analog the Permanent Moon Base Locations and Mars»",
+      "images": "Imágenes ilustrativas generadas con IA. Mapas: NASA Solar System Treks."
+    }
   }
 }

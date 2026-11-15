@@ -7,7 +7,7 @@
 
 | URL | Pantalla | Feature | Datos de la API |
 |---|---|---|---|
-| `/` | Redirige a `/luna` | — | — |
+| `/` | Landing: presenta el proyecto y lleva al explorador (desde el 15 nov, #81; antes redirigía a `/luna`). Tiene su propia cabecera, fuera de `AppLayout` | `landing` | `GET /sitios?cuerpo=` (nº de sitios), `GET /sitios/apollo-11` y `GET /analogos/apollo-11` (ejemplo) |
 | `/:cuerpo` | Explorar: sitios del cuerpo | `explore` | `GET /sitios/geojson` (E4) |
 | `/:cuerpo/:siteId` | Detalle del sitio | `site-detail` | `GET /sitios/{sitio_id}` |
 | `/limites-tierra` | Límites de la Tierra | `earth-limits` | Ninguno: textos de i18n (E7) |
