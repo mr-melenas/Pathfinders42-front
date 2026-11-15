@@ -225,6 +225,125 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/hielo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Resumen: cuántos análogos de hielo, veredictos y avisos */
+        get: operations["resumen_api_v1_hielo_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/hielo/sitios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Hielo de cada sitio de la Luna y Marte, con su mejor región de la Tierra */
+        get: operations["sitios_api_v1_hielo_sitios_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/hielo/sitios/{sitio_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ficha de hielo de un sitio: 5 regiones de la Tierra y comprobación de LRO */
+        get: operations["sitio_api_v1_hielo_sitios__sitio_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/hielo/parejas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Análogos de hielo (sitio ↔ región de la Tierra) con su veredicto, de más a menos parecidos */
+        get: operations["parejas_api_v1_hielo_parejas_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/usos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Usos de misión con sus pesos por capa */
+        get: operations["listar_api_v1_usos_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/usos/{uso}/sitios/{sitio_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Análogos de la Tierra de un sitio para un uso, de mejor a peor */
+        get: operations["parejas_api_v1_usos__uso__sitios__sitio_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/usos/{uso}/ranking": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mejor análogo de cada sitio para un uso (los sitios con pareja apta primero) */
+        get: operations["ranking_api_v1_usos__uso__ranking_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/explicaciones/{sitio_id}": {
         parameters: {
             query?: never;
@@ -256,12 +375,36 @@ export interface paths {
          * Search
          * @description ES: Busca en la documentación (corpus) y/o en internet (dominios permitidos, con caché). Cada
          *     resultado lleva `origen`; los de la web, además `fecha_consulta`, y no están verificados.
+         *     Con WEB_CACHE_ONLY=1 solo responde lo que esté en caché y no cuenta para el límite.
          *     EN: Searches the documentation (corpus) and/or the web (allowed domains, cached). Each result
          *     carries `origen`; web ones also carry `fecha_consulta` and are not verified.
          */
         get: operations["search_api_v1_buscar_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/preguntar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ask
+         * @description ES: Chat online. Recupera fragmentos (y web si `fuente` lo pide), el LLM responde en español y se
+         *     validan cifras y citas; si falla dos veces, responde con la plantilla determinista.
+         *     EN: Online chat. Retrieves fragments (and web if `fuente` asks), the LLM answers in Spanish, figures
+         *     and citations are validated; after two failures it answers with the deterministic template.
+         */
+        post: operations["ask_api_v1_preguntar_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -431,6 +574,80 @@ export interface components {
             percentil_indice: number;
         };
         /**
+         * ComprobacionLRO
+         * @description Dos pruebas independientes de LRO (Diviner y LEND) y la rugosidad de radar (Mini-RF).
+         */
+        ComprobacionLRO: {
+            /**
+             * Nivel
+             * @description Combinación de las señales de Diviner (frío) y LEND (hidrógeno)
+             * @enum {string}
+             */
+            nivel: "frío + hidrógeno" | "solo frío" | "solo hidrógeno" | "sin señal";
+            /**
+             * Diviner F Hielo
+             * @description Fracción del sitio con hielo estable cerca de la superficie (0–1)
+             */
+            diviner_f_hielo: number | null;
+            /**
+             * Senal Diviner
+             * @description diviner_f_hielo ≥ 0,25
+             */
+            senal_diviner: boolean;
+            /**
+             * Lend Supresion
+             * @description Supresión de neutrones epitérmicos frente a 55–60° S (sin restar el fondo de la nave)
+             */
+            lend_supresion: number | null;
+            /**
+             * Lend Err
+             * @description Error estadístico de la supresión (ruido de conteo)
+             */
+            lend_err: number | null;
+            /**
+             * Lend Exceso
+             * @description Supresión del sitio menos la mediana del polo
+             */
+            lend_exceso: number | null;
+            /**
+             * Lend Z Polo
+             * @description lend_exceso / lend_err
+             */
+            lend_z_polo: number | null;
+            /**
+             * Lend Percentil
+             * @description Percentil frente a 2000 discos al azar del polo
+             */
+            lend_percentil: number | null;
+            /**
+             * Senal Lend
+             * @description lend_z_polo ≥ 2 y lend_percentil ≥ 75, con un radio de 20 km
+             */
+            senal_lend: boolean;
+            /**
+             * Lend Radios Con Senal
+             * @description Radios (15, 20 y 30 km) con señal de LEND, 0–3
+             */
+            lend_radios_con_senal: number;
+            /**
+             * Lend Robusta
+             * @description Hay señal con los tres radios
+             */
+            lend_robusta: boolean;
+            /**
+             * Minirf Frac Cpr Gt1
+             * @description Fracción del sitio con CPR > 1 (banda S)
+             */
+            minirf_frac_cpr_gt1: number | null;
+            /** Rugosidad Radar Percentil */
+            rugosidad_radar_percentil: number | null;
+            /**
+             * Rugosidad Radar
+             * @description Bloques a escala de decímetros frente al resto del polo; no es una prueba de hielo
+             */
+            rugosidad_radar: ("baja" | "media" | "alta") | null;
+        };
+        /**
          * Contribucion
          * @description Una variable de la explicación SHAP de un candidato.
          */
@@ -516,6 +733,18 @@ export interface components {
             mapa_url: string;
             /** N Candidatos */
             n_candidatos: number;
+        };
+        /** FuenteHielo */
+        FuenteHielo: {
+            /**
+             * Instrumento
+             * @example LEND
+             */
+            instrumento: string;
+            /** Producto */
+            producto: string;
+            /** Url */
+            url: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -620,6 +849,18 @@ export interface components {
              */
             nombre: string;
             /**
+             * Lat
+             * @description Latitud del lugar de la Tierra (centro, si es una región)
+             * @example 68.1
+             */
+            lat?: number | null;
+            /**
+             * Lon
+             * @description Longitud del lugar de la Tierra
+             * @example 13.25
+             */
+            lon?: number | null;
+            /**
              * Distancia
              * @description Distancia principal de la capa (0 = igual, 1 = nada parecido)
              */
@@ -636,6 +877,119 @@ export interface components {
             detalles: {
                 [key: string]: unknown;
             };
+        };
+        /**
+         * ParejaHielo
+         * @description Análogo de hielo: un sitio de la Luna o Marte y su región de la Tierra, con su veredicto.
+         */
+        ParejaHielo: {
+            /**
+             * Sitio Id
+             * @example aterrizaje-im-1-odysseus
+             */
+            sitio_id: string;
+            /**
+             * Sitio
+             * @example IM-1 Odysseus
+             */
+            sitio: string;
+            /**
+             * Cuerpo
+             * @example luna
+             */
+            cuerpo: string;
+            /** F Hielo Sitio */
+            f_hielo_sitio: number | null;
+            /** Fuente Hielo */
+            fuente_hielo: string | null;
+            region: components["schemas"]["RegionHielo"];
+            /**
+             * Veredicto
+             * @description Según la comprobación de LRO; «sin comprobar» si el sitio solo tiene una fuente
+             * @enum {string}
+             */
+            veredicto: "se mantiene" | "debilitada" | "no se sostiene" | "sin comprobar";
+            /**
+             * Motivo
+             * @description Frase que explica el veredicto, lista para mostrar
+             */
+            motivo: string;
+            /** Nivel Lro */
+            nivel_lro: ("frío + hidrógeno" | "solo frío" | "solo hidrógeno" | "sin señal") | null;
+        };
+        /**
+         * ParejaUso
+         * @description Lugar de la Tierra comparado con un sitio, con lo que funciona y lo que falla en cada capa.
+         */
+        ParejaUso: {
+            /**
+             * Tierra Id
+             * @example lofoten_flakstadoy
+             */
+            tierra_id: string;
+            /**
+             * Tierra Nombre
+             * @example Lofoten (macizo de Flakstadøy), Noruega
+             */
+            tierra_nombre: string;
+            /** Tierra Lat */
+            tierra_lat: number | null;
+            /** Tierra Lon */
+            tierra_lon: number | null;
+            /**
+             * Puntuacion
+             * @description 0–1: media ponderada de similitudes del uso (0,5 = en el umbral)
+             */
+            puntuacion: number;
+            /**
+             * Cobertura
+             * @description Fracción del peso del uso con dato en esta pareja
+             */
+            cobertura: number;
+            /**
+             * Apta
+             * @description Pasa el umbral en las capas obligatorias del uso
+             */
+            apta: boolean;
+            /**
+             * N Capas Ok
+             * @description Capas del uso que pasan su umbral
+             */
+            n_capas_ok: number;
+            /**
+             * Distancias
+             * @description Distancia de cada capa medida (0 = igual)
+             */
+            distancias: {
+                [key: string]: number;
+            };
+            /**
+             * Funciona
+             * @description Capas que pasan su umbral
+             */
+            funciona: ("topografia" | "geologia" | "clima" | "hielo" | "forma_cueva")[];
+            /**
+             * Falla
+             * @description Capas medidas que no pasan su umbral
+             */
+            falla: ("topografia" | "geologia" | "clima" | "hielo" | "forma_cueva")[];
+            /**
+             * Sin Dato
+             * @description Capas del uso sin medir para esta pareja
+             */
+            sin_dato: ("topografia" | "geologia" | "clima" | "hielo" | "forma_cueva")[];
+            /**
+             * Brechas C
+             * @description Sitio − Tierra en °C; negativo = el sitio es más frío (ts_media, ts_min, ts_max, amplitud_anual, osc_diaria, t_interior)
+             */
+            brechas_C: {
+                [key: string]: number;
+            };
+            /**
+             * Fuentes
+             * @description Capas que propusieron esta pareja
+             */
+            fuentes: string[];
         };
         /** PositivoM1 */
         PositivoM1: {
@@ -665,6 +1019,88 @@ export interface components {
             /** Percentil M1 */
             percentil_m1: number;
         };
+        /** Question */
+        Question: {
+            /** Pregunta */
+            pregunta: string;
+            /** Sitio Id */
+            sitio_id?: string | null;
+            /**
+             * Fuente
+             * @default documentacion
+             * @enum {string}
+             */
+            fuente: "documentacion" | "web" | "ambas";
+        };
+        /** RankingSitio */
+        RankingSitio: {
+            /** Sitio Id */
+            sitio_id: string;
+            /** Nombre */
+            nombre: string;
+            /** Cuerpo */
+            cuerpo: string;
+            /** Tipo */
+            tipo: string;
+            /** Lat */
+            lat: number | null;
+            /** Lon */
+            lon: number | null;
+            /**
+             * N Aptas
+             * @description Parejas aptas para el uso
+             */
+            n_aptas: number;
+            mejor: components["schemas"]["ParejaUso"] | null;
+        };
+        /**
+         * RegionHielo
+         * @description Región de la Tierra comparada con un sitio por hielo y topografía.
+         */
+        RegionHielo: {
+            /**
+             * Region Id
+             * @example analogo-luna-askja-islandia
+             */
+            region_id: string;
+            /**
+             * Region
+             * @example Askja, Islandia
+             */
+            region: string;
+            /**
+             * Perfil
+             * @description Perfil del índice de la región (luna o marte)
+             */
+            perfil: string | null;
+            /**
+             * F Permafrost
+             * @description Probabilidad media de permafrost en la región (0–1)
+             */
+            f_permafrost: number | null;
+            /**
+             * D Hielo
+             * @description |f_hielo del sitio − f_permafrost de la región|
+             */
+            d_hielo: number | null;
+            /**
+             * D Topo
+             * @description Distancia topográfica (KS, 0–1)
+             */
+            d_topo: number | null;
+            /**
+             * D Hielo Topo
+             * @description Media de d_hielo y d_topo (0 = igual)
+             */
+            d_hielo_topo: number | null;
+            /**
+             * Base Cercana
+             * @description Estación antártica abierta más cercana
+             */
+            base_cercana?: string | null;
+            /** Base Km */
+            base_km?: number | null;
+        };
         /** ResumenCapa */
         ResumenCapa: {
             /**
@@ -683,6 +1119,63 @@ export interface components {
             mejor: components["schemas"]["Pareja"] | null;
             /** N Parejas */
             n_parejas: number;
+        };
+        /** ResumenHielo */
+        ResumenHielo: {
+            /**
+             * Versiones
+             * @example {
+             *       "hielo": "hielo_v0",
+             *       "hielo_lro": "hielo_v1.1"
+             *     }
+             */
+            versiones: {
+                [key: string]: string | null;
+            };
+            /**
+             * N Sitios
+             * @description Sitios con dato de hielo, por cuerpo
+             */
+            n_sitios: {
+                [key: string]: number;
+            };
+            /**
+             * N Parejas
+             * @description Análogos de hielo, por cuerpo
+             */
+            n_parejas: {
+                [key: string]: number;
+            };
+            /**
+             * Veredictos
+             * @description Número de parejas con cada veredicto
+             */
+            veredictos: {
+                [key: string]: number;
+            };
+            /**
+             * Niveles Lro
+             * @description Sitios del polo sur lunar en cada nivel
+             */
+            niveles_lro: {
+                [key: string]: number;
+            };
+            /**
+             * Umbrales
+             * @description Umbrales de cada versión
+             */
+            umbrales: {
+                [key: string]: {
+                    [key: string]: number;
+                };
+            };
+            /**
+             * Avisos
+             * @description Limitaciones que el front debe mostrar junto a los datos
+             */
+            avisos: string[];
+            /** Fuentes */
+            fuentes: components["schemas"]["FuenteHielo"][];
         };
         /** Salud */
         Salud: {
@@ -772,6 +1265,120 @@ export interface components {
                 };
             };
         };
+        /** SitioHielo */
+        SitioHielo: {
+            /**
+             * Id
+             * @example aterrizaje-im-2-athena
+             */
+            id: string;
+            /**
+             * Nombre
+             * @example IM-2 Athena
+             */
+            nombre: string;
+            /**
+             * Cuerpo
+             * @example luna
+             */
+            cuerpo: string;
+            /** Tipo */
+            tipo: string;
+            /** Lat */
+            lat: number | null;
+            /** Lon */
+            lon: number | null;
+            /**
+             * F Hielo
+             * @description Fracción del sitio con hielo cerca de la superficie (0–1)
+             */
+            f_hielo: number | null;
+            /**
+             * Fuente Hielo
+             * @example Diviner PRP (hielo estable)
+             */
+            fuente_hielo: string | null;
+            /**
+             * Tiene Analogo
+             * @description hielo_v0 encuentra una región parecida en hielo y topografía (None: sin comparación)
+             */
+            tiene_analogo: boolean | null;
+            /**
+             * Mejor Region
+             * @example Askja, Islandia
+             */
+            mejor_region: string | null;
+            /** D Hielo Topo */
+            d_hielo_topo: number | null;
+            /**
+             * Nivel Lro
+             * @description Solo los 12 sitios lunares por debajo de −80°
+             */
+            nivel_lro: ("frío + hidrógeno" | "solo frío" | "solo hidrógeno" | "sin señal") | null;
+        };
+        /** SitioHieloDetalle */
+        SitioHieloDetalle: {
+            /**
+             * Id
+             * @example aterrizaje-im-2-athena
+             */
+            id: string;
+            /**
+             * Nombre
+             * @example IM-2 Athena
+             */
+            nombre: string;
+            /**
+             * Cuerpo
+             * @example luna
+             */
+            cuerpo: string;
+            /** Tipo */
+            tipo: string;
+            /** Lat */
+            lat: number | null;
+            /** Lon */
+            lon: number | null;
+            /**
+             * F Hielo
+             * @description Fracción del sitio con hielo cerca de la superficie (0–1)
+             */
+            f_hielo: number | null;
+            /**
+             * Fuente Hielo
+             * @example Diviner PRP (hielo estable)
+             */
+            fuente_hielo: string | null;
+            /**
+             * Tiene Analogo
+             * @description hielo_v0 encuentra una región parecida en hielo y topografía (None: sin comparación)
+             */
+            tiene_analogo: boolean | null;
+            /**
+             * Mejor Region
+             * @example Askja, Islandia
+             */
+            mejor_region: string | null;
+            /** D Hielo Topo */
+            d_hielo_topo: number | null;
+            /**
+             * Nivel Lro
+             * @description Solo los 12 sitios lunares por debajo de −80°
+             */
+            nivel_lro: ("frío + hidrógeno" | "solo frío" | "solo hidrógeno" | "sin señal") | null;
+            /**
+             * H2O Grs Pct
+             * @description Agua equivalente de Mars Odyssey GRS (% en peso). Solo Marte
+             */
+            h2o_grs_pct: number | null;
+            /**
+             * Regiones
+             * @description Las 5 regiones de la Tierra más parecidas
+             */
+            regiones: components["schemas"]["RegionHielo"][];
+            /** @description Comprobación de LRO (None fuera del polo sur lunar) */
+            lro: components["schemas"]["ComprobacionLRO"] | null;
+        };
         /** SitioResumen */
         SitioResumen: {
             /**
@@ -810,6 +1417,69 @@ export interface components {
             parecidos: {
                 [key: string]: boolean | null;
             };
+        };
+        /** Uso */
+        Uso: {
+            /**
+             * Id
+             * @example aterrizaje
+             */
+            id: string;
+            /**
+             * Nombre
+             * @example Aterrizaje y navegación
+             */
+            nombre: string;
+            /** Descripcion */
+            descripcion: string;
+            /**
+             * Pesos
+             * @description Peso de cada capa en la puntuación del uso
+             */
+            pesos: {
+                [key: string]: number;
+            };
+            /**
+             * Requiere
+             * @description Capas que la pareja tiene que tener medidas
+             */
+            requiere: ("topografia" | "geologia" | "clima" | "hielo" | "forma_cueva")[];
+            /**
+             * Solo Sitios
+             * @description Limita el uso a sitios con hielo (≥ 20 %) o a sitios-cueva
+             */
+            solo_sitios: ("con_hielo" | "cuevas") | null;
+            /**
+             * Orden
+             * @enum {string}
+             */
+            orden: "puntuacion" | "capas_ok";
+            /**
+             * Min Capas Ok
+             * @description Capas que tienen que pasar su umbral para que la pareja sea apta
+             */
+            min_capas_ok: number;
+            /**
+             * N Sitios
+             * @description Sitios con al menos una pareja evaluada en este uso
+             */
+            n_sitios: number;
+        };
+        /** Usos */
+        Usos: {
+            /** Version */
+            version: string | null;
+            /**
+             * Umbrales
+             * @description Distancia máxima para que una capa «funcione»
+             */
+            umbrales: {
+                [key: string]: number;
+            };
+            /** Usos */
+            usos: components["schemas"]["Uso"][];
+            /** Nota */
+            nota?: string | null;
         };
         /** ValidacionM1 */
         ValidacionM1: {
@@ -1290,6 +1960,260 @@ export interface operations {
             };
         };
     };
+    resumen_api_v1_hielo_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResumenHielo"];
+                };
+            };
+        };
+    };
+    sitios_api_v1_hielo_sitios_get: {
+        parameters: {
+            query?: {
+                /** @description luna o marte */
+                cuerpo?: ("luna" | "marte") | null;
+                /** @description Solo los sitios con análogo de hielo */
+                solo_analogos?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SitioHielo"][];
+                };
+            };
+            /** @description La capa hielo no está en los datos, o el sitio es desconocido */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    sitio_api_v1_hielo_sitios__sitio_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sitio_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SitioHieloDetalle"];
+                };
+            };
+            /** @description La capa hielo no está en los datos, o el sitio es desconocido */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    parejas_api_v1_hielo_parejas_get: {
+        parameters: {
+            query?: {
+                /** @description luna o marte */
+                cuerpo?: ("luna" | "marte") | null;
+                /** @description Filtra por veredicto */
+                veredicto?: ("se mantiene" | "debilitada" | "no se sostiene" | "sin comprobar") | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParejaHielo"][];
+                };
+            };
+            /** @description La capa hielo no está en los datos, o el sitio es desconocido */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    listar_api_v1_usos_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Usos"];
+                };
+            };
+            /** @description Capa usos ausente, uso desconocido o sitio sin parejas */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    parejas_api_v1_usos__uso__sitios__sitio_id__get: {
+        parameters: {
+            query?: {
+                /** @description Número máximo de parejas */
+                n?: number;
+                /** @description Solo las que pasan las capas obligatorias */
+                solo_aptas?: boolean;
+            };
+            header?: never;
+            path: {
+                uso: string;
+                sitio_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParejaUso"][];
+                };
+            };
+            /** @description Capa usos ausente, uso desconocido o sitio sin parejas */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ranking_api_v1_usos__uso__ranking_get: {
+        parameters: {
+            query?: {
+                cuerpo?: ("luna" | "marte") | null;
+                /** @description p. ej. region_aterrizaje_artemis, cueva_marte */
+                tipo?: string | null;
+                n?: number;
+            };
+            header?: never;
+            path: {
+                uso: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RankingSitio"][];
+                };
+            };
+            /** @description Capa usos ausente, uso desconocido o sitio sin parejas */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_explanation_api_v1_explicaciones__sitio_id__get: {
         parameters: {
             query?: never;
@@ -1347,6 +2271,41 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     }[];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ask_api_v1_preguntar_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Question"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */

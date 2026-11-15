@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
-import { usePairPosition } from '@/shared/api/queries'
 import type { components } from '@/shared/api/schema'
 import { isBody } from '@/shared/i18n/labels'
 import { POLAR_EDGE_LAT } from '@/shared/lib/mapProjection'
@@ -26,9 +25,11 @@ export function MapsRow({ site }: MapsRowProps) {
   const { t } = useTranslation()
   // The same layer as the «Mejor pareja» panel
   const best = pickBestLayer(site.resumen)
-  const pairName = best?.mejor?.nombre ?? null
-  // Hooks go before any early return (rules of hooks)
-  const { data: position = null } = usePairPosition(best?.capa ?? null, best?.mejor?.id ?? null)
+  const pair = best?.mejor ?? null
+  const pairName = pair?.nombre ?? null
+  // Where the pair is on Earth, straight from the API; both values or none, never a half position
+  const position =
+    typeof pair?.lat === 'number' && typeof pair.lon === 'number' ? { lat: pair.lat, lon: pair.lon } : null
 
   const { cuerpo } = site
   if (!isBody(cuerpo)) return null

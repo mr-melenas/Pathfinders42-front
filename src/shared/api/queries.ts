@@ -1,6 +1,5 @@
-import { skipToken, useQuery } from '@tanstack/react-query'
-import { getLayerFile, getPairs, getSite, getSites, getSitesGeojson } from '@/shared/api/client'
-import { LAYERS_WITH_POSITIONS, pairPositionFrom } from '@/shared/api/pairPosition'
+import { useQuery } from '@tanstack/react-query'
+import { getPairs, getSite, getSites, getSitesGeojson } from '@/shared/api/client'
 import type { components } from '@/shared/api/schema'
 
 type Layer = components['schemas']['ResumenCapa']['capa']
@@ -12,7 +11,6 @@ export const queryKeys = {
   sitesGeojson: () => ['sites', 'geojson'] as const,
   site: (siteId: string) => ['site', siteId] as const,
   pairs: (siteId: string, capa?: Layer) => ['site', siteId, 'pairs', { capa }] as const,
-  layerFile: (capa: string) => ['layer', capa] as const,
 }
 
 export function useSites(cuerpo?: string) {
@@ -29,16 +27,4 @@ export function useSite(siteId: string) {
 
 export function usePairs(siteId: string, capa?: Layer) {
   return useQuery({ queryKey: queryKeys.pairs(siteId, capa), queryFn: () => getPairs(siteId, { capa }) })
-}
-
-// Where a pair is on Earth, or null when the data does not say. TEMPORARY until B1 (see pairPosition.ts)
-export function usePairPosition(capa: string | null, pairId: string | null) {
-  const canKnow = capa !== null && pairId !== null && LAYERS_WITH_POSITIONS.includes(capa)
-  return useQuery({
-    queryKey: queryKeys.layerFile(capa ?? 'none'),
-    // skipToken: no request at all for layers without positions (the climate file alone is 150 KB)
-    queryFn: canKnow ? () => getLayerFile(capa) : skipToken,
-    staleTime: Infinity, // the file only changes when the data is exported again
-    select: (file) => (pairId === null ? null : pairPositionFrom(file, pairId)),
-  })
 }
