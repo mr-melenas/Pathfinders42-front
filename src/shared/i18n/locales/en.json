@@ -113,5 +113,14 @@
     "landing": "Landing",
     "cave": "Cave",
     "unknown": "Other type"
+  },
+  "earthLimits": {
+    "title": "Earth's limits as an analogue · always fail",
+    "gravity": "Reduced gravity",
+    "vacuum": "Lunar vacuum",
+    "atmosphere": "Martian atmosphere",
+    "radiation": "Radiation",
+    "note": "No Earth pair reproduces them.",
+    "pending": "Explanations and sources: data pending."
   }
 }

@@ -1,6 +1,7 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { components } from '@/shared/api/schema'
+import { EarthLimitsBox } from '@/shared/ui/EarthLimitsBox'
 import { LayerRow } from '@/features/site-detail/components/LayerRow'
 
 type Site = components['schemas']['SitioDetalle']
@@ -32,6 +33,7 @@ export function VerdictPanel({ site }: VerdictPanelProps) {
           </li>
         ))}
       </ul>
+      <EarthLimitsBox cuerpo={site.cuerpo} />
     </section>
   )
 }
