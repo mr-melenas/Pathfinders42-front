@@ -3,6 +3,7 @@ import { useSite } from '@/shared/api/queries'
 import { ErrorState } from '@/shared/ui/ErrorState'
 import { LoadingState } from '@/shared/ui/LoadingState'
 import { BestPairPanel } from '@/features/site-detail/components/BestPairPanel'
+import { MapsRow } from '@/features/site-detail/components/MapsRow'
 import { SiteHeader } from '@/features/site-detail/components/SiteHeader'
 import { VerdictPanel } from '@/features/site-detail/components/VerdictPanel'
 
@@ -30,6 +31,7 @@ export function SiteDetailPage({ siteId }: SiteDetailPageProps) {
   return (
     <div className="flex flex-col gap-4">
       <SiteHeader site={data} />
+      <MapsRow site={data} />
       {/* One column on phones; two columns from 820 px, as in the final design */}
       <div className="grid items-start gap-4 md2:grid-cols-2">
         <VerdictPanel site={data} />

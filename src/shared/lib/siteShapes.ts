@@ -24,3 +24,6 @@ export const SHAPE_ORDER: readonly Shape[] = ['region', 'landing', 'cave', 'unkn
 
 // Marker colour of each body (sistema-visual §2.2)
 export const BODY_COLOR: Record<Body, string> = { luna: 'text-body-moon', marte: 'text-body-mars' }
+
+// Frame colour of every map, the Earth included (sistema-visual §2.2)
+export const MAP_COLOR: Record<Body | 'tierra', string> = { ...BODY_COLOR, tierra: 'text-body-earth' }

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import type { Body } from '@/shared/i18n/labels'
 import type { SiteSummary } from '@/features/explore/components/groupSitesByType'
-import { MarkerShape } from '@/features/explore/components/MarkerShape'
-import { BODY_COLOR, SHAPE_ORDER, shapeOf } from '@/features/explore/components/siteShapes'
+import { MarkerShape } from '@/shared/ui/MarkerShape'
+import { BODY_COLOR, SHAPE_ORDER, shapeOf } from '@/shared/lib/siteShapes'
 
 type MapLegendProps = {
   cuerpo: Body

@@ -5,10 +5,10 @@ import { BODY_LABEL_KEYS, type Body } from '@/shared/i18n/labels'
 import { EmptyState } from '@/shared/ui/EmptyState'
 import { ErrorState } from '@/shared/ui/ErrorState'
 import { LoadingState } from '@/shared/ui/LoadingState'
-import { BodyMap } from '@/features/explore/components/BodyMap'
+import { BodyMap } from '@/shared/ui/BodyMap'
 import { MapLegend } from '@/features/explore/components/MapLegend'
 import { SiteList } from '@/features/explore/components/SiteList'
-import { SouthPoleMap } from '@/features/explore/components/SouthPoleMap'
+import { SouthPoleMap } from '@/shared/ui/SouthPoleMap'
 
 type ExplorePageProps = {
   cuerpo: Body // API value, already checked by the router: "luna" or "marte"

@@ -105,7 +105,8 @@
     "global": "{{body}} · global map",
     "southPole": "{{body}} · south pole",
     "caption": "Image: NASA Solar System Treks. The sites on the map are also in the list below.",
-    "polarCaption": "Diagram: the centre is the south pole and the edge, 80° S."
+    "polarCaption": "Diagram: the centre is the south pole and the edge, 80° S.",
+    "imageSource": "Image: NASA Solar System Treks."
   },
   "mapLegend": {
     "label": "Map legend",
@@ -122,5 +123,13 @@
     "radiation": "Radiation",
     "note": "No Earth pair reproduces them.",
     "pending": "Explanations and sources: data pending."
+  },
+  "earthMap": {
+    "label": "Earth · pair",
+    "pending": "· position pending",
+    "caption": "Image: NASA GIBS (Blue Marble). The pair's position does not come from the API yet."
+  },
+  "mapBridge": {
+    "label": "Layer and distance of the best match:"
   }
 }
