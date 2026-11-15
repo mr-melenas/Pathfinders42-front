@@ -100,5 +100,11 @@
     "title": "Page not found",
     "text": "This address does not exist in Pathfinders42.",
     "back": "Back to Explore"
+  },
+  "bodyMap": {
+    "global": "{{body}} · global map",
+    "southPole": "{{body}} · south pole",
+    "caption": "Image: NASA Solar System Treks. The sites on the map are also in the list below.",
+    "polarCaption": "Diagram: the centre is the south pole and the edge, 80° S."
   }
 }

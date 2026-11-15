@@ -100,5 +100,11 @@
     "title": "Página no encontrada",
     "text": "Esta dirección no existe en Pathfinders42.",
     "back": "Volver a Explorar"
+  },
+  "bodyMap": {
+    "global": "{{body}} · mapa global",
+    "southPole": "{{body}} · polo sur",
+    "caption": "Imagen: NASA Solar System Treks. Los sitios del mapa también están en la lista de abajo.",
+    "polarCaption": "Esquema: el centro es el polo sur y el borde, 80° S."
   }
 }

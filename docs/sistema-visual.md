@@ -657,7 +657,7 @@ tokens que ya existen (ver 8 para confirmarlos):
 
 | Componente | Variantes | Estados | Notas |
 |---|---|---|---|
-| `BodyMap` | `cuerpo`: `"luna"` / `"marte"` (valor de la API) | cargando (`bg-map`), error, sin geometría | MapLibre. Etiqueta arriba a la izquierda («Luna · polo sur») con punto del color del cuerpo; pie con de dónde sale la geometría |
+| `BodyMap` | `cuerpo`: `"luna"` / `"marte"` (valor de la API) | cargando (`bg-map`), error, sin geometría | SVG propio con la imagen de NASA Trek (pendiente 9). Etiqueta arriba a la izquierda («Luna · polo sur») con punto del color del cuerpo; pie con de dónde sale la geometría |
 | `EarthMap` | | cargando, **posición pendiente** (hasta que exista `/analogos/{id}`) | Pareja con marcador `body-earth`. Mientras no llegue la posición: marcador discontinuo + «posición pendiente» |
 | `MapBridge` | horizontal / girado 90° (< 820 px) | | Arco y punto naranjas (64 × 40 px) + nombre de capa + distancia en `font-mono`, `accent` |
 | `MapsRow` | | | `BodyMap` · `MapBridge` · `EarthMap`, misma altura |
@@ -692,7 +692,7 @@ tokens que ya existen (ver 8 para confirmarlos):
 | 6 | **Verificación fuera de `anortosita`** | `VerificationChip`. Hoy solo aparece en `detalles.verificacion` de algunas capas | Back | Pregunta. Mientras tanto, no se muestra el chip si no hay dato |
 | 7 | **Posición y geometría de las parejas** | `EarthMap` | Back | Ya planificado: `/analogos/{id}` en S3 |
 | 8 | **Textos en inglés** de `nombre` y `descripcion` | Interfaz bilingüe | Back + Front | Las 6 descripciones en i18n del front; los nombres propios no se traducen |
-| 9 | **Mapas base** de MapLibre (teselas o imágenes de Luna, Marte y Tierra) | El diseño usa esquemas, no cartografía | Front + Datos | Decidir al empezar la tarea del globo/mapa |
+| 9 | **Mapas base** de MapLibre (teselas o imágenes de Luna, Marte y Tierra) | El diseño usa esquemas, no cartografía | Front + Datos | ✅ Decidido (15 nov, F4.1): Luna y Marte en SVG propio con la imagen equirectangular de NASA Solar System Treks (LRO WAC y Viking MDIM), porque las teselas Web Mercator de MapLibre acaban en ±85,05° y dejan fuera los sitios de Artemis. La Tierra, con MapLibre (por decidir sus teselas en E5/E8). Ver `docs/plan/epicas.md`, supuesto S4b |
 | 10 | **`body-earth` y `horizon` tienen el mismo valor** (`#7cc8ff`) | Un enlace y una pareja se ven del mismo color | Front | Se acepta en el MVP: se distinguen por forma (subrayado / marcador) |
 | 11 | **Rutas (URL)** | La maqueta enseña `/luna/artemis-malapert-massif` solo como ejemplo | Front | ✅ Decidido (15 nov, #13): `/:cuerpo` y `/:cuerpo/:siteId`; ver `docs/arquitectura-pantallas.md` |
 | 12 | **Ancho máximo del contenido** | La maqueta usa 1180 px, pero es el ancho del documento de propuesta, no de la app | Front | ✅ Decidido (12 nov, Adriana): **1200 px** (`--container-content: 75rem`, clase `max-w-content`), centrado |
