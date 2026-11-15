@@ -16,11 +16,6 @@ export type MapPoint = {
   y: number
 }
 
-// Global map: the NASA Trek images are equirectangular, so longitude and latitude map linearly to x and y
-export function toEquirectangular(lon: number, lat: number): MapPoint {
-  return { x: (lon + 180) / 360, y: (90 - lat) / 180 }
-}
-
 // South pole view: centre = the pole, edge = 80° S (as in the final design)
 export const POLAR_EDGE_LAT = -80
 

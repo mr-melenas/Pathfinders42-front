@@ -127,6 +127,12 @@
   }
 }
 
+/* MapLibre globes: a marker on the far side of the globe gets this class. MapLibre only fades it (it could
+   still be hovered and clicked through the globe), so it is hidden instead */
+.maplibregl-marker-covered {
+  visibility: hidden;
+}
+
 /* ---------- Custom utilities ---------- */
 
 /* Stripes for the null state (chip). Usage: class="stripes-null" */

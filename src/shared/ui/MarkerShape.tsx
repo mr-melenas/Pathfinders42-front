@@ -1,11 +1,4 @@
-import type { Shape } from '@/shared/lib/siteShapes'
-
-const SHAPE_CLASS: Record<Shape, string> = {
-  region: 'size-3 border-2 border-current bg-current/18', // square with an 18 % fill
-  landing: 'size-2.5 rotate-45 bg-current', // diamond
-  cave: 'size-3 rounded-full border-2 border-current', // ring, with a dot inside
-  unknown: 'size-2.5 rounded-full bg-current', // plain dot
-}
+import { SHAPE_CLASS, type Shape } from '@/shared/lib/siteShapes'
 
 type MarkerShapeProps = {
   shape: Shape
