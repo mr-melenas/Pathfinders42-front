@@ -183,6 +183,14 @@
       "marsSites": "sites on Mars",
       "layers": "layers compared"
     },
+    "video": {
+      "eyebrow": "Demo",
+      "title": "This is how Pathfinders42 works.",
+      "text": "A tour of the app: from a site on the Moon or Mars to the places on Earth that resemble it.",
+      "frameTitle": "Video demo: Pathfinders42 — Rehearse the Moon and Mars without leaving Earth",
+      "language": "Video in English, with English subtitles.",
+      "watch": "Watch on YouTube"
+    },
     "challenge": {
       "eyebrow": "The challenge",
       "title": "Artemis is going back to the Moon to stay. Before that, everything is rehearsed on Earth.",
