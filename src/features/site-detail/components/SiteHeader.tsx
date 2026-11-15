@@ -47,7 +47,7 @@ export function SiteHeader({ site }: SiteHeaderProps) {
       <Breadcrumbs items={[{ label: bodyLabel }, { label: typeLabel }, { label: nombre }]} />
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="font-display text-site-title font-extrabold tracking-display">{nombre}</h1>
-        <SiteTypeChip tipo={tipo} />
+        <SiteTypeChip tipo={tipo} cuerpo={cuerpo} />
       </div>
       <p className="flex flex-wrap gap-x-4 gap-y-1 text-caption text-muted">
         {coordinates && <span className="font-mono tabular-nums text-foreground">{coordinates}</span>}
