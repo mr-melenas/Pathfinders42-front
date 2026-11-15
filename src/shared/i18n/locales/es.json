@@ -92,7 +92,9 @@
     "errorTitle": "Sitio no disponible"
   },
   "explore": {
-    "title": "Explorar · {{body}}"
+    "title": "Explorar · {{body}}",
+    "count_one": "{{count}} sitio",
+    "count_other": "{{count}} sitios"
   },
   "notFound": {
     "title": "Página no encontrada",

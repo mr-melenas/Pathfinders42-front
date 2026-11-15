@@ -801,13 +801,58 @@ URL pública, el despliegue usa los datos falsos.
 
 Se detallarán cuando toque, con el mismo formato. Las que tienen ⚠️ incluyen sub-issues fuera del tablero.
 
-### E4 · Explorar: mapa con los sitios · P0 · S3
-**Objetivo:** ver los 160 sitios en el mapa de su cuerpo, filtrarlos y entrar al detalle de uno.
-**Tablero:** «Globo/mapa con los sitios reales (`/sitios/geojson`), coloreado por cuerpo/tipo o por veredicto».
-**Sub-issues:** F4.1 decidir el mapa base de Luna, Marte y Tierra (pendiente 9) ⚠️ · F4.2 `BodyMap` con react-map-gl (MapLibre) ·
-F4.3 capa de sitios desde `/sitios/geojson` con `SiteMarker` por forma · F4.4 leyenda y colorear por tipo o por veredicto
-(siempre con icono y palabra en la leyenda) · F4.5 conmutador Luna / Marte · F4.6 lista de sitios como alternativa
-accesible al mapa ⚠️ · F4.7 elegir un sitio y abrir su detalle · F4.8 elegir el color de Marte (pendiente 1) ⚠️.
+### E4 · Explorar: mapa con los sitios
+
+> Detallada el 15 nov solo en parte: por falta de tiempo se empieza por la lista (F4.6 + F4.7), que no depende del
+> mapa base. F4.5 (conmutador Luna / Marte) ya está hecha con las rutas (#13). El resto se detalla al empezarlo.
+
+**Objetivo:** ver los 160 sitios de su cuerpo (en una lista y en el mapa), filtrarlos y entrar al detalle de uno.
+
+**Prioridad:** P0 · **Área:** Front · Tablero: «Globo/mapa con los sitios reales (`/sitios/geojson`), coloreado por
+cuerpo/tipo o por veredicto»
+
+> **Datos:** la lista usa `GET /api/v1/sitios?cuerpo=` (tipo generado, hook `useSites(cuerpo)`): 67 sitios en la Luna
+> y 93 en Marte con la API v0.3.0. El mapa usará `GET /api/v1/sitios/geojson`.
+
+**Sub-issues pendientes de detallar:** F4.1 decidir el mapa base de Luna, Marte y Tierra (pendiente 9) ⚠️ · F4.2
+`BodyMap` con react-map-gl (MapLibre) · F4.3 capa de sitios desde `/sitios/geojson` con `SiteMarker` por forma · F4.4
+leyenda y colorear por tipo o por veredicto (siempre con icono y palabra en la leyenda) · F4.8 elegir el color de Marte
+(pendiente 1) ⚠️.
+
+#### F4.6 · Lista de sitios en Explorar (incluye F4.7)
+
+| Prioridad | Área | Tamaño |
+|---|---|---|
+| P0 | Front | M |
+
+**Descripción**
+La página Explorar (`/:cuerpo`) muestra todos los sitios del cuerpo en una lista agrupada por tipo. Cada sitio enlaza a
+su detalle (`/:cuerpo/:siteId`). Es la alternativa accesible al mapa y, mientras no haya mapa, la forma de entrar al
+detalle.
+
+**Criterios de aceptación**
+- [ ] `ExplorePage` pide los sitios con `useSites(cuerpo)`; cargando con `LoadingState`, error con `ErrorState` y
+      «Reintentar», y `EmptyState` si no hay sitios
+- [ ] Bajo el `<h1>`, el número de sitios con plural de i18n
+- [ ] Un grupo por `tipo`, con su nombre de i18n y su número en un `<h2>`, en el orden de `siteType` de i18n; los
+      sitios de cada grupo por orden alfabético. Un `tipo` desconocido se muestra tal cual, al final
+- [ ] Cada sitio: nombre como enlace a su detalle y recuento «N de M capas funcionan» contando solo los `=== true` de
+      `parecidos` (como `VerdictPanel`)
+- [ ] La agrupación y el orden están en una función pura (`groupSitesByType`), lista para probarla en la #23
+- [ ] Una columna en móvil y dos desde 820 px (`md2:`); a 320 px sin scroll horizontal
+- [ ] Textos nuevos en `es.json` y `en.json`; probada en Luna y Marte, en español e inglés, y con teclado
+- [ ] `pnpm lint` y `pnpm build` en verde
+
+**Archivos:** `src/features/explore/pages/ExplorePage.tsx` · `src/features/explore/components/*` ·
+`src/shared/i18n/locales/*.json`
+**Depende de:** #13 (rutas)
+**Referencias:** `docs/arquitectura-pantallas.md` · `docs/sistema-visual.md` §6 (estados comunes) · `VerdictPanel`
+(recuento) · tipo `SitioResumen` en `src/shared/api/schema.d.ts`
+
+**Prompt para Claude Code**
+> Tarea F4.6: lista de sitios en Explorar. Lee `docs/arquitectura-pantallas.md` y los estados comunes de
+> `docs/sistema-visual.md` §6. Modo: [MODO]. Usa `useSites(cuerpo)` y los tipos generados; el recuento cuenta solo los
+> `=== true`.
 
 ### E5 · Detalle del sitio
 
