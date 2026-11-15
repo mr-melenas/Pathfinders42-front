@@ -19,6 +19,14 @@ export function shapeOf(tipo: string): Shape {
   return isSiteType(tipo) ? SHAPE_BY_TYPE[tipo] : 'unknown'
 }
 
+// The drawing of each shape, in the current text colour: MarkerShape (React) and the globe markers (plain DOM) use it
+export const SHAPE_CLASS: Record<Shape, string> = {
+  region: 'size-3 border-2 border-current bg-current/18', // square with an 18 % fill
+  landing: 'size-2.5 rotate-45 bg-current', // diamond
+  cave: 'size-3 rounded-full border-2 border-current', // ring, with a dot inside
+  unknown: 'size-2.5 rounded-full bg-current', // plain dot
+}
+
 // Order of the shapes in the legend
 export const SHAPE_ORDER: readonly Shape[] = ['region', 'landing', 'cave', 'unknown']
 

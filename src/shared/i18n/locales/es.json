@@ -106,9 +106,7 @@
   "bodyMap": {
     "global": "{{body}} · mapa global",
     "southPole": "{{body}} · polo sur",
-    "caption": "Imagen: NASA Solar System Treks. Los sitios del mapa también están en la lista de abajo.",
-    "polarCaption": "Esquema: el centro es el polo sur y el borde, 80° S.",
-    "imageSource": "Imagen: NASA Solar System Treks."
+    "polarCaption": "Esquema: el centro es el polo sur y el borde, 80° S."
   },
   "mapLegend": {
     "label": "Leyenda del mapa",
@@ -128,19 +126,25 @@
   },
   "earthMap": {
     "label": "Tierra · pareja",
-    "pending": "· posición pendiente",
-    "caption": "Imagen: NASA GIBS (Blue Marble). La posición de la pareja todavía no llega de la API."
+    "pending": "· posición pendiente"
   },
   "mapBridge": {
     "label": "Capa y distancia de la mejor pareja:"
   },
-  "earthGlobe": {
+  "globe": {
     "zoomIn": "Acercar",
     "zoomOut": "Alejar",
     "helpWindows": "Usa Ctrl + rueda para hacer zoom en el mapa",
     "helpMac": "Usa ⌘ + rueda para hacer zoom en el mapa",
-    "helpMobile": "Usa dos dedos para mover el mapa",
+    "helpMobile": "Usa dos dedos para mover el mapa"
+  },
+  "earthGlobe": {
     "caption": "Imagen: Sentinel-2 cloudless 2016, de EOX (s2maps.eu), con datos modificados de Copernicus Sentinel. CC BY 4.0."
+  },
+  "bodyGlobe": {
+    "caption": "Imagen: OpenPlanetaryMap.",
+    "exploreCaption": "Imagen: OpenPlanetaryMap. Los sitios del globo también están en la lista de abajo.",
+    "polarNote": "Los que están a menos de 5° del polo sur no caben en el globo: salen en la vista del polo sur."
   },
   "summary": {
     "match": "{{site}} se parece a {{pair}} en <pass>{{layers}}</pass>.",

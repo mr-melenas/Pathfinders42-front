@@ -106,9 +106,7 @@
   "bodyMap": {
     "global": "{{body}} · global map",
     "southPole": "{{body}} · south pole",
-    "caption": "Image: NASA Solar System Treks. The sites on the map are also in the list below.",
-    "polarCaption": "Diagram: the centre is the south pole and the edge, 80° S.",
-    "imageSource": "Image: NASA Solar System Treks."
+    "polarCaption": "Diagram: the centre is the south pole and the edge, 80° S."
   },
   "mapLegend": {
     "label": "Map legend",
@@ -128,19 +126,25 @@
   },
   "earthMap": {
     "label": "Earth · pair",
-    "pending": "· position pending",
-    "caption": "Image: NASA GIBS (Blue Marble). The pair's position does not come from the API yet."
+    "pending": "· position pending"
   },
   "mapBridge": {
     "label": "Layer and distance of the best match:"
   },
-  "earthGlobe": {
+  "globe": {
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "helpWindows": "Use Ctrl + scroll to zoom the map",
     "helpMac": "Use ⌘ + scroll to zoom the map",
-    "helpMobile": "Use two fingers to move the map",
+    "helpMobile": "Use two fingers to move the map"
+  },
+  "earthGlobe": {
     "caption": "Image: Sentinel-2 cloudless 2016 by EOX (s2maps.eu), contains modified Copernicus Sentinel data. CC BY 4.0."
+  },
+  "bodyGlobe": {
+    "caption": "Image: OpenPlanetaryMap.",
+    "exploreCaption": "Image: OpenPlanetaryMap. The sites on the globe are also in the list below.",
+    "polarNote": "Those within 5° of the south pole do not fit on the globe: they are in the south pole view."
   },
   "summary": {
     "match": "{{site}} resembles {{pair}} in <pass>{{layers}}</pass>.",
