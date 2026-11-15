@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getPairs, getSite, getSites, getSitesGeojson } from '@/shared/api/client'
+import { getPairs, getSite, getSites, getSitesGeojson, getUseMatches } from '@/shared/api/client'
 import type { components } from '@/shared/api/schema'
 
 type Layer = components['schemas']['ResumenCapa']['capa']
@@ -11,6 +11,7 @@ export const queryKeys = {
   sitesGeojson: () => ['sites', 'geojson'] as const,
   site: (siteId: string) => ['site', siteId] as const,
   pairs: (siteId: string, capa?: Layer) => ['site', siteId, 'pairs', { capa }] as const,
+  useMatches: (siteId: string, uso: string, n: number) => ['site', siteId, 'uses', uso, { n }] as const,
 }
 
 export function useSites(cuerpo?: string) {
@@ -27,4 +28,8 @@ export function useSite(siteId: string) {
 
 export function usePairs(siteId: string, capa?: Layer) {
   return useQuery({ queryKey: queryKeys.pairs(siteId, capa), queryFn: () => getPairs(siteId, { capa }) })
+}
+
+export function useUseMatches(siteId: string, uso: string, n: number) {
+  return useQuery({ queryKey: queryKeys.useMatches(siteId, uso, n), queryFn: () => getUseMatches(uso, siteId, { n }) })
 }

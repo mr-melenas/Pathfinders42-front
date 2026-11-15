@@ -139,5 +139,20 @@
     "helpMac": "Use ⌘ + scroll to zoom the map",
     "helpMobile": "Use two fingers to move the map",
     "caption": "Image: Sentinel-2 cloudless 2016 by EOX (s2maps.eu), contains modified Copernicus Sentinel data. CC BY 4.0."
+  },
+  "summary": {
+    "match": "{{site}} resembles {{pair}} in <pass>{{layers}}</pass>.",
+    "fails": "No place on Earth resembles it in <fail>{{layers}}</fail>.",
+    "colder": "It is {{gap}} colder on average than {{pair}}, its closest match for climate.",
+    "warmer": "It is {{gap}} warmer on average than {{pair}}, its closest match for climate.",
+    "layer": {
+      "topografia": "relief",
+      "geologia": "rock",
+      "clima": "temperature",
+      "hielo": "ice",
+      "cuevas": "cave shape",
+      "forma_cueva": "cave shape",
+      "anortosita": "anorthosite"
+    }
   }
 }

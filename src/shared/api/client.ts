@@ -40,6 +40,7 @@ async function unwrap<T>(request: Promise<{ data?: T; error?: unknown; response:
 // Query parameters exactly as the contract defines them
 type SitesQuery = NonNullable<paths['/api/v1/sitios']['get']['parameters']['query']>
 type PairsQuery = NonNullable<paths['/api/v1/sitios/{sitio_id}/parejas']['get']['parameters']['query']>
+type UseMatchesQuery = NonNullable<paths['/api/v1/usos/{uso}/sitios/{sitio_id}']['get']['parameters']['query']>
 
 export function getHealth() {
   return unwrap(client.GET('/api/v1/health'))
@@ -59,4 +60,9 @@ export function getSite(siteId: string) {
 
 export function getPairs(siteId: string, query?: PairsQuery) {
   return unwrap(client.GET('/api/v1/sitios/{sitio_id}/parejas', { params: { path: { sitio_id: siteId }, query } }))
+}
+
+// Earth places for a site and a mission use, best first; each one says which layers work and fail for THAT place
+export function getUseMatches(uso: string, siteId: string, query?: UseMatchesQuery) {
+  return unwrap(client.GET('/api/v1/usos/{uso}/sitios/{sitio_id}', { params: { path: { uso, sitio_id: siteId }, query } }))
 }

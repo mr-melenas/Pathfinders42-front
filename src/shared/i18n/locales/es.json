@@ -139,5 +139,20 @@
     "helpMac": "Usa ⌘ + rueda para hacer zoom en el mapa",
     "helpMobile": "Usa dos dedos para mover el mapa",
     "caption": "Imagen: Sentinel-2 cloudless 2016, de EOX (s2maps.eu), con datos modificados de Copernicus Sentinel. CC BY 4.0."
+  },
+  "summary": {
+    "match": "{{site}} se parece a {{pair}} en <pass>{{layers}}</pass>.",
+    "fails": "Ningún lugar de la Tierra se le parece en <fail>{{layers}}</fail>.",
+    "colder": "Allí hace {{gap}} menos de media que en {{pair}}, su pareja más cercana en clima.",
+    "warmer": "Allí hace {{gap}} más de media que en {{pair}}, su pareja más cercana en clima.",
+    "layer": {
+      "topografia": "el relieve",
+      "geologia": "la roca",
+      "clima": "la temperatura",
+      "hielo": "el hielo",
+      "cuevas": "la forma de las cuevas",
+      "forma_cueva": "la forma de las cuevas",
+      "anortosita": "la anortosita"
+    }
   }
 }
