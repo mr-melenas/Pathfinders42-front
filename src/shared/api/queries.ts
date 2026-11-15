@@ -1,5 +1,13 @@
-import { useQuery } from '@tanstack/react-query'
-import { getPairs, getSite, getSites, getSitesGeojson, getUseMatches } from '@/shared/api/client'
+import { skipToken, useQuery } from '@tanstack/react-query'
+import {
+  getAnalogue,
+  getAnalogues,
+  getPairs,
+  getSite,
+  getSites,
+  getSitesGeojson,
+  getUseMatches,
+} from '@/shared/api/client'
 import type { components } from '@/shared/api/schema'
 
 type Layer = components['schemas']['ResumenCapa']['capa']
@@ -12,6 +20,8 @@ export const queryKeys = {
   site: (siteId: string) => ['site', siteId] as const,
   pairs: (siteId: string, capa?: Layer) => ['site', siteId, 'pairs', { capa }] as const,
   useMatches: (siteId: string, uso: string, n: number) => ['site', siteId, 'uses', uso, { n }] as const,
+  analogues: (siteId: string, n: number) => ['site', siteId, 'analogues', { n }] as const,
+  analogue: (siteId: string, earthId: string) => ['site', siteId, 'analogues', earthId] as const,
 }
 
 export function useSites(cuerpo?: string) {
@@ -32,4 +42,16 @@ export function usePairs(siteId: string, capa?: Layer) {
 
 export function useUseMatches(siteId: string, uso: string, n: number) {
   return useQuery({ queryKey: queryKeys.useMatches(siteId, uso, n), queryFn: () => getUseMatches(uso, siteId, { n }) })
+}
+
+export function useAnalogues(siteId: string, n: number) {
+  return useQuery({ queryKey: queryKeys.analogues(siteId, n), queryFn: () => getAnalogues(siteId, { n }) })
+}
+
+// null while no analogue is chosen: skipToken makes no request
+export function useAnalogue(siteId: string, earthId: string | null) {
+  return useQuery({
+    queryKey: queryKeys.analogue(siteId, earthId ?? 'none'),
+    queryFn: earthId === null ? skipToken : () => getAnalogue(siteId, earthId),
+  })
 }

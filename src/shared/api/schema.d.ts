@@ -344,6 +344,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/analogos/{sitio_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Análogos de la Tierra de un sitio, con su frase de pros y contras (aptos primero) */
+        get: operations["listar_api_v1_analogos__sitio_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analogos/{sitio_id}/{tierra_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ficha de un análogo: pros, contras, capas sin medir y límites de la Tierra */
+        get: operations["ficha_api_v1_analogos__sitio_id___tierra_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/explicaciones/{sitio_id}": {
         parameters: {
             query?: never;
@@ -446,6 +480,123 @@ export interface components {
             nombre: string;
             /** Dist Km */
             dist_km: number;
+        };
+        /**
+         * AnalogoFicha
+         * @description Ficha completa de un análogo: pros, contras, capas sin medir y límites de la Tierra.
+         */
+        AnalogoFicha: {
+            /**
+             * Tierra Id
+             * @example lofoten_flakstadoy
+             */
+            tierra_id: string;
+            /** Tierra Nombre */
+            tierra_nombre: string;
+            /** Tierra Lat */
+            tierra_lat: number | null;
+            /** Tierra Lon */
+            tierra_lon: number | null;
+            /**
+             * Verificacion
+             * @description De la ficha de análogos; «hipótesis» = región propuesta por los datos de satélite
+             * @enum {string}
+             */
+            verificacion: "verificada" | "pendiente" | "candidato" | "hipótesis";
+            /**
+             * Apta
+             * @description Pasa al menos 2 capas (uso «general»)
+             */
+            apta: boolean;
+            /** N Capas Ok */
+            n_capas_ok: number;
+            /**
+             * Puntuacion
+             * @description Puntuación del uso «general», 0–1
+             */
+            puntuacion: number | null;
+            /** @description Una frase: dónde funciona y dónde falla */
+            resumen: components["schemas"]["Textos"];
+            /** N Pros */
+            n_pros: number;
+            /** N Contras */
+            n_contras: number;
+            /** Usos Aptos */
+            usos_aptos: string[];
+            /** Sitio Id */
+            sitio_id: string;
+            /** Sitio Nombre */
+            sitio_nombre: string;
+            /** Cuerpo */
+            cuerpo: string;
+            /**
+             * Ficha Id
+             * @description Id en la ficha de análogos, si el lugar está en ella
+             */
+            ficha_id: string | null;
+            /**
+             * Rasgo
+             * @description Qué lo hace análogo, según la ficha (solo en español)
+             */
+            rasgo: string | null;
+            /** Referencia */
+            referencia: string | null;
+            /** Url */
+            url: string | null;
+            /** Pros */
+            pros: components["schemas"]["PuntoAnalogo"][];
+            /** Contras */
+            contras: components["schemas"]["PuntoAnalogo"][];
+            /**
+             * Sin Dato
+             * @description Capas sin medir para esta pareja
+             */
+            sin_dato: ("topografia" | "geologia" | "clima" | "hielo" | "forma_cueva")[];
+            /**
+             * Limites Tierra
+             * @description Contras generales: la Tierra no reproduce esto
+             */
+            limites_tierra: components["schemas"]["LimiteTierra"][];
+        };
+        /** AnalogoResumen */
+        AnalogoResumen: {
+            /**
+             * Tierra Id
+             * @example lofoten_flakstadoy
+             */
+            tierra_id: string;
+            /** Tierra Nombre */
+            tierra_nombre: string;
+            /** Tierra Lat */
+            tierra_lat: number | null;
+            /** Tierra Lon */
+            tierra_lon: number | null;
+            /**
+             * Verificacion
+             * @description De la ficha de análogos; «hipótesis» = región propuesta por los datos de satélite
+             * @enum {string}
+             */
+            verificacion: "verificada" | "pendiente" | "candidato" | "hipótesis";
+            /**
+             * Apta
+             * @description Pasa al menos 2 capas (uso «general»)
+             */
+            apta: boolean;
+            /** N Capas Ok */
+            n_capas_ok: number;
+            /**
+             * Puntuacion
+             * @description Puntuación del uso «general», 0–1
+             */
+            puntuacion: number | null;
+            /** @description Una frase: dónde funciona y dónde falla */
+            resumen: components["schemas"]["Textos"];
+            /** N Pros */
+            n_pros: number;
+            /** N Contras */
+            n_contras: number;
+            /** Usos Aptos */
+            usos_aptos: string[];
         };
         /**
          * Candidato
@@ -761,6 +912,22 @@ export interface components {
              */
             media_abs_shap: number;
         };
+        /**
+         * LimiteTierra
+         * @description Límite de la Tierra como análogo (gravedad, atmósfera, radiación): un contra de todos los análogos.
+         */
+        LimiteTierra: {
+            /**
+             * Id
+             * @example gravedad
+             */
+            id: string;
+            texto: components["schemas"]["Textos"];
+            /** Fuente */
+            fuente: string;
+            /** Url */
+            url: string;
+        };
         /** Meta */
         Meta: {
             /** Proyecto */
@@ -1008,6 +1175,53 @@ export interface components {
             /** Fuente */
             fuente: string;
         };
+        /**
+         * PuntoAnalogo
+         * @description Un pro o un contra de un análogo.
+         */
+        PuntoAnalogo: {
+            /**
+             * Tipo
+             * @description capa: una capa pasa o no su umbral; temperatura: diferencia en grados; verificacion: qué dice la literatura del lugar; usos: usos de misión para los que es apto
+             * @enum {string}
+             */
+            tipo: "capa" | "temperatura" | "verificacion" | "usos";
+            texto: components["schemas"]["Textos"];
+            /** Capa */
+            capa?: ("topografia" | "geologia" | "clima" | "hielo" | "forma_cueva") | null;
+            /**
+             * Distancia
+             * @description 0 = igual (solo tipo «capa»)
+             */
+            distancia?: number | null;
+            /**
+             * Umbral
+             * @description Parecido si distancia ≤ umbral (solo tipo «capa»)
+             */
+            umbral?: number | null;
+            /**
+             * Fuente
+             * @description Datos de la capa: sitio · Tierra (solo tipo «capa»)
+             */
+            fuente?: string | null;
+            /**
+             * Brechas C
+             * @description Sitio − Tierra en °C; negativo = el sitio es más frío (solo «temperatura»)
+             */
+            brechas_C?: {
+                [key: string]: number;
+            } | null;
+            /**
+             * Usos
+             * @description Ids de los usos aptos (solo tipo «usos»)
+             */
+            usos?: string[] | null;
+            /**
+             * Url
+             * @description Fuente de la verificación (solo «verificacion»)
+             */
+            url?: string | null;
+        };
         /** PuntoControl */
         PuntoControl: {
             /** Nombre */
@@ -1025,6 +1239,11 @@ export interface components {
             pregunta: string;
             /** Sitio Id */
             sitio_id?: string | null;
+            /**
+             * Tierra Id
+             * @description Con sitio_id: lugar de la Tierra del análogo (GET /analogos/{sitio_id}) del que se pregunta
+             */
+            tierra_id?: string | null;
             /**
              * Fuente
              * @default documentacion
@@ -1417,6 +1636,13 @@ export interface components {
             parecidos: {
                 [key: string]: boolean | null;
             };
+        };
+        /** Textos */
+        Textos: {
+            /** Es */
+            es: string;
+            /** En */
+            en: string;
         };
         /** Uso */
         Uso: {
@@ -2197,6 +2423,90 @@ export interface operations {
                 };
             };
             /** @description Capa usos ausente, uso desconocido o sitio sin parejas */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    listar_api_v1_analogos__sitio_id__get: {
+        parameters: {
+            query?: {
+                /** @description Número máximo de análogos */
+                n?: number;
+                /** @description Solo los que pasan al menos 2 capas */
+                solo_aptos?: boolean;
+                /** @description verificada, pendiente, candidato o hipótesis */
+                verificacion?: string | null;
+            };
+            header?: never;
+            path: {
+                sitio_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnalogoResumen"][];
+                };
+            };
+            /** @description Capa analogos ausente, sitio sin análogos o lugar que no es pareja */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ficha_api_v1_analogos__sitio_id___tierra_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sitio_id: string;
+                tierra_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnalogoFicha"];
+                };
+            };
+            /** @description Capa analogos ausente, sitio sin análogos o lugar que no es pareja */
             404: {
                 headers: {
                     [name: string]: unknown;

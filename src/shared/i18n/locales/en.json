@@ -28,7 +28,9 @@
   },
   "verification": {
     "verificada": "Verified",
-    "candidato": "Candidate"
+    "candidato": "Candidate",
+    "pendiente": "Pending",
+    "hipótesis": "Hypothesis"
   },
   "siteType": {
     "region_aterrizaje_artemis": "Artemis landing region",
@@ -154,5 +156,14 @@
       "forma_cueva": "cave shape",
       "anortosita": "anorthosite"
     }
+  },
+  "analogues": {
+    "title": "Earth analogues",
+    "choose": "Choose an analogue",
+    "works": "Works",
+    "fails": "Fails",
+    "unmeasured": "Not measured",
+    "none": "None",
+    "source": "See source"
   }
 }
