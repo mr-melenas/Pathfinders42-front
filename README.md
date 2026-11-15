@@ -4,6 +4,8 @@ Frontend del proyecto **Pathfinders42**, nuestra participación en la **NASA Spa
 
 Construido con **Vite + React + TypeScript** y **Tailwind CSS**.
 
+**Web desplegada:** https://pathfinders42-front.vercel.app
+
 ## Requisitos
 
 - **Node.js** `^20.19.0 || >=22.12.0` (lo que exige Vite 8; probado con Node 24).
@@ -94,6 +96,16 @@ Las variables de entorno van en un archivo `.env` (ignorado por git). Usa `.env.
 | `VITE_API_URL` | URL base de la API. | `http://localhost:8000/api/v1` |
 
 > En Vite, **solo** las variables con prefijo `VITE_` se exponen al código del cliente. Las demás quedan fuera del bundle.
+
+## Despliegue
+
+El front se publica en **Vercel**: https://pathfinders42-front.vercel.app
+
+- `VITE_API_URL` se configura en Vercel (Settings → Environment Variables) y apunta a la API desplegada.
+- La API tiene que permitir el dominio de Vercel en su CORS.
+- `vercel.json` reescribe todas las rutas a `index.html`: así una ruta interna (`/luna/artemis-malapert-massif`)
+  funciona al recargar la página o al abrir un enlace compartido. Los archivos que existen (JS, CSS, imágenes) se
+  sirven antes que la reescritura.
 
 ## Flujo de ramas
 
